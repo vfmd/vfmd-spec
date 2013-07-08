@@ -55,4 +55,46 @@ breaks_.
 If a _line_ contains no _characters_, or if all _characters_ in the
 _line_ are _space_ characters, that line is called a **blank line**.
 
+### Block-elements
+
+The _document_ can be seen as a sequence of _block-elements_, where each
+_block-element_ consists of a sequence of one or more _lines_.
+
+There are different types of _block-elements_: 
+
+- Paragraph
+- Header
+- Blockquote
+- List
+- Code block
+- Horizontal rule
+- Null block
+
+To identify the _block-elements_ in the _document_, the _document_ is
+seen as a sequence of _lines_.
+
+## Identifying block-elements
+
+Given a sequence of _lines_, henceforth called the **input line
+sequence**, we need to identify the block-elements in the input,
+identify the type of the block-elements and identify which sub-sequence
+of lines in the input correspond to which block-element.
+
+The line at which a block-element begins is called a **block-element
+start line**. The line at which a block-element ends is called a
+**block-element end line**. The sub-sequence of lines starting from the
+_block-element start line_ and ending at the _block-element end line_,
+both inclusive, constitute the **block-element line sequence**.
+
+Every _block-element end line_ in the _input line sequence_ is
+immediately followed by a _block-element start line_, unless the
+_block-element end line_ is the last line in the _input line sequence_.
+The first line in the _input line sequence_ is a _block-element start
+line_, and the last line in the _input line sequence_ is a
+_block-element end line_.
+
+The type of the block-element is determined based on the _block-element
+start line_. Also, where the block should end (i.e. the corresponding
+_block-element end line_) is also determined base on the _block-element
+start line_.
 
