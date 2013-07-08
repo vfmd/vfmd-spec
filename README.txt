@@ -1,0 +1,1 @@
+vfmd = Vanilla-flavored Markdown
