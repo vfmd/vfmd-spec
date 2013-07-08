@@ -1,10 +1,12 @@
 # vfmd for implementers
 
-This document describes the [vfmd Markdown syntax] in formal terms, and
+This spec describes the [vfmd Markdown syntax] in formal terms, and
 is intended to be read by someone implementing this spec to parse or
-otherwise programmatically interpret vfmd input.
+otherwise programmatically interpret vfmd input. If you only intend
+to write a document using vfmd, see [vfmd for writers].
 
 [vfmd Markdown syntax]: introduction.md
+[vfmd for writers]: for_writers.md
 
 This document is organized as follows: We start by defining a few terms
 that shall be used in the rest of this spec. Then, we discuss how
