@@ -110,7 +110,11 @@ start line_.
 
 The type and extent of the _block-element_ is determined as follows:
 
- 1. If the leftmost character of the _block-element start line_ is a `#`
+ 1. If the _block-element start line_ is a _blank line_, then the body
+    element is of type **null**. The same line is the _block-element end
+    line_.
+
+ 2. If the leftmost character of the _block-element start line_ is a `#`
     character, it signifies the start of a block-element of type
     **atx-style header**.  The same line is the _block-element end line_.
 
@@ -168,4 +172,8 @@ following regular expression patterns:
 
         <h5></h5>
 
+### null block
+
+A null block element can be formed from a single _blank line_. A null
+block does not result in any output at all.
 
