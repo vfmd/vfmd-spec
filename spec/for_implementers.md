@@ -46,6 +46,16 @@ A `#x0A (LF)` character is henceforth called a **line break**.
 A contiguous sequence of one or more _space_ or _line break_ characters
 constitutes **whitespace**.
 
+A **string** is a sequence of zero or more _characters_.
+
+**Trimming** a _string_ means removing any leading or trailing
+_whitespace_ characters from the _string_. For example, _trimming_
+<code>&nbsp;&nbsp;&nbsp;yellow&nbsp;&nbsp;</code> yields `yellow`;
+_trimming_ <code>green&nbsp;&nbsp;</code> yields `green`. _Trimming_ a
+_string_ that does  not have any leading or trailing _spaces_ has no
+effect on the _string_. Trimming a _string_ that is entirely composed of
+_whitespace_ yields an empty (zero-length) _string_.
+  
 ### Lines
 
 When we split the _document_ on _line breaks_, we get **lines**. The
@@ -63,7 +73,7 @@ _block-element_ consists of a sequence of one or more _lines_.
 There are different types of _block-elements_: 
 
 - Paragraph
-- Header
+- Header (atx-style, or setext-style)
 - Blockquote
 - List
 - Code block
@@ -97,4 +107,65 @@ The type of the block-element is determined based on the _block-element
 start line_. Also, where the block should end (i.e. the corresponding
 _block-element end line_) is also determined base on the _block-element
 start line_.
+
+The type and extent of the _block-element_ is determined as follows:
+
+ 1. If the leftmost character of the _block-element start line_ is a `#`
+    character, it signifies the start of a block-element of type
+    **atx-style header**.  The same line is the _block-element end line_.
+
+Each _block-element line sequence_ has to be processed based on the type
+of the block-element. The respective sections for each type of
+block-element, given below, discuss that in detail.
+
+### atx-style header
+
+An atx-style header can be formed from a single _line_ that starts with
+a `#` character.
+
+The _line_ that constitutes the atx-style header shall match one of the
+following regular expression patterns:
+
+ 1. With header text: `/^(#+)(.*[^#])#*$/`
+
+    Examples:  
+
+        ## Subheading 1
+        ### Third-level heading
+        ####Fourth-level####
+        ##   Subheading #2   ####
+        ###### Six hashes
+        ####### Seven hashes
+        ######## Eight '#'es
+
+    The length of the matching substring for the first paranthesized
+    subexpression is the heading level, subject to a maximum of 6.
+
+    The matching substring for the second paranthesized subexpression
+    shall be _trimmed_ to give the header text.
+
+    For example, the HTML outputs for the above expressions are:
+
+        <h2>Subheading 1</h2>
+        <h3>Third-level heading</h3>
+        <h4>Fourth-level</h4>
+        <h2>Subheading #2</h2>
+        <h6>Six hashes</h6>
+        <h6>Seven hashes</h6>
+        <h6>Eight '#'es</h6>
+
+ 2. Without header text: `/^(#+)$/`
+
+    The length of the matching substring for the first paranthesized
+    subexpression is the heading level, subject to a maximum of 6.
+    The header text is empty.
+
+    For example, if the complete _line_ reads:
+
+        #####
+
+    then the corresponding HTML output shall be:
+
+        <h5></h5>
+
 
