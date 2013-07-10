@@ -151,9 +151,10 @@ The type and extent of the _block-element_ is determined as follows:
     is said to be of type **setext-style header**, and the succeeding
     line is said to be the _block-element end line_.
 
-Each _block-element line sequence_ has to be processed based on the type
-of the block-element. The respective sections for each type of
-block-element, given below, discuss that in detail.
+Using the above rules, the _input line sequence_ is broken down into a
+series of _block-element line sequences_. Each _block-element line
+sequence_ is interpreted based on the type of the block-element, as
+discussed below.
 
 ### atx-style header
 
