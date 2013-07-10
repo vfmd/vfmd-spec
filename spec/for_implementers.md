@@ -134,6 +134,23 @@ The type and extent of the _block-element_ is determined as follows:
     If no such _block-element end line_ is found, the last line in the
     _input line sequence_ is the _block-element end line_.
 
+ 4. If none of the above conditions apply, and if the _block-element
+    start line_ does not start with a _space_ character, and is not the
+    last line in the _input line sequence_, and is immediately followed
+    by a succeeding line that satisfies at least one of the following
+    conditions:
+
+     1. The succeeding line begins with a `-` character, and is composed
+        entirely of instances of only the `-` character and optional
+        _space_ characters (or)
+     2. The succeeding line begins with a `=` character, and is composed
+        entirely of instances of only the `=` character and optional
+        _space_ characters
+
+    then the block-element that starts at the _block-element start line_
+    is said to be of type **setext-style header**, and the succeeding
+    line is said to be the _block-element end line_.
+
 Each _block-element line sequence_ has to be processed based on the type
 of the block-element. The respective sections for each type of
 block-element, given below, discuss that in detail.
@@ -187,6 +204,43 @@ following regular expression patterns:
     then the corresponding HTML output shall be:
 
         <h5></h5>
+
+### setext-style header
+
+The  _block-element line sequence_ for a setext-style header shall have
+exactly two lines, with the second line beginning with either a `-`
+character or a `=` character.
+
+The first line shall be _trimmed_ to give the header text.
+
+If the second line starts with the `=` character, the heading level
+shall be 1. If the second line starts with the `-` character, the
+heading level shall be 2. No other heading levels are possible in a
+setext-style header.
+
+For example, consider the following pairs of _lines_:
+
+    Level One
+    =========
+
+    Another Level One
+    ======= ===== ===
+
+    Level   Two
+    -----------
+
+    Another level two
+    -- -- -- -- -- --
+
+The corresponding HTML outputs for the above lines are:
+
+    <h1>Level One</h1>
+
+    <h1>Another Level One</h1>
+
+    <h2>Level   Two</h2>
+
+    <h2>Another level two</h2>
 
 ### code block
 
