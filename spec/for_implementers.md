@@ -67,10 +67,10 @@ _line_ are _space_ characters, that line is called a **blank line**.
 
 ### Block-elements
 
-The _document_ can be seen as a sequence of _block-elements_, where each
-_block-element_ consists of a sequence of one or more _lines_.
+The _document_ can be seen as a sequence of block-elements, where each
+block-element consists of a sequence of one or more _lines_.
 
-There are different types of _block-elements_: 
+There are different types of block-elements: 
 
 - Paragraph
 - Header (atx-style, or setext-style)
@@ -80,7 +80,7 @@ There are different types of _block-elements_:
 - Horizontal rule
 - Null block
 
-To identify the _block-elements_ in the _document_, the _document_ is
+To identify the block-elements in the _document_, the _document_ is
 seen as a sequence of _lines_.
 
 ## Identifying block-elements
