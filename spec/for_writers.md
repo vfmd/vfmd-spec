@@ -1,14 +1,18 @@
 # vfmd for writers
 
-This document describes the [vfmd Markdown syntax] in simple terms, and
+This document describes the [vfmd] syntax in simple terms, and
 is intended to be of help for people writing in vfmd.
 
-[vfmd Markdown syntax]: introduction.md
+The vfmd syntax is pretty much the same as the [original Markdown
+syntax], with a few minor changes and added clarifications.
 
 vfmd enables you to represent rich-text markup in plain-text files. It
 uses punctuation characters as indicators of markup. It supports
 block-level markup like lists, blockquotes and code-blocks, and also
 supports span-level markup like emphasis, links and inline-code.
+
+[vfmd]: introduction.md
+[original Markdown syntax]: http://daringfireball.net/projects/markdown/syntax
 
 ## Encoding
 
