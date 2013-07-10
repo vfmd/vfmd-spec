@@ -118,6 +118,22 @@ The type and extent of the _block-element_ is determined as follows:
     character, it signifies the start of a block-element of type
     **atx-style header**.  The same line is the _block-element end line_.
 
+ 3. If the _block-element start line_ is not a _blank line_, and begins
+    with four or more consecutive _space_ characters, it signifies the
+    start of a block-element of type **code block**. The _block-element
+    end line_ is the next subsequent line in the _input line sequence_
+    that is immediately succeeded by a succeeding line that satisfies
+    one of the following conditions:
+
+     1. The succeeding line is not a _blank line_, and it does not
+        begin with four or more consecutive _space_ characters (or)
+     2. The succeeding line is a _blank line_, and is immediately
+        followed by a line that does not begin with four or more
+        consecutive _space_ characters
+
+    If no such _block-element end line_ is found, the last line in the
+    _input line sequence_ is the _block-element end line_.
+
 Each _block-element line sequence_ has to be processed based on the type
 of the block-element. The respective sections for each type of
 block-element, given below, discuss that in detail.
@@ -171,6 +187,31 @@ following regular expression patterns:
     then the corresponding HTML output shall be:
 
         <h5></h5>
+
+### code block
+
+A code block element can be formed by a sequence of _lines_, where
+each _line_ in the sequence is either a _blank line_ or a _line_
+beginning with four or more _space_ characters.
+
+For each line in the sequence of _lines_, the leading four _space_
+characters are removed, if present, and the resulting sequence of
+_lines_, separated by _line breaks_, forms the content of the code
+block.
+
+For example, if the following sequence of _lines_ form the code block
+element:
+
+        int main() {
+            return 42;
+        }
+
+The corresponding HTML output shall be:
+
+    <pre><code>int main() {
+        return 42;
+    }
+    </code></pre>
 
 ### null block
 
