@@ -157,11 +157,11 @@ block-element, given below, discuss that in detail.
 
 ### atx-style header
 
-An atx-style header can be formed from a single _line_ that starts with
-a `#` character.
+The  _block-element line sequence_ for an atx-style header shall have a
+single line that starts with a `#` character.
 
-The _line_ that constitutes the atx-style header shall match one of the
-following regular expression patterns:
+The single _line_ in the _block-element line sequence_ shall match one
+of the following regular expression patterns:
 
  1. With header text: `/^(#+)(.*[^#])#*$/`
 
@@ -244,13 +244,13 @@ The corresponding HTML outputs for the above lines are:
 
 ### code block
 
-A code block element can be formed by a sequence of _lines_, where
-each _line_ in the sequence is either a _blank line_ or a _line_
-beginning with four or more _space_ characters.
+Each line in the  _block-element line sequence_ for a code block element
+shall either be a _blank line_ or a _line_ beginning with four or more
+_space_ characters.
 
-For each line in the sequence of _lines_, the leading four _space_
-characters are removed, if present, and the resulting sequence of
-_lines_, separated by _line breaks_, forms the content of the code
+For each line in the _block-element line sequence_, the leading four
+_space_ characters are removed, if present, and the resulting sequence
+of _lines_, separated by _line breaks_, forms the content of the code
 block.
 
 For example, if the following sequence of _lines_ form the code block
@@ -269,6 +269,8 @@ The corresponding HTML output shall be:
 
 ### null block
 
-A null block element can be formed from a single _blank line_. A null
-block does not result in any output at all.
+The  _block-element line sequence_ for a null block element shall have a
+single _blank line_.
+
+A null block does not result in any output.
 
