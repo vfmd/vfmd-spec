@@ -1,7 +1,7 @@
 # Introduction
 
 **vfmd** stands for Vanilla-flavoured Markdown. It formalises the
-[original Markdown syntax][] as a fully-defined specification. It also adds
+[original Markdown syntax] as a fully-defined specification. It also adds
 a few (arguably minor) modifications to the syntax.
 
 ## Purpose
@@ -33,7 +33,7 @@ specification, given in the order of their preference:
    Markdown’s syntax is the format of plain text email".
 2. Make the output rich text structurally resemble the input plain text
 3. Any input should be acceptable as valid Markdown
-4. Stick to the [original Markdown syntax][] as much as possible
+4. Stick to the [original Markdown syntax] as much as possible
 
-[Gruber's Markdown]: http://daringfireball.net/projects/markdown/syntax
+[original Markdown syntax]: http://daringfireball.net/projects/markdown/syntax
 
