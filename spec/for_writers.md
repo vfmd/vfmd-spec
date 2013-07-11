@@ -7,9 +7,8 @@ The vfmd syntax is pretty much the same as the [original Markdown
 syntax], with a few minor changes and added clarifications.
 
 vfmd enables you to represent rich-text markup in plain-text files. It
-uses punctuation characters as indicators of markup. It supports
-block-level markup like lists, blockquotes and code-blocks, and also
-supports span-level markup like emphasis, links and inline-code.
+supports block-level markup like lists, blockquotes and code-blocks, and
+also supports span-level markup like emphasis, links and inline-code.
 
 [vfmd]: introduction.md
 [original Markdown syntax]: http://daringfireball.net/projects/markdown/syntax
