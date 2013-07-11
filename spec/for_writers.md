@@ -87,3 +87,31 @@ For example:
 
     ###### Sixth-level header #
 
+### Code blocks
+
+Code blocks can be used to quote text verbatim. For example, it can be
+used to quote source code. Every line of the code block should be
+indented by 4 space characters.
+
+No Markdown syntax is processed within a code block. In addition, for
+HTML output, ampersands (`&`) and angle brackets (`<` and `>`) within a
+code block are automatically converted into HTML entities, so that the
+text appears as specified when the output HTML in viewed in a browser.
+
+For example:
+
+    Consider the following snippet that mixes Markdown with HTML5:
+
+        ## Introduction
+
+        This is <del>normal text</del> an intro.
+
+becomes, in HTML output:
+
+    <p>Consider the following snippet that mixes Markdown with HTML5:</p>
+
+    <pre><code>## Introduction
+
+    This is &lt;del&gt;normal text&lt;/del&gt; an intro.
+    </pre></code>
+
