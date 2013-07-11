@@ -22,3 +22,68 @@ another language, please make sure that the document is in UTF-8
 encoding (for example, if you are using a text editor to write the
 document, ensure that it saves the document in UTF-8 encoding).
 
+## Block-level elements
+
+### Headers
+
+vfmd supports both [setext]-style and [atx]-style headers.
+
+[setext]: http://docutils.sourceforge.net/mirror/setext.html
+[atx]: http://www.aaronsw.com/2002/atx/
+
+#### setext-style headers
+
+To create a setext-style header, follow the header text with an
+line that "underlines" the text with equal signs (for first-level
+headers) and dashes (for second-level headers).
+
+For example:
+
+    This is a first-level header
+    ============================
+
+    This is a second-level header
+    -----------------------------
+
+The "underline" line should start with a `=` or `-` character, can be of
+any length, and can have interspersed space characters.
+
+For example:
+
+    This is a first-level header
+    ==== == = =========== ======
+
+    This is a second-level header
+    ----
+
+#### atx-style headers
+
+atx-style headers start with one or more `#` characters. The first-level
+header starts with a single `#`, second-level headers with `##`,
+third-level headers with `###`, and so on, till 6 `#` characters for a
+sixth-level header.
+
+For example:
+
+    # Title (first-level header)
+
+    ## Section (second-level header)
+
+    ### Subtitle (third-level header)
+
+    ###### Sixth-level header
+
+    ######### Still a sixth-level header
+
+You may optionally "close" the header with any number of additional `#`
+characters. However, the header level is determined only by counting the
+"opening" `#` characters.
+
+For example:
+
+    ## Second-level header ##
+
+    ### Third-level header ######
+
+    ###### Sixth-level header #
+
