@@ -37,6 +37,8 @@ A `#x09 (TAB)` _character_ in the input shall be treated as four
 consecutive `#x20 (SPACE)` characters.
 
 A `#x20 (SPACE)` character is henceforth called a **space** character.
+Any _character_ that is not a `#x20 (SPACE)` character is henceforth
+called a **non-space** character.
 
 The character sequence `#x0D #x0A (CRLF)` in the input shall be treated
 as a single `#x0A (LF)` character.
@@ -150,6 +152,23 @@ The type and extent of the _block-element_ is determined as follows:
     then the block-element that starts at the _block-element start line_
     is said to be of type **setext-style header**, and the succeeding
     line is said to be the _block-element end line_.
+
+ 5. If none of the above conditions apply, and if the first
+    _non-space_ character in the _block-element start line_ is a `>`
+    character, then the block-element is of type **blockquote**. The
+    _block-element end line_ is the next subsequent line in the _input
+    line sequence_ that is a _blank line_ and is immediately succeeded
+    by a succeeding line that satisfies one of the following conditions:
+
+     1. The succeeding line is a _blank line_ (or)
+     2. The succeeding line begins with four or more consecutive _space_
+        characters (or)
+     3. The first _non-space_ character in the succeeding line is not
+        a `>` character
+    
+    If no such _block-element end line_ is found, the last line in the
+    _input line sequence_ is the _block-element end line_.
+
 
 Using the above rules, the _input line sequence_ is broken down into a
 series of _block-element line sequences_. Each _block-element line
@@ -267,6 +286,69 @@ The corresponding HTML output shall be:
         return 42;
     }
     </code></pre>
+
+### blockquote
+
+The _block-element line sequence_ for a blockquote element shall
+have two or more _lines_, some of which might have the `>` character as
+the first _non-space_ character in the _line_.
+
+If the last _line_ in the _block-element line sequence_ is a _blank
+line_, the last _line_ is ignored.
+
+Each _line_ in the _block-element line sequence_ is processed to produce
+a modified sequence of _lines_, called the _blockquote-processed line
+sequence_. The following processing is to be done for each _line_:
+
+ 1. If the _line_ matches the regular expression `/^ *> /`, then the
+part of the _line_ that matches the said regular expression shall be removed
+from the line  
+ 2. If the pattern in (1) above is not satisfied, and if the _line_ matches
+the regular expression `/^ *>/`, then the part of the _line_ that
+matches the said regular expression shall be removed from the line
+
+The _blockquote-processed line sequence_ obtained this way can be
+considered as the _input line sequence_ for a sequence of block-elements
+nested within the blockquote. The result of interpreting that _input
+line sequence_ further into block-elements shall form the content of the
+blockquote element.
+
+For example, consider the following _block-element line sequence_:
+
+      > In Perl, a Hello World is 
+      > written as follows:
+      >
+      >     print "Hello World!\n";
+
+After processing each line in the above _block-element line sequence_,
+the _blockquote-processed line sequence_ obtained is as follows:
+
+    In Perl, a Hello World is 
+    written as follows:
+    
+        print "Hello World!\n";
+
+When we treat the _blockquote-processed line sequence_ as an _input line
+sequence_, we can recognize nested block elements in it of type
+paragraph and code block. The HTML equivalent for the _lines_ in the
+_blockquote-processed line sequence_ is as follows:
+
+    <p>In Perl, a Hello World is 
+    written as follows:</p>
+    
+    <pre><code>print "Hello World!\n";
+    </code></pre>
+
+Therefore, the HTML equivalent for the given  _block-element line
+sequence_ is:
+
+    <blockquote>
+    <p>In Perl, a Hello World is 
+    written as follows:</p>
+    
+    <pre><code>print "Hello World!\n";
+    </code></pre>
+    </blockquote>
 
 ### null block
 

@@ -114,3 +114,53 @@ becomes, in HTML output:
     This is &lt;del&gt;normal text&lt;/del&gt; an intro.
     </pre></code>
 
+### Blockquotes
+
+Blockquoting is done by starting a line with `>` characters, like it's
+done in email. It looks best if you hard wrap the text and start every
+line with a `>`, like this:
+
+    > 'Very true,' said the Duchess: 'flamingoes and mustard both
+    > bite.  And the moral of that is - "Birds of a feather flock
+    > together."'
+    >
+    > 'Only mustard isn't a bird,' Alice remarked.
+    >
+    > 'Right, as usual,' said the Duchess: 'what a clear way you
+    > have of putting things!'
+
+But you are allowed to skip the leading `>` for subsequent lines of a
+hard-wrapped paragraph, as long as the first line of the paragraph
+starts with a `>`. If there's only one blank line between multiple
+blockquoted paragraphs, they form a single blockquote, like this:
+
+    > 'Very true,' said the Duchess: 'flamingoes and mustard both
+    bite.  And the moral of that is - "Birds of a feather flock
+    together."'
+    
+    > 'Only mustard isn't a bird,' Alice remarked.
+    
+    > 'Right, as usual,' said the Duchess: 'what a clear way you
+    have of putting things!'
+
+Blockquotes can contain other elements, like headers, code blocks and
+nested blockquotes.
+
+For example:
+
+    > ## Section header
+    >
+    > This is a paragraph inside a blockquote.
+    >
+    > > This is a nested blockquote.
+    > > The second line of the nested blockquote.
+    > >
+    > > > This is the third level of nesting.
+    >
+    > Some code that gives the ultimate answer of
+    > _Life, the Universe and Everything_:
+    >
+    >     int main() {
+    >         return 42;
+    >     }
+
