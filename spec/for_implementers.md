@@ -116,11 +116,7 @@ The type and extent of the _block-element_ is determined as follows:
     element is of type **null**. The same line is the _block-element end
     line_.
 
- 2. If the leftmost character of the _block-element start line_ is a `#`
-    character, it signifies the start of a block-element of type
-    **atx-style header**.  The same line is the _block-element end line_.
-
- 3. If the _block-element start line_ is not a _blank line_, and begins
+ 2. If the _block-element start line_ is not a _blank line_, and begins
     with four or more consecutive _space_ characters, it signifies the
     start of a block-element of type **code block**. The _block-element
     end line_ is the next subsequent line in the _input line sequence_
@@ -136,7 +132,7 @@ The type and extent of the _block-element_ is determined as follows:
     If no such _block-element end line_ is found, the last line in the
     _input line sequence_ is the _block-element end line_.
 
- 4. If none of the above conditions apply, and if the _block-element
+ 3. If none of the above conditions apply, and if the _block-element
     start line_ does not start with a _space_ character, and is not the
     last line in the _input line sequence_, and is immediately followed
     by a succeeding line that satisfies at least one of the following
@@ -152,6 +148,10 @@ The type and extent of the _block-element_ is determined as follows:
     then the block-element that starts at the _block-element start line_
     is said to be of type **setext-style header**, and the succeeding
     line is said to be the _block-element end line_.
+
+ 4. If the leftmost character of the _block-element start line_ is a `#`
+    character, it signifies the start of a block-element of type
+    **atx-style header**.  The same line is the _block-element end line_.
 
  5. If none of the above conditions apply, and if the first
     _non-space_ character in the _block-element start line_ is a `>`
