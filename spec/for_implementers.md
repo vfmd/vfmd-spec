@@ -188,7 +188,7 @@ of the following regular expression patterns:
     Examples:  
 
         ## Subheading 1
-        ### Third-level heading
+        ### Third-level *heading*
         ####Fourth-level####
         ##   Subheading #2   ####
         ###### Six hashes
@@ -199,12 +199,14 @@ of the following regular expression patterns:
     subexpression is the heading level, subject to a maximum of 6.
 
     The matching substring for the second paranthesized subexpression
-    shall be _trimmed_ to give the header text.
+    shall be _trimmed_ to give a _header text run_. The result of
+    processing the _header text run_ as a _text run_ shall form the
+    content of the header element.
 
     For example, the HTML outputs for the above expressions are:
 
         <h2>Subheading 1</h2>
-        <h3>Third-level heading</h3>
+        <h3>Third-level <em>heading</em></h3>
         <h4>Fourth-level</h4>
         <h2>Subheading #2</h2>
         <h6>Six hashes</h6>
@@ -231,7 +233,9 @@ The  _block-element line sequence_ for a setext-style header shall have
 exactly two lines, with the second line beginning with either a `-`
 character or a `=` character.
 
-The first line shall be _trimmed_ to give the header text.
+The first line shall be _trimmed_ to give a _header text run_. The
+result of processing the _header text run_ as a _text run_ shall form
+the content of the header element.
 
 If the second line starts with the `=` character, the heading level
 shall be 1. If the second line starts with the `-` character, the
@@ -243,8 +247,8 @@ For example, consider the following pairs of _lines_:
     Level One
     =========
 
-    Another Level One
-    ======= ===== ===
+    Another *Level One*
+    ======= ====== ====
 
     Level   Two
     -----------
@@ -256,7 +260,7 @@ The corresponding HTML outputs for the above lines are:
 
     <h1>Level One</h1>
 
-    <h1>Another Level One</h1>
+    <h1>Another <em>Level One</em></h1>
 
     <h2>Level   Two</h2>
 
