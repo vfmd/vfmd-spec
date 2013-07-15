@@ -133,10 +133,9 @@ The type and extent of the _block-element_ is determined as follows:
     _input line sequence_ is the _block-element end line_.
 
  3. If none of the above conditions apply, and if the _block-element
-    start line_ does not start with a _space_ character, and is not the
-    last line in the _input line sequence_, and is immediately followed
-    by a succeeding line that satisfies at least one of the following
-    conditions:
+    start line_ is not the last line in the _input line sequence_, and
+    is immediately followed by a succeeding line that satisfies at least
+    one of the following conditions:
 
      1. The succeeding line begins with a `-` character, and is composed
         entirely of instances of only the `-` character and optional
