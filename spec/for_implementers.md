@@ -148,7 +148,7 @@ The type and extent of the _block-element_ is determined as follows:
     is said to be of type **setext-style header**, and the succeeding
     line is said to be the _block-element end line_.
 
- 4. If none of the above conditions apply, and if the leftmost character
+ 4. If none of the above conditions apply, and if the first character
     of the _block-element start line_ is a `#` character, it signifies
     the start of a block-element of type **atx-style header**.  The same
     line is the _block-element end line_.
