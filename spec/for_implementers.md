@@ -116,13 +116,20 @@ The type and extent of the _block-element_ is determined as follows:
     element is of type **null**. The same line is the _block-element end
     line_.
 
- 2. If the _block-element start line_ is not a _blank line_, and begins
-    with four or more consecutive _space_ characters, it signifies the
-    start of a block-element of type **code block**. The _block-element
-    end line_ is the next subsequent line in the _input line sequence_,
-    starting from and inclusive of the _block-element start line_, that
-    is immediately succeeded by a succeeding line that satisfies one of
-    the following conditions:
+ 2. If none of the above conditions apply, and if the _block-element
+    start line_ is not the last line in the _input line sequence_, and
+    is immediately followed by a succeeding line that matches the
+    regular expression pattern `/^(-+|=+) *$/`, then the block-element
+    is said to be of type **setext-style header**, and the succeeding
+    line is said to be the _block-element end line_.
+
+ 3. If none of the above conditions apply, and if the _block-element
+    start line_ begins with four or more consecutive _space_ characters,
+    it signifies the start of a block-element of type **code block**.
+    The _block-element end line_ is the next subsequent line in the
+    _input line sequence_, starting from and inclusive of the
+    _block-element start line_, that is immediately succeeded by a
+    succeeding line that satisfies one of the following conditions:
 
      1. The succeeding line is not a _blank line_, and it does not
         begin with four or more consecutive _space_ characters (or)
@@ -132,13 +139,6 @@ The type and extent of the _block-element_ is determined as follows:
 
     If no such _block-element end line_ is found, the last line in the
     _input line sequence_ is the _block-element end line_.
-
- 3. If none of the above conditions apply, and if the _block-element
-    start line_ is not the last line in the _input line sequence_, and
-    is immediately followed by a succeeding line that matches the
-    regular expression pattern `/^(-+|=+) *$/`, then the block-element
-    is said to be of type **setext-style header**, and the succeeding
-    line is said to be the _block-element end line_.
 
  4. If none of the above conditions apply, and if the first character
     of the _block-element start line_ is a `#` character, it signifies
