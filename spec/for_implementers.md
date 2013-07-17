@@ -119,9 +119,10 @@ The type and extent of the _block-element_ is determined as follows:
  2. If the _block-element start line_ is not a _blank line_, and begins
     with four or more consecutive _space_ characters, it signifies the
     start of a block-element of type **code block**. The _block-element
-    end line_ is the next subsequent line in the _input line sequence_
-    that is immediately succeeded by a succeeding line that satisfies
-    one of the following conditions:
+    end line_ is the next subsequent line in the _input line sequence_,
+    starting from and inclusive of the _block-element start line_, that
+    is immediately succeeded by a succeeding line that satisfies one of
+    the following conditions:
 
      1. The succeeding line is not a _blank line_, and it does not
         begin with four or more consecutive _space_ characters (or)
