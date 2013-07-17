@@ -32,9 +32,13 @@ vfmd supports both [setext]-style and [atx]-style headers.
 
 #### setext-style headers
 
-To create a setext-style header, follow the header text with an
-line that "underlines" the text with equal signs (for first-level
-headers) and dashes (for second-level headers).
+To create a setext-style header, follow the header text with a line that
+"underlines" the text with equal signs (`=`) or dashes (`-`).
+
+For a first-level header, the "underline" line should be sequence of one
+or more `=` characters. For a second-level header, it should be a
+sequence of one or more `-` characters. There can be no other characters
+in the "underline" line (trailing spaces are okay).
 
 For example:
 
@@ -44,16 +48,11 @@ For example:
     This is a second-level header
     -----------------------------
 
-The "underline" line should start with a `=` or `-` character, can be of
-any length, and can have interspersed space characters.
-
-For example:
-
     This is a first-level header
-    ==== == = =========== ======
+    ===
 
     This is a second-level header
-    ----
+    ---
 
 #### atx-style headers
 

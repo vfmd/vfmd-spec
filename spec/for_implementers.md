@@ -135,17 +135,8 @@ The type and extent of the _block-element_ is determined as follows:
 
  3. If none of the above conditions apply, and if the _block-element
     start line_ is not the last line in the _input line sequence_, and
-    is immediately followed by a succeeding line that satisfies at least
-    one of the following conditions:
-
-     1. The succeeding line begins with a `-` character, and is composed
-        entirely of instances of only the `-` character and optional
-        _space_ characters (or)
-     2. The succeeding line begins with a `=` character, and is composed
-        entirely of instances of only the `=` character and optional
-        _space_ characters
-
-    then the block-element that starts at the _block-element start line_
+    is immediately followed by a succeeding line that matches the
+    regular expression pattern `/^(-+|=+) *$/`, then the block-element
     is said to be of type **setext-style header**, and the succeeding
     line is said to be the _block-element end line_.
 
@@ -249,13 +240,13 @@ For example, consider the following pairs of _lines_:
     =========
 
     Another *Level One*
-    ======= ====== ====
+    ===================
 
     Level   Two
     -----------
 
     Another level two
-    -- -- -- -- -- --
+    -----------------
 
 The corresponding HTML outputs for the above lines are:
 
