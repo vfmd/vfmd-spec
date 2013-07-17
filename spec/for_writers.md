@@ -54,6 +54,22 @@ For example:
     This is a second-level header
     ---
 
+Please note that in case the header is in the immediate next line of a
+paragraph, it will be considered as a part of the paragraph, and shall
+not be identified as a header.
+
+    This is a paragraph. If you don't inculde a blank line
+    between this paragraph of text and the title of the next
+    section, the title will not be recognized as a title.
+    This will not be recognized as a section title
+    ----------------------------------------------
+
+    If you do include a blank line between the paragraph and
+    the title, it all works out correctly.
+
+    This is a section title
+    -----------------------
+
 #### atx-style headers
 
 atx-style headers start with one or more `#` characters. The first-level
@@ -84,6 +100,20 @@ For example:
     ### Third-level header ######
 
     ###### Sixth-level header #
+
+Please note that in case the header is in the immediate next line of a
+paragraph, it will be considered as a part of the paragraph, and shall
+not be identified as a header.
+
+    This is a paragraph. If you don't inculde a blank line
+    between this paragraph of text and the title of the next
+    section, the title will not be recognized as a title.
+    # This will not be recognized as a section title
+
+    If you do include a blank line between the paragraph and
+    the title, it all works out correctly.
+
+    # This is a section title
 
 ### Code blocks
 
