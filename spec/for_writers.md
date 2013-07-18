@@ -193,3 +193,35 @@ For example:
     >         return 42;
     >     }
 
+### Horizontal rule
+
+A horizontal rule tag (`<hr/>`) can be created by placing three or more
+hyphens (`-`), or three or more underscores (`_`) or three or more
+asterisks (`*`) on a line by themselves. The hyphens (or the
+underscores, or the asterisks) forming the horizontal rule can
+optionally be interspersed with spaces.
+
+Each of the following lines results in a horizontal rule:
+
+    ***
+
+    *****
+
+    * * * *
+
+    -------------
+    _   _   _   _   _   _   _
+
+    -- --- --
+
+But the following lines don't result in a horizontal rule:
+
+    **
+
+    --
+
+    *-*-*
+
+    _-_-_-_
+
+

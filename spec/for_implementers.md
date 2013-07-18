@@ -161,6 +161,19 @@ The type and extent of the _block-element_ is determined as follows:
     If no such _block-element end line_ is found, the last line in the
     _input line sequence_ is the _block-element end line_.
 
+ 6. If none of the above conditions apply, and if the _block-element
+    start line_ contains three or more `*` characters, and is composed
+    entirely of instances of the `*` character and optional _space_
+    characters, then the line forms a block-element of type **horizontal
+    rule**.
+
+    Similarly, if the _block-element start line_ contains either three
+    or more `-` characters, or three or more `_` characters, and is
+    composed entirely of the same character and optional _space_
+    characters, then the block-element is of type _horizontal rule_.
+
+    The _block-element end line_ is the same as the _block-element start
+    line_.
 
 Using the above rules, the _input line sequence_ is broken down into a
 series of _block-element line sequences_. Each _block-element line
@@ -345,6 +358,30 @@ sequence_ is:
     <pre><code>print "Hello World!\n";
     </code></pre>
     </blockquote>
+
+### horizontal rule
+
+The  _block-element line sequence_ for a null block element shall have a
+single _line_ that is composed entirely of either `*`, `-` or `_`
+characters, along with optional _space_ characters.
+
+The output shall consist of a horizontal rule.
+
+For example:
+
+    Last line of a paragraph.
+
+    * * *
+
+    First line of a paragraph.
+
+The corresponding HTML output shall be:
+
+    <p>Last line of a paragraph.</p>
+
+    <hr/>
+
+    <p>First line of a paragraph.</p>
 
 ### null block
 
