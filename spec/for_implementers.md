@@ -299,7 +299,7 @@ The corresponding HTML output shall be:
 ### blockquote
 
 The _block-element line sequence_ for a blockquote element shall
-have two or more _lines_, some of which might have the `>` character as
+have one or more _lines_, some of which might have the `>` character as
 the first _non-space_ character in the _line_.
 
 If the last _line_ in the _block-element line sequence_ is a _blank
