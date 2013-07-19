@@ -120,6 +120,11 @@ start line_.  The line at which the block should end (i.e.  the
 corresponding _block-element end line_) is determined based on the
 _block-element start line_ and subsequent lines.
 
+**Definitions:** The regular expression pattern `/^( *[\*\-\+] +)[^ ]/`
+is called the **unordered list starter pattern**. The regular expression
+pattern `/^( *[0-9]+\. +)[^ ]/` is called the **ordered list starter
+pattern**.
+
 The following rules are to be followed in determining the type of the
 block-element and the _block-element end line_:
 
@@ -185,6 +190,59 @@ block-element and the _block-element end line_:
 
     The _block-element end line_ is the same as the _block-element start
     line_.
+
+ 7. If none of the conditions specified above apply, and if the
+    _block-element start line_ matches the _unordered list starter
+    pattern_ (i.e. the regular expression `/^( *[\*\-\+] +)[^ ]/`) then
+    the block-element is of type **unordered list**. The matching
+    substring for the first and only paranthesized subexpression in the
+    pattern is called the _unordered list starter string_. The number of
+    _characters_ in the _unordered list starter string_ is called the
+    _unordered-list-starter-string-length_.
+
+    For example, consider the following _block-element start line_
+    (which has three _space_ characters, followed by an asterisk,
+    followed by two _space_ characters, followed by the word "Peanuts"):
+  
+           *  Peanuts
+
+    The _unordered list starter string_ in the above example consists of
+    the first 6 characters of the line, i.e. the entire part before the
+    word "Peanuts". The _unordered-list-starter-string-length_ is 6.
+   
+    The _block-element end line_ is the next subsequent line in the
+    _input line sequence_, starting from and inclusive of the
+    _block-element start line_, that satisfies one of the following
+    conditions:
+
+     1. The line is a _blank line_ and is immediately succeeded by
+        another _blank line_
+
+        (or)
+
+     2. The line is a _blank line_ and is immediately succeeded by a
+        succeeding line that satisfies all of the following conditions:
+
+         1. The succeeding line does not start with the _unordered list
+            starter string_ seen in the _block-element start line_
+         2. The first _unordered-list-starter-string-length_ characters
+            of the succeeding line include _non-space_ characters
+
+        (or)
+
+     3. The line is not a _blank line_ and is immediately succeeded by
+        a succeeding line that statisfies all of the following
+        conditions:
+
+         1. The succeeding line does not start with the _unordered list
+            starter string_ seen in the _block-element start line_
+         2. The first _unordered-list-starter-string-length_ characters
+            of the succeeding line include _non-space_ characters
+         3. The succeeding line matches either the _unordered list
+            starter pattern_ or the _ordered list starter pattern_
+
+    If no such _block-element end line_ is found, the last line in the
+    _input line sequence_ is the _block-element end line_.
 
 Using the above rules, the _input line sequence_ is broken down into a
 series of _block-element line sequences_, and the block-element type of
@@ -400,6 +458,215 @@ The corresponding HTML output shall be:
     <hr/>
 
     <p>First line of a paragraph.</p>
+
+### unordered list
+
+The _block-element line sequence_ for an unordered list block shall have
+one or more _lines_.
+
+The first line in the _block-element line sequence_ would match the
+_unordered list starter pattern_ (i.e. the regular expression
+`/^( *[\*\-\+] +)[^ ]/`). The matching substring for the first and only
+paranthesized subexpression in that pattern is called the _unordered
+list starter string_. The number of characters in the _unordered list
+starter string_ is called the _unordered-list-starter-string-length_.
+
+We first divide the _block-element line sequence_ into a series of
+_unordered list item line sequences_. The lines in a particular
+_unordered list item line sequence_ correspond to one list item in the
+list.
+
+Every _line_ in the _block-element line sequence_ that starts with the
+_unordered list starter string_ is called an _unordered list item start
+line_. Each _unordered list item start line_ signifies the beginning of
+a new _unordered list item line sequence_. An _unordered list item line
+sequence_ consists of the sequence of _lines_ starting from (and
+inclusive of) an _unordered list item start line_, and ending at (and
+excluding) the next subsequent _unordered list item start line_. If
+there is no subsequent _unordered list item start line_, the _unordered
+list item line sequence_ ends at the last _line_ of the _block-element
+line sequence_.
+
+We have now divided the _block-element line sequence_ into a series of
+_unordered list item line sequences_. The first line of each _unordered
+list item line sequence_ starts with the _unordered list starter
+string_.
+
+Each _line_ in the _unordered list item line sequence_ is processed to
+produce a modified sequence of _lines_, called the
+_unordered-list-item-processed line sequence_. The following processing
+is to be done for each _line_:
+
+ 1. If the _line_ is the first line of the _unordered list item line
+    sequence_:
+    
+    The _line_ would start with the _unordered list starter string_.
+    The _unordered list starter string_ shall be removed from the
+    beginning of the _line_.
+
+ 2. If the _line_ is not the first line of the _unordered list item line
+    sequence_:
+    
+    The _line_ would start with zero or more _space_ characters. The
+    leading _space_ characters, if any, should be removed as given
+    below:
+
+     1. If the number of leading _space_ characters exceeds the
+        _unordered-list-starter-string-length_, the number of leading
+        _space_ characters removed should be equal to the
+        _unordered-list-starter-string-length_.
+     2. If the number of leading _space_ characters is less than or
+        equal to the _unordered-list-starter-string-length_, all the
+        leading _space_ characters should be removed.
+
+The _unordered-list-item-processed line sequence_ obtained this way can
+be considered as the _input line sequence_ for a sequence of
+block-elements nested within the list item. The result of interpreting
+that _input line sequence_ further into block-elements shall form the
+content of the list element. 
+
+The list elements so obtained are combined into a sequence to form the
+complete unordered list in the output.
+
+For example, consider the following _block-element line sequence_:
+
+    * First item 1
+
+    * Second item 1
+    Second item 2
+
+          Code block
+
+    * Third item 1
+
+        * Nested item 1
+
+The _unordered list starter string_ for the above example is an asterisk
+followed by a single _space_ character. The
+_unordered-list-starter-string-length_ is 2.
+
+The 1<sup>st</sup>, 3<sup>rd</sup> and 8<sup>th</sup> lines in the
+_block-element line sequence_ start with the _unordered list starter
+string_, and are therefore _unordered list item start lines_. (The
+10<sup>th</sup> line does contain the _unordered list starter string_,
+but does not start with the _unordered list starter string_, so it's not
+an _unordered list item start line_.)  Therefore, there are three
+_unordered list item line sequences_ in the above example, as follows:
+
+ 1. The _lines_ 1 and 2 form the first _unordered list item
+    line sequence_
+ 2. The _lines_ 3-7 form the second _unordered list item line sequence_
+ 3. The _lines_ 8-10 form the third and last _unordered list item
+    line sequence_
+
+Each _unordered list item line sequence_ is then processed to obtain the
+_unordered-list-item-processed line sequence_.  When we treat each
+_unordered-list-item-processed line sequence_ as an _input line
+sequence_, we can recognize nested block elements in it.
+
+The first _unordered list item line sequence_ looks like:
+
+<pre><code>* First item 1
+
+</code></pre>
+
+To obtain the corresponding _unordered-list-item-processed line
+sequence_, we need to remove the _unordered list starter string_ from
+the beginning of the first line.
+
+The first _unordered-list-item-processed line sequence_ is therefore:
+
+<pre><code>First item 1
+
+</code></pre>
+
+When this _unordered-list-item-processed line sequence_ is processed as
+an _input line sequence_ to identify block-elements in it, we get a
+single paragraph block-element.  The corresponding HTML would be:
+
+    <p>First item 1</p>
+
+The second _unordered list item line sequence_ looks like:
+
+<pre><code>* Second item 1
+Second item 2
+
+      Code block
+
+</code></pre>
+
+To obtain the corresponding _unordered-list-item-processed line
+sequence_, we need to remove the _unordered list starter string_ from
+the beginning of the first line, and remove leading _space_ characters,
+subject to a maximum of 2 _space_ characters (because the
+_unordered-list-starter-string-length_ is 2), from the subsequent lines.
+
+The second _unordered-list-item-processed line sequence_ is therefore:
+
+<pre><code>Second item 1
+Second item 2
+
+    Code block
+
+</code></pre>
+
+When this _unordered-list-item-processed line sequence_ is processed as
+an _input line sequence_ to identify block-elements in it, we get a
+paragraph followed by a code block.  The corresponding HTML would be:
+
+    <p>Second item 1
+    Second item 2</p>
+
+    <pre><code>Code block
+    </code></pre>
+
+The third _unordered list item line sequence_ looks like:
+
+    * Third item 1
+
+        * Nested item 1
+
+To obtain the corresponding _unordered-list-item-processed line
+sequence_, we need to remove the _unordered list starter string_ from
+the beginning of the first line, and remove leading _space_ characters,
+subject to a maximum of 2 _space_ characters, from the subsequent lines.
+
+The third _unordered-list-item-processed line sequence_ is therefore:
+
+    Third item 1
+
+      * Nested item 1
+
+When this _unordered-list-item-processed line sequence_ is processed as
+an _input line sequence_ to identify block-elements in it, we get a
+paragraph followed by an unordered list.  The corresponding HTML would
+be:
+
+    <p>Third item 1</p>
+
+    <ul>
+        <li>Nested item 1</li>
+    </ul>
+
+Putting the content of all the list items together, the HTML equivalent
+for the complete _block-element line sequence_ of the unordered list in
+this example would be:
+
+    <ul>
+        <li><p>First item 1</p></li>
+        <li><p>Second item 1
+        Second item 2</p>
+
+        <pre><code>Code block
+        </code></pre></li>
+        <li><p>Third item 1</p>
+
+        <ul>
+            <li>Nested item 1</li>
+        </ul></li>
+    <ul>
+
+
 
 ### null block
 
