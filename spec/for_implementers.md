@@ -92,6 +92,8 @@ sequence**, we need to identify the block-elements in the input,
 identify the type of the block-elements and identify which sub-sequence
 of lines in the input correspond to which block-element.
 
+### The block-element line sequence
+
 The line at which a block-element begins is called a **block-element
 start line**. The line at which a block-element ends is called a
 **block-element end line**. The sub-sequence of lines starting from the
@@ -105,12 +107,21 @@ The first line in the _input line sequence_ is a _block-element start
 line_, and the last line in the _input line sequence_ is a
 _block-element end line_.
 
-The type of the block-element is determined based on the _block-element
-start line_. Also, where the block should end (i.e. the corresponding
-_block-element end line_) is also determined base on the _block-element
-start line_.
+The idea is to break the _input line sequence_ into a series of
+_block-element line sequences_. Each _block-element line sequence_ shall
+consist of only the _lines_ that correspond to a particular
+block-element.
 
-The type and extent of the _block-element_ is determined as follows:
+### Type and extent of a block-element
+
+The type of the block-element is determined based on the _block-element
+start line_ and, in some cases, the line following the _block-element
+start line_.  The line at which the block should end (i.e.  the
+corresponding _block-element end line_) is determined based on the
+_block-element start line_ and subsequent lines.
+
+The following rules are to be followed in determining the type of the
+block-element and the _block-element end line_:
 
  1. If the _block-element start line_ is a _blank line_, then the body
     element is of type **null**. The same line is the _block-element end
@@ -176,9 +187,16 @@ The type and extent of the _block-element_ is determined as follows:
     line_.
 
 Using the above rules, the _input line sequence_ is broken down into a
-series of _block-element line sequences_. Each _block-element line
-sequence_ is interpreted based on the type of the block-element, as
-discussed below.
+series of _block-element line sequences_, and the block-element type of
+each _block-element line sequence_ is identified.
+
+## Interpreting block-elements
+
+This section assumes that the _input line sequence_ has been broken down
+into a series of _block-element line sequences_, and that the
+block-element type of each _block-element line sequence_ has been
+identified. For a given block-element type, the procedure to interpret a
+_block-element line sequence_ is discussed in this section.
 
 ### atx-style header
 
