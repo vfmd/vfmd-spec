@@ -122,7 +122,7 @@ _block-element start line_ and subsequent lines.
 
 **Definitions:** The regular expression pattern `/^( *[\*\-\+] +)[^ ]/`
 is called the **unordered list starter pattern**. The regular expression
-pattern `/^( *[0-9]+\. +)[^ ]/` is called the **ordered list starter
+pattern `/^( *([0-9]+)\. +)[^ ]/` is called the **ordered list starter
 pattern**.
 
 The following rules are to be followed in determining the type of the
@@ -240,6 +240,57 @@ block-element and the _block-element end line_:
             of the succeeding line include _non-space_ characters
          3. The succeeding line matches either the _unordered list
             starter pattern_ or the _ordered list starter pattern_
+
+    If no such _block-element end line_ is found, the last line in the
+    _input line sequence_ is the _block-element end line_.
+
+ 8. If none of the conditions specified above apply, and if the
+    _block-element start line_ matches the _ordered list starter
+    pattern_ (i.e. the regular expression `/^( *([0-9]+)\. +)[^ ]/`)
+    then the block-element is of type **ordered list**. The length of
+    the matching substring for the first (i.e. inner) paranthesized
+    subexpression in the pattern is called the
+    _ordered-list-starter-string-length_.
+    
+    For example, consider the following _block-element start line_
+    (which has three _space_ characters, followed by the number '1',
+    followed by a dot, followed by two _space_ characters, followed by
+    the word "Peanuts"):
+  
+           1.  Peanuts
+
+    The _ordered-list-starter-string-length_ in the above example is 7.
+   
+    The _block-element end line_ is the next subsequent line in the
+    _input line sequence_, starting from and inclusive of the
+    _block-element start line_, that satisfies one of the following
+    conditions:
+
+     1. The line is a _blank line_ and is immediately succeeded by
+        another _blank line_
+
+        (or)
+
+     2. The line is a _blank line_ and is immediately succeeded by a
+        succeeding line that satisfies all of the following conditions:
+
+         1. The succeeding line does not match the _ordered list starter
+            pattern_
+         2. The first _ordered-list-starter-string-length_ characters of
+            the succeeding line include _non-space_ characters
+
+        (or)
+
+     3. The line is not a _blank line_ and is immediately succeeded by
+        a succeeding line that statisfies all of the following
+        conditions:
+
+         1. The succeeding line does not match the _ordered list starter
+            pattern_
+         2. The first _ordered-list-starter-string-length_ characters of
+            the succeeding line include _non-space_ characters
+         3. The succeeding line matches the _unordered list starter
+            pattern_
 
     If no such _block-element end line_ is found, the last line in the
     _input line sequence_ is the _block-element end line_.
@@ -666,7 +717,237 @@ this example would be:
         </ul></li>
     <ul>
 
+### ordered list
 
+The _block-element line sequence_ for an ordered list block shall have
+one or more _lines_.
+
+The first line in the _block-element line sequence_ would match the
+_ordered list starter pattern_ (i.e. the regular expression
+`/^( *([0-9]+)\. +)[^ ]/`). The length of the matching substring for the
+first (i.e. outer) paranthesized subexpression in the pattern is called
+the _ordered-list-starter-string-length_. The matching substring for the
+second (i.e. inner) paranthesized subexpression in the pattern is called
+the _ordered list starting number_.
+
+We first divide the _block-element line sequence_ into a series of
+_ordered list item line sequences_. The lines in a particular
+_ordered list item line sequence_ correspond to one list item in the
+list.
+
+Every _line_ in the _block-element line sequence_ that satisfies all the
+following conditions is called an _ordered list item start line_:
+
+ 1. The _line_ matches the _ordered list starter pattern_
+ 2. The first _ordered-list-starter-string-length_ characters of the
+    _line_ include _non-space_ characters
+
+Each _ordered list item start line_ signifies the beginning of a new
+_ordered list item line sequence_. An _ordered list item line sequence_
+consists of the sequence of _lines_ starting from (and inclusive of) an
+_ordered list item start line_, and ending at (and excluding) the next
+subsequent _ordered list item start line_. If there is no subsequent
+_ordered list item start line_, the _ordered list item line sequence_
+ends at the last _line_ of the _block-element line sequence_.
+
+We have now divided the _block-element line sequence_ into a series of
+_ordered list item line sequences_. The first line of each _ordered list
+item line sequence_ matches the _ordered list starter pattern_.
+
+Each _line_ in the _ordered list item line sequence_ is processed to
+produce a modified sequence of _lines_, called the
+_ordered-list-item-processed line sequence_. The following processing is
+to be done for each _line_:
+
+ 1. If the _line_ is the first line of the _ordered list item line
+    sequence_:
+    
+    The _line_ would match the _ordered list starter pattern_. The
+    matching substring for the first (i.e. outer) paranthesized
+    subexpression in the pattern shall be removed from the beginning of
+    the _line_.
+ 2. If the _line_ is not the first line of the _ordered list item line
+    sequence_:
+    
+    The _line_ would start with zero or more _space_ characters. The
+    leading _space_ characters, if any, should be removed as given
+    below:
+
+     1. If the number of leading _space_ characters exceeds the
+        _ordered-list-starter-string-length_, the number of leading
+        _space_ characters removed should be equal to the
+        _ordered-list-starter-string-length_.
+     2. If the number of leading _space_ characters is less than or
+        equal to the _ordered-list-starter-string-length_, all the
+        leading _space_ characters should be removed.
+
+The _ordered-list-item-processed line sequence_ obtained this way can be
+considered as the _input line sequence_ for a sequence of block-elements
+nested within the list item. The result of interpreting that _input line
+sequence_ further into block-elements shall form the content of the list
+element.
+
+The list elements so obtained are combined into a sequence to form the
+complete ordered list in the output. 
+
+The numbering for the ordered list should start from the _ordered list
+starting number_. For HTML output, if the _ordered list starting number_
+is the number '1', the corresponding `ol` start tag in the output shall
+not have the `start` attribute; if the _ordered list starting number_ is
+not the number '1', the corresponding `ol` start tag in the output shall
+include the `start` attribute with the the _ordered list starting
+number_ as the attribute value.
+
+For example, consider the following _block-element line sequence_:
+
+    1. First item 1
+
+    2. Second item 1
+    Second item 2
+
+          Code block
+
+    3. Third item 1
+
+        1. Nested item 1
+
+When we match the first line against the _ordered list starter pattern_,
+the matching substring for the paranthesized subexpression is obtained
+as <code>1. </code> (i.e. the number '1', followed by a dot, followed by
+a single _space_ character). The _ordered-list-starter-string-length_ is
+therefore 3. Also, the _ordered list starting number_ is identified as
+the number '1'.
+
+The 1<sup>st</sup>, 3<sup>rd</sup>, 8<sup>th</sup> and 10<sup>th</sup>
+lines in the _block-element line sequence_ match the _ordered list
+starter pattern_, but only the 1<sup>st</sup>, 3<sup>rd</sup> and
+8<sup>th</sup> lines are such that the first 3 characters of the line
+include _non-space_ characters. So only the 1<sup>st</sup>,
+3<sup>rd</sup> and 8<sup>th</sup> lines are are _ordered list item start
+lines_.  Therefore, there are three _ordered list item line sequences_
+in the above example, as follows:
+
+ 1. The _lines_ 1 and 2 form the first _ordered list item line sequence_
+ 2. The _lines_ 3-7 form the second _ordered list item line sequence_
+ 3. The _lines_ 8-10 form the third and last _ordered list item line
+    sequence_
+
+Each _ordered list item line sequence_ is then processed to obtain the
+_ordered-list-item-processed line sequence_.  When we treat each
+_ordered-list-item-processed line sequence_ as an _input line sequence_,
+we can recognize nested block elements in it.
+
+The first _ordered list item line sequence_ looks like:
+
+<pre><code>1. First item 1
+
+</code></pre>
+
+To obtain the corresponding _ordered-list-item-processed line sequence_,
+we need to match the line against the _ordered list starter pattern_ and
+remove the matching substring for the first paranthesized subexpression.
+The matching substring in this case is <code>1. </code> (i.e. the number
+'1', followed by a dot, followed by a single space character).
+
+The first _ordered-list-item-processed line sequence_ is therefore:
+
+<pre><code>First item 1
+
+</code></pre>
+
+When this _ordered-list-item-processed line sequence_ is processed as an
+_input line sequence_ to identify block-elements in it, we get a single
+paragraph block-element.  The corresponding HTML would be:
+
+    <p>First item 1</p>
+
+The second _ordered list item line sequence_ looks like:
+
+<pre><code>2. Second item 1
+Second item 2
+
+      Code block
+
+</code></pre>
+
+To obtain the corresponding _ordered-list-item-processed line sequence_,
+we need to match the first line against the _ordered list starter
+pattern_ and remove the matching substring for the first paranthesized
+subexpression. The matching substring in this case is <code>2. </code>
+(i.e. the number '2', followed by a dot, followed by a single space
+character). From subsequent lines, we need to remove leading _space_
+characters, subject to a maximum of 3 _space_ characters (because the
+_ordered-list-starter-string-length_ is 3).
+
+The second _ordered-list-item-processed line sequence_ is therefore:
+
+<pre><code>Second item 1
+Second item 2
+
+    Code block
+
+</code></pre>
+
+When this _ordered-list-item-processed line sequence_ is processed as
+an _input line sequence_ to identify block-elements in it, we get a
+paragraph followed by a code block.  The corresponding HTML would be:
+
+    <p>Second item 1
+    Second item 2</p>
+
+    <pre><code>Code block
+    </code></pre>
+
+The third _ordered list item line sequence_ looks like:
+
+    3. Third item 1
+
+        1. Nested item 1
+
+To obtain the corresponding _ordered-list-item-processed line sequence_,
+we need to match the first line against the _ordered list starter
+pattern_ and remove the matching substring for the first paranthesized
+subexpression. The matching substring in this case is <code>3. </code>
+(i.e. the number '3', followed by a dot, followed by a single space
+character). From subsequent lines, we need to remove leading _space_
+characters, subject to a maximum of 3 _space_ characters (because the
+_ordered-list-starter-string-length_ is 3).
+
+The third _ordered-list-item-processed line sequence_ is therefore:
+
+    Third item 1
+
+     1. Nested item 1
+
+When this _ordered-list-item-processed line sequence_ is processed as
+an _input line sequence_ to identify block-elements in it, we get a
+paragraph followed by an ordered list.  The corresponding HTML would
+be:
+
+    <p>Third item 1</p>
+
+    <ol>
+        <li>Nested item 1</li>
+    </ol>
+
+Putting the content of all the list items together, the HTML equivalent
+for the complete _block-element line sequence_ of the ordered list in
+this example would be:
+
+
+    <ol>
+        <li><p>First item 1</p></li>
+        <li><p>Second item 1
+        Second item 2</p>
+
+        <pre><code>Code block
+        </code></pre></li>
+        <li><p>Third item 1</p>
+
+        <ol>
+            <li>Nested item 1</li>
+        </ol></li>
+    </ol>
 
 ### null block
 
