@@ -295,6 +295,60 @@ block-element and the _block-element end line_:
     If no such _block-element end line_ is found, the last line in the
     _input line sequence_ is the _block-element end line_.
 
+ 9. If none of the above conditions apply, then the block-element is of
+    type **paragraph**.
+
+    In order to find the _block-element end line_, we need to make use
+    of a HTML parser. To the HTML parser, we feed the characters of each
+    line, starting from the _block-element start line_. After feeding
+    all characters of every line, we feed a `#x0A (LF)` character (i.e.
+    a _line break_) to the HTML parser, and observe the state of the
+    HTML parser.
+
+    Of the the many possible states of a HTML parser, the following is
+    the list of states that we are interested in:
+
+     1. Within a HTML tag (open / close / self-closing tag)
+     2. Within the contents of a HTML element, but not within a HTML
+        open or close tag
+     3. Within a HTML comment
+     4. Outside of any HTML element or comment
+ 
+    The _block-element end line_ is the next subsequent _line_ in the
+    _input line sequence_, starting from and inclusive of the
+    _block-element start line_, that satisfies all the following
+    conditions:
+
+    <!-- For some reason, Redcarpet requires a comment here to
+         correctly display the following list -->
+
+     1. At the end of feeding the _line_ and a _line break_ to the HTML
+        parser, all the following conditions are satisfied:
+
+         1. The HTML parser state is not "within a HTML tag"
+
+         2. The HTML parser state is not "within a HTML comment"
+
+         3. If the HTML parser state is "within the contents of a HTML
+            element", then the containing HTML element or any of its
+            ancestor elements is not one of the following HTML elements:
+            `pre`, `script`, `style`
+
+     2. The _line_ is a _blank line_, or is immediately succeeded by a
+        succeeding line that satisfies at least one of the following
+        conditions:
+
+         1. The leftmost _non-space_ character in the succeeding line is
+            a `>` character
+
+            (or)
+
+         2. The succeeding line contains three or more `*` characters,
+            and is composed entirely of instances of the `*` character
+            and optional _space_ characters (or similarly with `-` or
+            `_` characters)
+
+
 Using the above rules, the _input line sequence_ is broken down into a
 series of _block-element line sequences_, and the block-element type of
 each _block-element line sequence_ is identified.
@@ -948,6 +1002,56 @@ this example would be:
             <li>Nested item 1</li>
         </ol></li>
     </ol>
+
+### paragraph
+
+The _block-element line sequence_ for a paragraph block shall have
+one or more _lines_.
+
+The lines in the _block-element line sequence_ are joined together into
+a single sequence of _characters_, with a _line feed_ after each line.
+The resulting sequence of _characters_ is called the _paragraph text_.
+The result of interpreting the _paragraph text_ as a _text run_ shall
+form the content of the paragraph element.
+
+The _paragraph text_ needs to be run through a HTML parser to determine
+how the content of the paragrah element should be presented.
+
+For HTML output, the content of the paragraph element shall be enclosed
+in `p` tags if all the following conditions are satisfied:
+
+ 1. The _paragraph text_ does not contain any tag (open or close or
+    self-closing tag) of any of the following HTML elements: `address`,
+    `article`, `aside`, `blockquote`, `div`, `dl`, `fieldset`, `form`,
+    `hr`, `nav`, ` noscript`, `ol`, `pre`, `section`, `table`, `ul`.
+
+ 2. There is no unmatched HTML tag (i.e. open tag without a close tag,
+    or a close tag without an open tag) in the _paragraph text_
+
+ 3. At least one of the following conditions is satisfied:
+
+     1. The first _non-space_ character of the _paragraph text_ is not
+        part of a HTML tag (open or close or self-closing tag)
+
+        (or)
+
+     2. The last _non-space_ character of the _paragraph text_ is not
+        part of a HTML tag (open or close or self-closing tag)
+
+ 4. At least one of the following conditions is satisfied:
+
+     1. The containing HTML element (i.e. the direct parent element
+        under which this paragraph will be placed in the output HTML) is
+        not an `li` element
+
+        (or)
+
+     2. The last line in the _block-element line sequence_ is a _blank
+        line_
+
+If any of the above 4 conditions is not satisfied, the HTML output of
+the paragraph shall be the same as the content of the paragraph, without
+wrapping it in `p` tags.
 
 ### null block
 
