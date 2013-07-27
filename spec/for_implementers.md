@@ -131,15 +131,20 @@ block-element and the _block-element end line_:
  1. If the _block-element start line_ is a _blank line_, then the body
     element is of type **null**. The same line is the _block-element end
     line_.
+ 
+ 2. If the _block-element start line_ matches the regular expression
+    pattern `/^ *\[[^\[\]]+\] *: *[^ ]/`, then the block-element is of
+    type **reference resolution block**. The same line is the
+    _block-element end line_.
 
- 2. If none of the above conditions apply, and if the _block-element
+ 3. If none of the above conditions apply, and if the _block-element
     start line_ is not the last line in the _input line sequence_, and
     is immediately followed by a succeeding line that matches the
     regular expression pattern `/^(-+|=+) *$/`, then the block-element
     is said to be of type **setext-style header**, and the succeeding
     line is said to be the _block-element end line_.
 
- 3. If none of the above conditions apply, and if the _block-element
+ 4. If none of the above conditions apply, and if the _block-element
     start line_ begins with four or more consecutive _space_ characters,
     it signifies the start of a block-element of type **code block**.
     The _block-element end line_ is the next subsequent line in the
@@ -156,12 +161,12 @@ block-element and the _block-element end line_:
     If no such _block-element end line_ is found, the last line in the
     _input line sequence_ is the _block-element end line_.
 
- 4. If none of the above conditions apply, and if the first character
+ 5. If none of the above conditions apply, and if the first character
     of the _block-element start line_ is a `#` character, it signifies
     the start of a block-element of type **atx-style header**.  The same
     line is the _block-element end line_.
 
- 5. If none of the above conditions apply, and if the first
+ 6. If none of the above conditions apply, and if the first
     _non-space_ character in the _block-element start line_ is a `>`
     character, then the block-element is of type **blockquote**. The
     _block-element end line_ is the next subsequent line in the _input
@@ -177,7 +182,7 @@ block-element and the _block-element end line_:
     If no such _block-element end line_ is found, the last line in the
     _input line sequence_ is the _block-element end line_.
 
- 6. If none of the above conditions apply, and if the _block-element
+ 7. If none of the above conditions apply, and if the _block-element
     start line_ contains three or more `*` characters, and is composed
     entirely of instances of the `*` character and optional _space_
     characters, then the line forms a block-element of type **horizontal
@@ -191,7 +196,7 @@ block-element and the _block-element end line_:
     The _block-element end line_ is the same as the _block-element start
     line_.
 
- 7. If none of the conditions specified above apply, and if the
+ 8. If none of the conditions specified above apply, and if the
     _block-element start line_ matches the _unordered list starter
     pattern_ (i.e. the regular expression `/^( *[\*\-\+] +)[^ ]/`) then
     the block-element is of type **unordered list**. The matching
@@ -244,7 +249,7 @@ block-element and the _block-element end line_:
     If no such _block-element end line_ is found, the last line in the
     _input line sequence_ is the _block-element end line_.
 
- 8. If none of the conditions specified above apply, and if the
+ 9. If none of the conditions specified above apply, and if the
     _block-element start line_ matches the _ordered list starter
     pattern_ (i.e. the regular expression `/^( *([0-9]+)\. +)[^ ]/`)
     then the block-element is of type **ordered list**. The length of
@@ -295,7 +300,7 @@ block-element and the _block-element end line_:
     If no such _block-element end line_ is found, the last line in the
     _input line sequence_ is the _block-element end line_.
 
- 9. If none of the above conditions apply, then the block-element is of
+10. If none of the above conditions apply, then the block-element is of
     type **paragraph**.
 
     In order to find the _block-element end line_, we need to make use
@@ -1052,6 +1057,59 @@ in `p` tags if all the following conditions are satisfied:
 If any of the above 4 conditions is not satisfied, the HTML output of
 the paragraph shall be the same as the content of the paragraph, without
 wrapping it in `p` tags.
+
+### reference-resolution block
+
+The _block-element line sequence_ for a reference-resolution block shall
+have a single _line_.
+
+The reference-resolution block does not result in any output by itself.
+It is used to resolve the URLs of reference-style links and images in
+the rest of the document.
+
+The single _line_ in the _block-element line sequence_ shall match one
+of the following regular expression patterns:
+
+ 1. Just the URL: `/^ *\[([^\[\]]+)\] *: *([^ ]+) *$/`
+
+    Examples:  
+    `[ref id]: http://example.net/`  
+    `[ref id]: <http://example.net/>`  
+    `[ref id]: mailto:someone@somewhere.net`  
+
+ 2. URL followed by text: `/^ *\[([^\[\]]+)\] *: *([^ ]+) +([^ ].*)$/`
+
+    Examples:  
+    `[ref id]: http://example.net/ "Title"`  
+    `[ref id]: http://example.net/ 'Title'`  
+    `[ref id]: http://example.net/ "Title with \"escaped\" quotes"`  
+    `[ref id]: http://example.net/ "Title" followed by random "(ignored)" text`  
+    `[ref id]: http://example.net/ just random ignored text`  
+
+In case of either pattern, the matching substring for the first
+paranthesized subexpression in the pattern is called the _reference id_,
+and the matching substring for the second parathesized subexpression is
+called the _link string_.
+
+If the _link string_ begins with a `<` character, the `<` character at
+the beginning is removed, and if the _link string_ ends with a `>`
+character, the `>` character at the end is removed. The result after
+removing the leading `<` and the trailing `>` from the _link string_ is
+called the _link url_.
+
+In case the match is with the second regular expression pattern, the
+matching substring for the third paranthesized subexpression in the
+pattern is called the _trailing string_. If the _trailing string_ begins
+with a _quoted string_, the string enclosed in quotes in the _quoted
+string_ gives the _link title_ of the link, and the rest of the
+_trailing string_ is ignored. If the _trailing string_ does not begin
+with a _quoted string_, the whole of the _trailing string_ is ignored,
+and no _link title_ is associated with the link.
+
+If the _reference id_ appears as a link reference anywhere else in the
+document (either in a _close-link tag_ for a reference-link, or in an
+_image tag_), it shall be resolved by mapping it to the _link url_ and,
+if an associated _link title_ was found, the _link title_.
 
 ### null block
 
