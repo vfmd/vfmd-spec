@@ -343,8 +343,10 @@ following is true:
  3. There is a HTML tag (open tag or close tag or self-closing tag) at
     both the beginning and the end of the paragraph
 
-In case any of the above is true, but you still want it become a HTML
-paragraph, you will have to supply the open and close `p` tags yourself.
+In case any of the above is true, the vfmd syntax assumes that it's
+really a HTML block with some embedded vfmd content and does not wrap it
+in `p` tags. If you still want it become a HTML paragraph, you will have
+to supply the open and close `p` tags yourself.
 
 For example, consider the vfmd paragraph:
 
