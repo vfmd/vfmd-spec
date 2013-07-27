@@ -200,7 +200,7 @@ block-element and the _block-element end line_:
     _block-element start line_ matches the _unordered list starter
     pattern_ (i.e. the regular expression `/^( *[\*\-\+] +)[^ ]/`) then
     the block-element is of type **unordered list**. The matching
-    substring for the first and only paranthesized subexpression in the
+    substring for the first and only parenthesized subexpression in the
     pattern is called the _unordered list starter string_. The number of
     _characters_ in the _unordered list starter string_ is called the
     _unordered-list-starter-string-length_.
@@ -253,7 +253,7 @@ block-element and the _block-element end line_:
     _block-element start line_ matches the _ordered list starter
     pattern_ (i.e. the regular expression `/^( *([0-9]+)\. +)[^ ]/`)
     then the block-element is of type **ordered list**. The length of
-    the matching substring for the first (i.e. inner) paranthesized
+    the matching substring for the first (i.e. inner) parenthesized
     subexpression in the pattern is called the
     _ordered-list-starter-string-length_.
     
@@ -386,10 +386,10 @@ of the following regular expression patterns:
         ####### Seven hashes
         ######## Eight '#'es
 
-    The length of the matching substring for the first paranthesized
+    The length of the matching substring for the first parenthesized
     subexpression is the heading level, subject to a maximum of 6.
 
-    The matching substring for the second paranthesized subexpression
+    The matching substring for the second parenthesized subexpression
     shall be _trimmed_ to give a _header text run_. The result of
     processing the _header text run_ as a _text run_ shall form the
     content of the header element.
@@ -406,7 +406,7 @@ of the following regular expression patterns:
 
  2. Without header text: `/^(#+)$/`
 
-    The length of the matching substring for the first paranthesized
+    The length of the matching substring for the first parenthesized
     subexpression is the heading level, subject to a maximum of 6.
     The header text is empty.
 
@@ -577,7 +577,7 @@ one or more _lines_.
 The first line in the _block-element line sequence_ would match the
 _unordered list starter pattern_ (i.e. the regular expression
 `/^( *[\*\-\+] +)[^ ]/`). The matching substring for the first and only
-paranthesized subexpression in that pattern is called the _unordered
+parenthesized subexpression in that pattern is called the _unordered
 list starter string_. The number of characters in the _unordered list
 starter string_ is called the _unordered-list-starter-string-length_.
 
@@ -784,9 +784,9 @@ one or more _lines_.
 The first line in the _block-element line sequence_ would match the
 _ordered list starter pattern_ (i.e. the regular expression
 `/^( *([0-9]+)\. +)[^ ]/`). The length of the matching substring for the
-first (i.e. outer) paranthesized subexpression in the pattern is called
+first (i.e. outer) parenthesized subexpression in the pattern is called
 the _ordered-list-starter-string-length_. The matching substring for the
-second (i.e. inner) paranthesized subexpression in the pattern is called
+second (i.e. inner) parenthesized subexpression in the pattern is called
 the _ordered list starting number_.
 
 We first divide the _block-element line sequence_ into a series of
@@ -822,7 +822,7 @@ to be done for each _line_:
     sequence_:
     
     The _line_ would match the _ordered list starter pattern_. The
-    matching substring for the first (i.e. outer) paranthesized
+    matching substring for the first (i.e. outer) parenthesized
     subexpression in the pattern shall be removed from the beginning of
     the _line_.
  2. If the _line_ is not the first line of the _ordered list item line
@@ -871,7 +871,7 @@ For example, consider the following _block-element line sequence_:
         1. Nested item 1
 
 When we match the first line against the _ordered list starter pattern_,
-the matching substring for the paranthesized subexpression is obtained
+the matching substring for the parenthesized subexpression is obtained
 as <code>1. </code> (i.e. the number '1', followed by a dot, followed by
 a single _space_ character). The _ordered-list-starter-string-length_ is
 therefore 3. Also, the _ordered list starting number_ is identified as
@@ -904,7 +904,7 @@ The first _ordered list item line sequence_ looks like:
 
 To obtain the corresponding _ordered-list-item-processed line sequence_,
 we need to match the line against the _ordered list starter pattern_ and
-remove the matching substring for the first paranthesized subexpression.
+remove the matching substring for the first parenthesized subexpression.
 The matching substring in this case is <code>1. </code> (i.e. the number
 '1', followed by a dot, followed by a single space character).
 
@@ -931,7 +931,7 @@ Second item 2
 
 To obtain the corresponding _ordered-list-item-processed line sequence_,
 we need to match the first line against the _ordered list starter
-pattern_ and remove the matching substring for the first paranthesized
+pattern_ and remove the matching substring for the first parenthesized
 subexpression. The matching substring in this case is <code>2. </code>
 (i.e. the number '2', followed by a dot, followed by a single space
 character). From subsequent lines, we need to remove leading _space_
@@ -965,7 +965,7 @@ The third _ordered list item line sequence_ looks like:
 
 To obtain the corresponding _ordered-list-item-processed line sequence_,
 we need to match the first line against the _ordered list starter
-pattern_ and remove the matching substring for the first paranthesized
+pattern_ and remove the matching substring for the first parenthesized
 subexpression. The matching substring in this case is <code>3. </code>
 (i.e. the number '3', followed by a dot, followed by a single space
 character). From subsequent lines, we need to remove leading _space_
@@ -1087,7 +1087,7 @@ of the following regular expression patterns:
     `[ref id]: http://example.net/ just random ignored text`  
 
 In case of either pattern, the matching substring for the first
-paranthesized subexpression in the pattern is called the _reference id_,
+parenthesized subexpression in the pattern is called the _reference id_,
 and the matching substring for the second parathesized subexpression is
 called the _link string_.
 
@@ -1098,7 +1098,7 @@ removing the leading `<` and the trailing `>` from the _link string_ is
 called the _link url_.
 
 In case the match is with the second regular expression pattern, the
-matching substring for the third paranthesized subexpression in the
+matching substring for the third parenthesized subexpression in the
 pattern is called the _trailing string_. If the _trailing string_ begins
 with a _quoted string_, the string enclosed in quotes in the _quoted
 string_ gives the _link title_ of the link, and the rest of the
