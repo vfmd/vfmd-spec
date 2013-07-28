@@ -57,7 +57,29 @@ _trimming_ <code>green&nbsp;&nbsp;</code> yields `green`. _Trimming_ a
 _string_ that does  not have any leading or trailing _spaces_ has no
 effect on the _string_. Trimming a _string_ that is entirely composed of
 _whitespace_ yields an empty (zero-length) _string_.
-  
+
+**Escaping** a _character_ in a string means placing a `\` (backslash)
+just before the _character_ in the string, where the `\` used for
+escaping remains unescaped (i.e. the escaping `\` shall not be preceded
+by an unescaped `\`).
+
+A **quoted string** is a _string_ that consists at least two
+characters and either
+
+ 1. begins with an unescaped `'` (single quote) character, and ends with
+    an unescaped `'` character, and does not contain any other instance
+    of an unescaped `'` character
+
+    or
+
+ 2. begins with an unescaped `"` (double quote) character, and ends with
+    an unescaped `"` character, and does not contain any other instance
+    of an unescaped `"` character
+
+The substring of the _quoted string_ that excludes the first and the
+last character of the _quoted string_ is called the _enclosed string_ of
+the _quoted string_.
+
 ### Lines
 
 When we split the _document_ on _line breaks_, we get **lines**. The
