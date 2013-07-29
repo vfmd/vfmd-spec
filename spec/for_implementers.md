@@ -1140,3 +1140,399 @@ single _blank line_.
 
 A null block does not result in any output.
 
+## Identifying span-elements
+
+A **text run** is a sequence of span-level vfmd constructs in a
+paragraph block.
+
+To interpret a sequence of characters, called the **input character
+sequence**, as a _text run_, we need to identify the type and extent of
+the span-elements in the input.
+
+Some characters in the _input character sequence_ form the text content,
+and the other characters denote how the text content is to be "marked
+up". The characters that denote "mark up" form _span tags_, and the
+other characters form _text fragments_.
+
+There are three categories of _span tags_: _opening span tags_, _closing
+span tags_ and _self-contained span tags_.
+
+For example, consider the following _text run_:
+
+    The **`ls` command** [_lists_ files](/ls-cmd).
+
+The above _text run_ can be broken down into the following:
+
+    "The "       : text fragment
+    "**"         : opening span tag (emphasis)
+    "`ls`"       : self-contained span tag (code)
+    " command"   : text fragment
+    "**"         : closing span tag (emphasis)
+    "["          : opening span tag (link)
+    "_"          : opening span tag (emphasis)
+    "lists "     : text fragment
+    "_"          : closing span tag (emphasis)
+    "files"      : text fragment
+    "](/ls-cmd)" : closing span tag (link)
+    "."          : text fragment
+
+To identify and interpret the _span tags_ in the _input character
+sequence_, we make use of a **stack of potential opening span tags**.
+Each node in the _stack of potential opening span tags_ eventually might
+or might not get interpreted as an _opening span tag_. If a
+corresponding _closing span tag_ is identified, the node gets
+interpreted as an _opening span tag_; else, it gets identified as a
+_text fragment_.
+
+Initially, the _stack of potential opening span tags_ is empty. The
+stack grows upwards: the bottommost node in the stack is the first one
+added to the stack, and pushing a node onto the stack places it on top
+of the stack. Each node in the stack contains the following fields:
+
+ 1. A _tag string_ that contains the substring of the _input character
+    sequence_ that forms the _span tag_
+ 2. A _node type_ that indicates what types of span element this node
+    might be opening, the possible values being: _asterisk emphasis
+    node_, _underscore emphasis node_, _internally referential link
+    node_, _other link node_ or _raw html node_
+ 3. A _internal reference string_ that is set only if the _node type_ is equal
+    to _internally referential link node_
+
+The topmost node in the stack is called the _top node_.
+
+A node _n_ is said to be the _topmost node_ of type _t_ if, and only if,
+all the following conditions are satisfied:
+
+ 1. The _node type_ of _n_ is equal to _t_
+ 2. The node _n_ is present in the _stack of potential opening span tags_
+ 3. There is no other node _m_ (where _n_ != _m_) such that both the
+    following are true:
+     1. The node _m_ is above the node _n_ in the _stack of potential
+        opening span tags_
+     2. The _node type_ of _m_ is equal to _t_
+
+The _topmost node_ of type _t_ is said to be _null_ if, and only if, the
+_stack of potential opening span tags_ does not contain any node whose
+_node type_ is equal to _t_.
+
+To identify and interpret the _span tags_ in the _input character
+sequence_, we follow the procedure described in the next subsection,
+_Identifying and interpreting span tags_.
+
+### Identifying and interpreting _span tags_
+
+In this section, we discuss the procedure to identify and interpret the
+_span tags_ in the _input character sequence_.
+
+The procedure involves iterating over the characters in the _input
+character sequence_. The current character position in the _input
+character sequence_ is called the _current-position_. A
+_current-position_ value of 1 indicates that we are going to process the
+first character in the _input character sequence_.  The substring of the
+_input character sequence_ starting from and including the character at
+the _current-position_ and ending at the end of the _input character
+sequence_ is called the _remaining-character-sequence_.
+
+To identify and interpret the _span tags_, the following procedure is
+to be followed:
+
+ 1. Set _current-position_ as 1
+ 2. Set _is-potential-span-tag_ as false
+ 3. If the character at the _current-position_ is either an unescaped
+    `[` (open square bracket) character, or an unescaped `]` (close
+    square bracket) character, then set _is-potential-span-tag_ as true
+    and follow the procedure discussed in _Handling potential link 
+    tags_
+ 4. If the character at the _current-position_ is either an unescaped
+    `*` (asterisk) character, or an unescaped `_` (underscore or low
+    line) character, then set _is-potential-span-tag_ as true and follow
+    the procedure discussed in _Handling potential emphasis tags_
+ 5. TODO: Code
+ 6. TODO: Image
+ 7. TODO: Automatic links (\<http://link\> or http\://link)
+ 8. TODO: Raw HTML
+ 9. If _is-potential-span-tag_ is true, the above steps (3-7) should
+    have identified either a _span tag candidate_ or a _text fragment_;
+    Increment the _current-position_ by the length of the _span tag
+    candidate_ or the _text fragment_ that was identified
+ 10. If _is-potential-span-tag_ is false, the character at the _current
+     position_ is identified as being part of a _text fragment_;
+     Increment the _current-position_ by 1
+ 11. If the _current-position_ is greater than the length of the _input
+     character sequence_, then stop this procedure; else, go to Step 2.
+
+#### Handling potential link tags
+
+In this section, we discuss how to identify _span tags_ related to
+links. This section assumes that the character at the _current-position_
+is either an unescaped `[` character or an unescaped `]` character.
+
+If the character at the _current-position_ is a `[` character, it might
+indicate the start of an _opening referential link tag_ or an _opening
+direct link tag_, as described below:
+
+ 1. If the _remaining-character-sequence_ matches any of the
+    following regular expression patterns:
+
+     1. With trailing empty square brackets:
+        `/^\[(([^\\\[\]]|\\.)*)\] *\[ *\]/`
+
+        Example:  
+        `[link text][]`  
+        `[link text] [ ]`  
+        `[link text with \[escaped square brackets\]] []`
+
+     2. With no trailing opening bracket: 
+        `/^\[(([^\\\[\]]|\\.)*)\] *[^\[\(]/`
+
+        Examples:  
+        `[link text] a`  
+        `[link \[ text] a`
+    
+     3. At the very end:
+        `/^\[(([^\\\[\]]|\\.)*)\] *$/`
+
+        Examples:  
+        `[link text]`  
+        `[link \] text]`
+    
+    then, the following is done:
+    
+    <!-- For some reason, Redcarpet requires a comment here to correctly
+    display the following list -->
+
+     1. The `[` character at the _current-position_ is identified as a
+        _span tag candidate_, which can potentially get interpreted as an
+        _opening referential link tag_ in the future
+
+     2. The matching substring for the first parenthesized subexpression
+        in the matching pattern shall be called the _link text string_.
+
+     3. A new node is pushed onto the _stack of potential opening span
+        tags_ with the following properties:
+
+         1. The _tag string_ of the node is set to the `[` character at
+            the _current-position_
+         2. The _node type_ of the node is set as _internally
+            referential link node_
+         3. The _internal reference string_ of the node is set to the
+            _link text string_
+
+ 2. If the above condition does not apply, and if the character at the
+    _current-position_ is a `[` character, then the following is
+    done:
+    
+     1. The `[` character at the _current-position_ is identified as a
+        _span tag candidate_, which can potentially get interpreted as
+        either an _opening referential link tag_ or an _opening direct
+        link tag_ in the future
+
+     2. A new node is pushed onto the _stack of potential opening span
+        tags_ with the following properties:
+
+         1. The _tag string_ of the node is set to the `[` character at
+            the current position
+         2. The _node type_ of the node is set as _other link node_
+
+If the character at the _current-position_ is a `]` character, it might
+indicate the start of a _closing referential link tag_ or a _closing
+direct link tag_, as described below:
+
+ 1. If the _topmost node_ of type _internally referential link node_ is
+    not _null_, and the if the _remaining-character-sequence_ matches
+    any of the following regular expression patterns:
+
+     1. With trailing empty square brackets:
+        `/^(\] *\[ *\])/`
+
+        Example:  
+        `][]`
+
+     2. With no trailing opening bracket:
+        `/^(\] *)[^\[\(]/`
+
+        Example:  
+        `] a`
+    
+     3. At the very end:
+        `/^(\] *)$/`
+
+        Example:  
+        `]`
+     
+    then the following is done:
+        
+    <!-- For some reason, Redcarpet requires a comment here to correctly
+    display the following list -->
+
+     1. The matching substring for the first and only parenthesized
+        subexpression in the matching pattern is identified as a _span
+        tag candidate_, and interpreted as a _closing span tag_, or more
+        specifically, as a **closing referential link tag**
+
+     2. If the _topmost node_ of type _internally referential link node_
+        is not already the _top node_, all nodes above it are popped off
+        and interpreted as _text fragments_
+
+     3. The _top node_ (which should have its _node type_ equal to
+        _internally referential link node_) is interpreted as an _opening span
+        tag_, or more specifically, as an **opening referential link
+        tag**
+
+     4. The _closing referential link tag_ is said to correspond to the
+        _opening referential link tag_, and any _span tags_ or _text
+        fragments_ occuring between the _opening referential link tag_
+        and the _closing referential link tag_ are considered to form
+        the linked content of the link
+        
+     5. The _internal reference string_ of the _opening referential link
+        tag_ shall be used to look up the actual link url and link title
+        from the _link reference association map_. If the _internal
+        reference string_ cannot be resolved into a link, it is output
+        as is.
+
+     6. The _top node_ is popped off
+
+ 2. If the _topmost node_ of type _other link node_ is not _null_, and
+    if the _remaining-character-sequence_ matches the regular expression
+    pattern `/^\] *\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
+    then the following is done:
+
+     1. The matching substring for the whole of the pattern is
+        identified as a _span tag candidate_, and interpreted as a
+        _closing span tag_, or more specifically, as a **closing
+        referential link tag**
+
+     2. The matching substring for the first and only parenthesized
+        subexpression in the pattern shall be called the _external
+        reference string_
+
+     3. If the _topmost node_ of type _other link node_ is not already
+        the _top node_, all nodes above it are popped off and
+        interpreted as _text fragments_
+
+     4. The _top node_ (which should have its _node type_ equal to
+        _other link node_) is interpreted as an _opening span tag_, or more
+        specifically, as an **opening referential link tag**
+
+     5. The _closing referential link tag_ is said to correspond to the
+        _opening referential link tag_, and any _span tags_ or _text
+        fragments_ occuring between the _opening referential link tag_
+        and the _closing referential link tag_ are considered to form
+        the linked content of the link
+
+     6. The _external reference string_ shall be used to look up the
+        actual link url and link title from the _link reference
+        association map_. If the _external reference string_ cannot be
+        resolved into a link, it is output as is.
+
+     7. The _top node_ is popped off
+
+ 3. If the _topmost node_ of type _other link node_ is not _null_, and
+    if both the following conditions are satisfied:
+
+     1. The _remaining-character-sequence_ matches one of the following
+        regular expression patterns:
+
+         1. URL without angle brackets: `/^\] *\(([^\(\)<> ]+)([\) ].*)$/`
+
+            Example: `] (http://www.example.net` + _residual-link-attribute-sequence_
+
+         2. URL within angle brackets: `/^\] *\( *<([^<>]+)>([\)].+)$/`
+   
+            Examples:  
+            `](<http://example.net>` + _residual-link-attribute-sequence_  
+            `] ( <http://example.net/?q=)>` + _residual-link-attribute-sequence_
+
+        In case of either pattern, the matching substring for the first
+        parenthesised subexpression shall be called the _link url
+        string_, and the matching substring for the second parenthesized
+        subexpression shall be called the _residual-link-attribute-sequence_.
+
+        The position at which the _residual-link-attribute-sequence_
+        starts within the _remaining-character-sequence_ (i.e. the
+        number of characters present in the
+        _remaining-character-sequence_ before the start of the
+        _residual-link-attribute-sequence_) shall be called the
+        _url-pattern-match-length_.
+
+     2. The _residual-link-attribute-sequence_ matches one of the
+        following regular expression patterns:
+
+         1. Just the closing paranthesis: `/^ *\)/`
+
+            Example: `)`
+
+            If this is the matching pattern, the _title string_ is said
+            to be _null_.
+        
+         2. Title and/or appended ignorable text and closing paranthesis: 
+            `/^ *((("(([^"\\]|\\.)*)")|('(([^'\\]|\\.)*)')|(([^"'\)\\]|\\.)*))+)\)/`
+
+            Examples:  
+            `"Title")`  
+            `'Title')`  
+            `"A (nice) \"title\" for the link")`  
+            `'Title' followed by random ignored text)`  
+            `"Title" followed by random "(ignored)" text)`  
+            `just random ignored text)`  
+            `just ignored text with \(escaped parentheses\))`
+
+            If this is the matching pattern, the matching substring for
+            the first parenthesized subexpression in the pattern is
+            _trimmed_ to give the _attributes-string_. If the
+            _attributes-string_ begins with a _quoted string_, then the
+            _enclosed string_ of the _quoted string_ is called the
+            _title string_. If the _attributes-string_ does not begin
+            with a _quoted string_, then the _title string_ is said to
+            be _null_.
+
+        The number of characters in the
+        _residual-link-attribute-sequence_ that were consumed in
+        matching the whole of the matching pattern is called the
+        _attributes-pattern-match-length_.
+
+    then, the following is done:
+
+    <!-- For some reason, Redcarpet requires a comment here to correctly
+    display the following list -->
+
+     1. Let _close-link-tag-length_ be equal to the sum of the
+        _url-pattern-match-length_ and the
+        _attributes-pattern-match-length_. The first
+        _close-link-tag-length_ characters of the
+        _remaining-character-sequence_ are collectively identified as a
+        _span tag candidate_, and interpreted as a _closing span tag_,
+        or more specifically, as a **closing direct link tag**
+
+     2. If the _topmost node_ of type _other link node_
+        is not already the _top node_, all nodes above it are popped off
+        and interpreted as _text fragments_
+
+     3. The _top node_ (which should have its _node type_ equal to
+        _other link node_) is interpreted as an _opening span tag_, or more
+        specifically, as an **opening direct link tag**
+
+     4. The _closing direct link tag_ is said to correspond to the
+        _opening direct link tag_, and any _span tags_ or _text
+        fragments_ occuring between the _opening direct link tag_ and
+        the _closing direct link tag_ are considered to form the
+        linked content of the link
+
+     5. The _link url string_ shall be used as the link url for the link
+
+     6. If the _title string_ is not _null_, the _title string_ shall be
+        used as the title for the link
+
+     7. The _top node_ is popped off
+        
+ 4. If none of the above 3 conditions are satisfied, then the `]` at the
+    _current-position_ is interpreted as a _text fragment_
+
+Thus, using this procedure, the `[` or `]` at the _current-position_ is
+identified to be the start of either a _span tag candidate_ or a _text
+fragment_. In some cases, the _span tag candidate_ is also interpreted
+as one of these _span tags_: _opening referential link tag_ , _closing
+referential link tag_, _opening direct link tag_ or _closing direct link
+tag_.
+
