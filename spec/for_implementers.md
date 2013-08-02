@@ -155,8 +155,8 @@ block-element and the _block-element end line_:
     line_.
  
  2. If the _block-element start line_ matches the regular expression
-    pattern `/^ *\[[^\[\]]+\] *: *[^ ]/`, then the block-element is of
-    type **reference resolution block**. The same line is the
+    pattern `/^ *\[([^\\\[\]]|\\.)*\] *: *[^ ]/`, then the block-element
+    is of type **reference resolution block**. The same line is the
     _block-element end line_.
 
  3. If none of the above conditions apply, and if the _block-element
@@ -1092,46 +1092,57 @@ the rest of the document.
 The single _line_ in the _block-element line sequence_ shall match one
 of the following regular expression patterns:
 
- 1. Just the URL: `/^ *\[([^\[\]]+)\] *: *([^ ]+) *$/`
+ 1. Just the URL:
+    `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ ]+) *$/`
 
     Examples:  
     `[ref id]: http://example.net/`  
-    `[ref id]: <http://example.net/>`  
-    `[ref id]: mailto:someone@somewhere.net`  
+    `[ref \[ id]: <http://example.net/>`  
+    `[ref \] id]: mailto:someone@somewhere.net`  
 
- 2. URL followed by text: `/^ *\[([^\[\]]+)\] *: *([^ ]+) +([^ ].*)$/`
+ 2. URL followed by text:
+    `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ ]+) +([^ ].*)$/`
 
     Examples:  
     `[ref id]: http://example.net/ "Title"`  
-    `[ref id]: http://example.net/ 'Title'`  
-    `[ref id]: http://example.net/ "Title with \"escaped\" quotes"`  
+    `[ref \[ id]: http://example.net/ 'Title'`  
+    `[ref \] id]: http://example.net/ "Title with \"escaped\" quotes"`  
     `[ref id]: http://example.net/ "Title" followed by random "(ignored)" text`  
     `[ref id]: http://example.net/ just random ignored text`  
 
 In case of either pattern, the matching substring for the first
-parenthesized subexpression in the pattern is called the _reference id_,
-and the matching substring for the second parathesized subexpression is
-called the _link string_.
+parenthesized subexpression in the pattern is called the _reference id
+string_, and the matching substring for the second parathesized
+subexpression is called the _link string_.
 
 If the _link string_ begins with a `<` character, the `<` character at
 the beginning is removed, and if the _link string_ ends with a `>`
 character, the `>` character at the end is removed. The result after
 removing the leading `<` and the trailing `>` from the _link string_ is
-called the _link url_.
+called the _link url string_.
 
 In case the match is with the second regular expression pattern, the
 matching substring for the third parenthesized subexpression in the
 pattern is called the _trailing string_. If the _trailing string_ begins
-with a _quoted string_, the string enclosed in quotes in the _quoted
-string_ gives the _link title_ of the link, and the rest of the
-_trailing string_ is ignored. If the _trailing string_ does not begin
-with a _quoted string_, the whole of the _trailing string_ is ignored,
-and no _link title_ is associated with the link.
+with a _quoted string_, the _enclosed string_ of the _quoted string_ is
+called the _link title string_, and the rest of the _trailing string_ is
+ignored. If the _trailing string_ does not begin with a _quoted string_,
+the whole of the _trailing string_ is ignored, and the _link title
+string_ is said to be _null_.
 
-If the _reference id_ appears as a link reference anywhere else in the
-document (either in a _close-link tag_ for a reference-link, or in an
-_image tag_), it shall be resolved by mapping it to the _link url_ and,
-if an associated _link title_ was found, the _link title_.
+The _reference id string_ is said to be associated with the _link url
+string_ and the _link title string_. A new entry is added to the _link
+reference association map_ with the _reference id string_ as the key,
+and the _link url string_ and the _link title string_ as values, unless
+the _link reference association map_ already has an entry with the
+_reference id string_ as the key.
+
+The **link reference association map** is an associative array that
+contains data from all the reference-resolution blocks in the document,
+that helps in mapping a _reference id_ to the _link url_ and _link
+title_ that the _reference id_ represents. It is used to resolve link
+references elsewhere in the document (either in a _closing referential
+link tag_, or in an _image tag_).
 
 ### null block
 
