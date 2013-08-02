@@ -1547,3 +1547,270 @@ as one of these _span tags_: _opening referential link tag_ , _closing
 referential link tag_, _opening direct link tag_ or _closing direct link
 tag_.
 
+#### Handling potential emphasis tags
+
+In this section, we discuss how to identify _span tags_ related to
+emphasis. This section assumes that the character at the
+_current-position_ is either an unescaped `*` character or an unescaped
+`_` character.
+
+We define a **word separator** character to be a unicode code point
+whose 'General\_Category' unicode property has one of the following
+values:
+
+ 1. One of: Zs, Zl, Zp (i.e. a 'Separator')
+
+    (or)
+
+ 2. One of: Pc, Pd, Ps, Pe, Pi, Pf, Po (i.e. a 'Punctuation')
+
+    (or)
+
+ 3. One of: Cc, Cf
+    
+For example, the _space_ character, the _line break_ character, `.`,
+ `,`, `(`, `)` are all _word separator_ characters.
+
+Given that the character at the _current-position_ is either `*` or `_` ,
+then the _remaining character sequence_ will definitely match one of the following
+regular expression patterns:
+
+ 1. At the end of the _input character sequence_:
+    `/^([\*_]+)$/`
+
+ 2. In the middle of the _input character sequence_:
+    `/^([\*_]+)([^\*_])/`
+
+In case of either pattern, the matching substring for the first
+parenthesized subexpression is called the _emphasis indicator
+string_.
+
+If the match is with the second regular expression pattern given
+above, and if the single character in the matching substring for the
+second parenthesized subexpression in the pattern is not a _word
+separator_ character, then the _emphasis indicator string_ is said
+to be _left-flanking_, else, the _emphasis indicator string_ is said
+to be not _left-flanking_.
+
+If the _current position_ is greater than 1, and if the character at
+the previous position (i.e. at _current position_ minus 1) is not a
+_word separator_ character, then the _emphasis indicator string_ is
+said to be _right-flanking_, else, the _emphasis indicator string_
+is said to be not _right-flanking_.
+
+For example, the string `I'm ***Bond***, *** James***Bond` contains 4
+_emphasis indicator strings_, each consisting of 3 `*` characters.  The
+first _emphasis indicator string_ is _left-flanking_ (but not
+_right-flanking_), the second _emphasis indicator string_ is
+_right-flanking_ (but not _left-flanking_), the third _emphasis
+indicator string_ is neither _left-flanking_ nor _right-flanking_, and
+the fourth _emphasis indicator string_ is both _left-flanking_ and
+_right-flanking_.
+
+An _emphasis indicator string_ can contain both `*` and `_`
+characters. When we split the _emphasis indicator string_ into
+substrings composed of the same character, with no adjacent
+substring having a common character, we get a list of _emphasis
+tag strings_.
+
+For example:
+
+<table>
+<tr>
+    <th><em>emphasis indicator string</em></th>
+    <th>List of <em>emphasis tag strings</em></th>
+</tr>
+<tr>
+    <td><code>***</code></td>
+    <td>[<code>***</code>]</td>
+</tr>
+<tr>
+    <td><code>***___**</code></td>
+    <td>[<code>***</code>, <code>___</code>, <code>**</code>]</td>
+</tr>
+<tr>
+    <td><code>__*_**__</code></td>
+    <td>[<code>__</code>, <code>*</code>, <code>_</code>, <code>**</code>, <code>__</code>]</td>
+</tr>
+</table>
+
+An _emphasis tag string_ shall either be composed entirely of `*`
+characters, or be composed entirely of `_` characters. If it's
+composed entirely of `*` characters, the _constituent character_ of
+the _emphasis tag string_ is said to be `*`. If it's composed
+entirely of `_` characters, the _constituent character_ of the
+_emphasis tag string_ is said to be `_`.
+
+If the _emphasis indicator string_ is neither _left-flanking_ nor
+_right-flanking_, the the _emphasis indicator string_ is interpreted as
+a _text fragment_.
+
+Similarly, if the _emphasis indicator string_ is both _left-flanking_
+and _right-flanking_, the the _emphasis indicator string_ is interpreted
+as a _text fragment_.
+
+If the _emphasis indicator string_ is _left-flanking_ and not
+_right-flanking_, then the _emphasis tag strings_ in the _emphasis
+indicator string_ can potentially become _opening emphasis tags_. In
+this case, the following shall be done:
+
+ 1. The _emphasis indicator string_ is identified as a _span tag
+    candidate_, which can potentially get interpreted as one or more
+    _opening emphasis tags_ in the future
+
+ 2. For each _emphasis tag string_ in the _emphasis indicator string_
+    (listed in the order in which the _emphasis tag string_ appears in
+    the _emphasis indicator string_) a new node is pushed onto the
+    _stack of potential opening span tags_ with the following
+    properties:
+
+     1. The _tag string_ of the node is set to the _emphasis tag string_
+     2. If the  _constituent character_ of the _emphasis tag string_ is
+        `*`, then the _node type_ of the node is set as _asterisk
+        emphasis node_; if the  _constituent character_ of the _emphasis
+        tag string_ is `_`, then the _node type_ of the node is set as
+        _underscore emphasis node_
+
+If the _emphasis indicator string_ is _right-flanking_ and not
+_left-flanking_, then the _emphasis tag strings_ in the _emphasis
+indicator string_ can potentially be interpreted as _closing emphasis
+tags_.  In this case, the following shall be done:
+
+ 1. Set _current-tag-string_ to the first _emphasis tag string_ in
+    the _emphasis indicator string_
+
+ 2. If the _constituent character_ of the _current-tag-string_ is `*`,
+    then the _matching emphasis node_ is the _topmost node_ of type
+    _asterisk emphasis node_; if the _constituent character_ of the
+    _current-tag-string_ is `_`, then the _matching emphasis node_ is
+    the _topmost node_ of type _underscore emphasis node_
+
+ 3. If _matching emphasis node_ is _null_, then the _emphasis tag
+    string_ is interpreted as a _text fragment_
+
+ 4. If the _matching emphasis node_ is not _null_, and if it is not
+    already the _top node_, then all nodes above it are popped off and
+    interpreted as _text fragments_
+ 
+ 5. If the _matching emphasis node_ is not _null_, the procedure
+    described in _Matching opening and closing emphasis_ is followed.
+    The _current-tag-string_ and/or the _top node_ can get modified in
+    this process.
+
+ 6. If the _current-tag-string_ is empty, and if there are any more
+    unprocessed _emphasis tag strings_ in the _emphasis indicator
+    string_, set the _current-tag-string_ to the next
+    _emphasis-tag-string_ 
+ 
+ 7. If the _current-tag-string_ is not empty, go to Step 2
+
+
+##### Matching opening and closing emphasis
+
+This section describes how the _current-tag-string_ is to be matched
+with the _matching emphasis node_ at the top of the _stack of potential
+opening span tags_.
+
+In this section, the _top node_ is assumed to be of a _node type_ that
+matches the _constituent character_ of the _current-tag-string_. If the
+_constituent character_ of the _current-tag-string_ is `*`, the _node
+type_ of the _top node_ should be _asterisk emphasis node_. If the
+_constituent character_ of the _current-tag-string_ is `_`, the _node
+type_ of the _top node_ should be _underscore emphasis node_.
+
+Let the _tag string_ of the _top node_ be called the _top node tag
+string_. The _top node tag string_ is compared with the
+_current-tag-string_.
+
+ 1. If the _top node tag string_ and the _current-tag-string_ are
+    exactly the same strings, then:
+
+     1. The _top node_ is interpreted as an _opening span tag_, or more
+        specifically, as an **opening emphasis tag**
+
+     2. The _current-tag-string_ is interpreted as a _closing span tag_,
+        or more specifically, as a **closing emphasis tag**
+    
+     3. The _closing emphasis tag_ is said to correspond to the _opening
+        emphasis tag_, and any _span tags_ or _text fragments_ occuring
+        between the _opening emphasis tag_ and the _closing emphasis
+        tag_ are considered to constitute the emphasized content
+
+     4. Set the _current-tag-string_ to _null_
+
+     5. The _top node_ is popped off
+        
+ 2. If the _top node tag string_ and the _current-tag-string_ are not
+    exactly the same strings, and if the _current-tag-string_ is a
+    substring of the _top node tag string_, then:
+            
+     1. Let the length of the _current-tag-string_ be called the
+        _current-tag-string-length_.
+        
+        The last _current-tag-string-length_ characters of the _top node
+        tag string_ are interpreted as an _opening span tag_, or more
+        specifically, as an **opening emphasis tag**.
+
+     2. The whole of the _current-tag-string_ is interpreted as a
+        _closing span tag_, or more specifically, as a **closing
+        emphasis tag**
+
+     3. The _closing emphasis tag_ is said to correspond to the _opening
+        emphasis tag_, and any _span tags_ or _text fragments_ occuring
+        between the _opening emphasis tag_ and the _closing emphasis
+        tag_ are considered to constitute the emphasized content
+
+     4. Set the _current-tag-string_ to _null_
+
+     5. The characters of the _top node tag string_ that were
+        interpreted as the _opening emphasis tag_ are removed from the
+        _tag string_ of the _top node_ while the _top node_ is still
+        retained in the _stack of potential opening span tags_
+
+ 3. If the _top node tag string_ and the _current-tag-string_ are
+    not exactly the same strings, and if the _top node tag string_
+    is a substring of the _current-tag-string_, then:
+    
+     1. The _top node_ is interpreted as an _opening span tag_, or more
+        specifically, as an **opening emphasis tag**
+
+     2. Let the length of the _top node tag string_ be called the
+        _top-node-tag-string-length_.
+
+        The first _top-node-tag-string-length_ characters of the
+        _current-tag-string_ interpreted as a _closing span tag_, or
+        more specifically, as a **closing emphasis tag**.
+
+     3. The _closing emphasis tag_ is said to correspond to the _opening
+        emphasis tag_, and any _span tags_ or _text fragments_ occuring
+        between the _opening emphasis tag_ and the _closing emphasis
+        tag_ are considered to constitute the emphasized content
+
+     4. The characters of the _current-tag-string_ that were interpreted as
+        the _closing emphasis tag_ are removed from the  _current-tag-string_ 
+        
+     5. The _top node_ is popped off
+
+ 4. If any of the above conditions are satisfied, then we would have
+    identified an _opening emphasis tag_ and a _closing emphasis tag_.
+    The length of the _opening emphasis tag_ and the _closing emphasis
+    tag_ should be the same. Let the length of the _opening emphasis
+    tag_ or the _closing emphasis tag_ be called the
+    _emphasis-tag-length_.
+
+    The kind of emphasis that is to be applied is determined as follows:
+
+     1. If the _emphasis-tag-length_ is 1, use an emphasis of kind
+        _emphatic stress_. In HTML output, this shall be output as an
+        `em` element.
+
+     2. If the _emphasis-tag-length_ is 2, use an emphasis of kind
+        _strong importance_. In HTML output, this shall be output as a
+        `strong` element.
+
+     3. If the _emphasis-tag-length_ is 3 or above, use both an emphasis
+        of kind _strong importance_ and an emphasis of kind _emphatic
+        stress_.  In HTML output, this shall be output as an `em`
+        element nested within a `strong` element.
+
+
