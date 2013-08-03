@@ -154,9 +154,11 @@ block-element and the _block-element end line_:
     element is of type **null**. The same line is the _block-element end
     line_.
  
- 2. If the _block-element start line_ matches the regular expression
-    pattern `/^ *\[([^\\\[\]]|\\.)*\] *: *[^ ]/`, then the block-element
-    is of type **reference resolution block**. The same line is the
+ 2. If the _block-element start line_ does not begin with four or more
+    consecutive _space_ characters, and if the _block-element start
+    line_ matches the regular expression pattern
+    `/^ *\[([^\\\[\]]|\\.)*\] *: *[^ ]/`, then the block-element is of
+    type **reference resolution block**. The same line is the
     _block-element end line_.
 
  3. If none of the above conditions apply, and if the _block-element
