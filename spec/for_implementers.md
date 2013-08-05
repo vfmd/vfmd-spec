@@ -59,6 +59,13 @@ _spaces_ has no effect on the _string_. Trimming a _string_ that is
 entirely composed of _whitespace_ characters yields an empty
 (zero-length) _string_.
 
+**Simplifying** a _string_ means _trimming_ the string, and in addition,
+replacing each sequence of internal _whitespace_ characters in the
+_string_ with a single _space_ character. For example, _simplifying_ <code
+style="white-space: pre;">   Amazing   Maurice  </code> yields `Amazing Maurice`; _simplifying_
+<code style="white-space: pre;">educated   rodents  </code> yields
+`educated rodents`.
+
 **Escaping** a _character_ in a string means placing a `\` (backslash)
 just before the _character_ in the string, where the `\` used for
 escaping remains unescaped (i.e. the escaping `\` shall not be preceded
@@ -1114,9 +1121,9 @@ of the following regular expression patterns:
     `[ref id]: http://example.net/ just random ignored text`  
 
 In case of either pattern, the matching substring for the first
-parenthesized subexpression in the pattern is called the _reference id
-string_, and the matching substring for the second parathesized
-subexpression is called the _link string_.
+parenthesized subexpression in the pattern is _simplified_ to obtain the
+_reference id string_. The matching substring for the second
+parathesized subexpression is called the _link string_.
 
 If the _link string_ begins with a `<` character, the `<` character at
 the beginning is removed, and if the _link string_ ends with a `>`
@@ -1320,7 +1327,8 @@ direct link tag_, as described below:
         _opening referential link tag_ in the future
 
      2. The matching substring for the first parenthesized subexpression
-        in the matching pattern shall be called the _link text string_.
+        in the matching pattern is _simplified_ to obtain the _reference
+        id string_
 
      3. A new node is pushed onto the _stack of potential opening span
         tags_ with the following properties:
@@ -1330,7 +1338,7 @@ direct link tag_, as described below:
          2. The _node type_ of the node is set as _internally
             referential link node_
          3. The _internal reference string_ of the node is set to the
-            _link text string_
+            _reference id string_
 
  2. If the above condition does not apply, and if the character at the
     _current-position_ is a `[` character, then the following is
@@ -1418,8 +1426,8 @@ direct link tag_, as described below:
         referential link tag**
 
      2. The matching substring for the first and only parenthesized
-        subexpression in the pattern shall be called the _external
-        reference string_
+        subexpression in the pattern is _simplified_ to obtain the
+        _external reference string_
 
      3. If the _topmost node_ of type _other link node_ is not already
         the _top node_, all nodes above it are popped off and
