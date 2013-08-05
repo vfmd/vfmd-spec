@@ -45,8 +45,8 @@ as a single `#x0A (LF)` character.
 
 A `#x0A (LF)` character is henceforth called a **line break**.
 
-A contiguous sequence of one or more _space_ or _line break_ characters
-constitutes **whitespace**.
+A **whitespace** character is one of the following characters: `#x09
+(TAB)`, `#x0A (LF)`, `#x0C (FF)`, `#x0D (CR)` or `#x20 (SPACE)`.
 
 A **string** is a sequence of zero or more _characters_.
 
