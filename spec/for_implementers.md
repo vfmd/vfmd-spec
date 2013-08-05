@@ -1288,7 +1288,7 @@ direct link tag_, as described below:
     following regular expression patterns:
 
      1. With trailing empty square brackets:
-        `/^\[(([^\\\[\]]|\\.)*)\] *\[ *\]/`
+        `/^\[(([^\\\[\]]|\\.)*)\]\s*\[\s*\]/`
 
         Example:  
         `[link text][]`  
@@ -1296,14 +1296,14 @@ direct link tag_, as described below:
         `[link text with \[escaped square brackets\]] []`
 
      2. With no trailing opening bracket: 
-        `/^\[(([^\\\[\]]|\\.)*)\] *[^\[\(]/`
+        `/^\[(([^\\\[\]]|\\.)*)\]\s*[^\[\(]/`
 
         Examples:  
         `[link text] a`  
         `[link \[ text] a`
     
      3. At the very end:
-        `/^\[(([^\\\[\]]|\\.)*)\] *$/`
+        `/^\[(([^\\\[\]]|\\.)*)\]\s*$/`
 
         Examples:  
         `[link text]`  
@@ -1356,19 +1356,19 @@ direct link tag_, as described below:
     any of the following regular expression patterns:
 
      1. With trailing empty square brackets:
-        `/^(\] *\[ *\])/`
+        `/^(\]\s*\[\s*\])/`
 
         Example:  
         `][]`
 
      2. With no trailing opening bracket:
-        `/^(\] *)[^\[\(]/`
+        `/^(\])\s*[^\[\(]/`
 
         Example:  
         `] a`
     
      3. At the very end:
-        `/^(\] *)$/`
+        `/^(\]\s*)$/`
 
         Example:  
         `]`
@@ -1408,7 +1408,7 @@ direct link tag_, as described below:
 
  2. If the _topmost node_ of type _other link node_ is not _null_, and
     if the _remaining-character-sequence_ matches the regular expression
-    pattern `/^\] *\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
+    pattern `/^\]\s*\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
     then the following is done:
 
      1. The matching substring for the whole of the pattern is
@@ -1447,11 +1447,11 @@ direct link tag_, as described below:
      1. The _remaining-character-sequence_ matches one of the following
         regular expression patterns:
 
-         1. URL without angle brackets: `/^\] *\(([^\(\)<> ]+)([\) ].*)$/`
+         1. URL without angle brackets: `/^\]\s*\(\s*([^\(\)<>\s]+)([\)\s].*)$/`
 
             Example: `] (http://www.example.net` + _residual-link-attribute-sequence_
 
-         2. URL within angle brackets: `/^\] *\( *<([^<>]+)>([\)].+)$/`
+         2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]+)>([\)].+)$/`
    
             Examples:  
             `](<http://example.net>` + _residual-link-attribute-sequence_  
@@ -1472,7 +1472,7 @@ direct link tag_, as described below:
      2. The _residual-link-attribute-sequence_ matches one of the
         following regular expression patterns:
 
-         1. Just the closing paranthesis: `/^ *\)/`
+         1. Just the closing paranthesis: `/^\s*\)/`
 
             Example: `)`
 
@@ -1480,7 +1480,7 @@ direct link tag_, as described below:
             to be _null_.
         
          2. Title and/or appended ignorable text and closing paranthesis: 
-            `/^ *((("(([^"\\]|\\.)*)")|('(([^'\\]|\\.)*)')|(([^"'\)\\]|\\.)*))+)\)/`
+            `/^\s*((("(([^"\\]|\\.)*)")|('(([^'\\]|\\.)*)')|(([^"'\)\\]|\\.)*))+)\)/`
 
             Examples:  
             `"Title")`  
