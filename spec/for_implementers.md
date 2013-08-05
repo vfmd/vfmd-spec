@@ -165,9 +165,9 @@ block-element and the _block-element end line_:
  2. If the _block-element start line_ does not begin with four or more
     consecutive _space_ characters, and if the _block-element start
     line_ matches the regular expression pattern
-    `/^ *\[([^\\\[\]]|\\.)*\] *: *[^ ]/`, then the block-element is of
-    type **reference resolution block**. The same line is the
-    _block-element end line_.
+    `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ <>]+|<[^<>]*>)/`, then the
+    block-element is of type **reference-resolution block**. The same
+    line is the _block-element end line_.
 
  3. If none of the above conditions apply, and if the _block-element
     start line_ is not the last line in the _input line sequence_, and
@@ -1103,7 +1103,7 @@ The single _line_ in the _block-element line sequence_ shall match one
 of the following regular expression patterns:
 
  1. Just the URL:
-    `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ ]+) *$/`
+    `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ <>]+|<[^<>]*>) *$/`
 
     Examples:  
     `[ref id]: http://example.net/`  
@@ -1111,7 +1111,7 @@ of the following regular expression patterns:
     `[ref \] id]: mailto:someone@somewhere.net`  
 
  2. URL followed by text:
-    `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ ]+) +([^ ].*)$/`
+    `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ <>]+|<[^<>]*>) +([^ ].*)$/`
 
     Examples:  
     `[ref id]: http://example.net/ "Title"`  
@@ -1123,13 +1123,10 @@ of the following regular expression patterns:
 In case of either pattern, the matching substring for the first
 parenthesized subexpression in the pattern is _simplified_ to obtain the
 _reference id string_. The matching substring for the second
-parathesized subexpression is called the _link string_.
+parathesized subexpression is called the _unprocessed url string_.
 
-If the _link string_ begins with a `<` character, the `<` character at
-the beginning is removed, and if the _link string_ ends with a `>`
-character, the `>` character at the end is removed. The result after
-removing the leading `<` and the trailing `>` from the _link string_ is
-called the _link url string_.
+Any `<`, `>` or _whitespace_ characters in the _unprocessed url string_
+are removed, and the resultant string is called the _link url string_.
 
 In case the match is with the second regular expression pattern, the
 matching substring for the third parenthesized subexpression in the
@@ -1460,16 +1457,19 @@ direct link tag_, as described below:
 
             Example: `] (http://www.example.net` + _residual-link-attribute-sequence_
 
-         2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]+)>([\)].+)$/`
+         2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]*)>([\)].+)$/`
    
             Examples:  
             `](<http://example.net>` + _residual-link-attribute-sequence_  
             `] ( <http://example.net/?q=)>` + _residual-link-attribute-sequence_
 
         In case of either pattern, the matching substring for the first
-        parenthesised subexpression shall be called the _link url
+        parenthesised subexpression shall be called the _unprocessed url
         string_, and the matching substring for the second parenthesized
-        subexpression shall be called the _residual-link-attribute-sequence_.
+        subexpression shall be called the
+        _residual-link-attribute-sequence_.  Any _whitespace_ characters
+        in the _unprocessed url string_ are removed, and the resultant
+        string is called the _link url string_.
 
         The position at which the _residual-link-attribute-sequence_
         starts within the _remaining-character-sequence_ (i.e. the
