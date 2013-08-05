@@ -51,12 +51,13 @@ A **whitespace** character is one of the following characters: `#x09
 A **string** is a sequence of zero or more _characters_.
 
 **Trimming** a _string_ means removing any leading or trailing
-_whitespace_ characters from the _string_. For example, _trimming_
-<code>&nbsp;&nbsp;&nbsp;yellow&nbsp;&nbsp;</code> yields `yellow`;
-_trimming_ <code>green&nbsp;&nbsp;</code> yields `green`. _Trimming_ a
-_string_ that does  not have any leading or trailing _spaces_ has no
-effect on the _string_. Trimming a _string_ that is entirely composed of
-_whitespace_ yields an empty (zero-length) _string_.
+_whitespace_ characters from the _string_. For example, _trimming_ <code
+style="white-space: pre;">   yellow  </code> yields `yellow`; _trimming_
+<code style="white-space: pre;">green  </code> yields `green`.
+_Trimming_ a _string_ that does  not have any leading or trailing
+_spaces_ has no effect on the _string_. Trimming a _string_ that is
+entirely composed of _whitespace_ characters yields an empty
+(zero-length) _string_.
 
 **Escaping** a _character_ in a string means placing a `\` (backslash)
 just before the _character_ in the string, where the `\` used for
