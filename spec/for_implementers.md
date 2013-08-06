@@ -1373,6 +1373,9 @@ indicate the start of a _closing link tag_, as described below:
 
      6. The _top node_ is popped off
 
+     7. All nodes with _node type_ equal to _link node_ are removed from
+        the _stack of potential opening span tags_
+
  2. If the _topmost node_ of type _other link node_ is not _null_, and
     if the _remaining-character-sequence_ matches the regular expression
     pattern `/^\]\s*\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
@@ -1417,6 +1420,9 @@ indicate the start of a _closing link tag_, as described below:
         text forming the _closing link tag_.
 
      7. The _top node_ is popped off
+
+     8. All nodes with _node type_ equal to _link node_ are removed from
+        the _stack of potential opening span tags_
 
  3. If the _topmost node_ of type _other link node_ is not _null_, and
     if both the following conditions are satisfied:
@@ -1517,7 +1523,10 @@ indicate the start of a _closing link tag_, as described below:
         the _enclosed content_ linked to the link url and link title.
 
      6. The _top node_ is popped off
-        
+
+     7. All nodes with _node type_ equal to _link node_ are removed from
+        the _stack of potential opening span tags_
+
  4. If none of the above 3 conditions are satisfied, then the `]` at the
     _current-position_ is interpreted as a _text fragment_
 
