@@ -1211,10 +1211,9 @@ of the stack. Each node in the stack contains the following fields:
     sequence_ that forms the _span tag_
  2. A _node type_ that indicates what types of span element this node
     might be opening, the possible values being: _asterisk emphasis
-    node_, _underscore emphasis node_, _internally referential link
-    node_, _other link node_ or _raw html node_
- 3. A _internal reference string_ that is set only if the _node type_ is equal
-    to _internally referential link node_
+    node_, _underscore emphasis node_, _link node_ or _raw html node_
+ 3. A _linked content start position_ that is set only if the _node
+    type_ is equal to _link node_
 
 The topmost node in the stack is called the _top node_.
 
@@ -1286,78 +1285,25 @@ links. This section assumes that the character at the _current-position_
 is either an unescaped `[` character or an unescaped `]` character.
 
 If the character at the _current-position_ is a `[` character, it might
-indicate the start of an _opening referential link tag_ or an _opening
-direct link tag_, as described below:
+indicate  an _opening link tag_, as described below:
 
- 1. If the _remaining-character-sequence_ matches any of the
-    following regular expression patterns:
+ 1. The `[` character at the _current-position_ is identified as a
+    _span tag candidate_, which can potentially get interpreted as
+    an _opening link tag_ in the future
 
-     1. With trailing empty square brackets:
-        `/^\[(([^\\\[\]]|\\.)*)\]\s*\[\s*\]/`
+ 2. A new node is pushed onto the _stack of potential opening span
+    tags_ with the following properties:
 
-        Example:  
-        `[link text][]`  
-        `[link text] [ ]`  
-        `[link text with \[escaped square brackets\]] []`
-
-     2. With no trailing opening bracket: 
-        `/^\[(([^\\\[\]]|\\.)*)\]\s*[^\[\(]/`
-
-        Examples:  
-        `[link text] a`  
-        `[link \[ text] a`
-    
-     3. At the very end:
-        `/^\[(([^\\\[\]]|\\.)*)\]\s*$/`
-
-        Examples:  
-        `[link text]`  
-        `[link \] text]`
-    
-    then, the following is done:
-    
-    <!-- For some reason, Redcarpet requires a comment here to correctly
-    display the following list -->
-
-     1. The `[` character at the _current-position_ is identified as a
-        _span tag candidate_, which can potentially get interpreted as an
-        _opening referential link tag_ in the future
-
-     2. The matching substring for the first parenthesized subexpression
-        in the matching pattern is _simplified_ to obtain the _reference
-        id string_
-
-     3. A new node is pushed onto the _stack of potential opening span
-        tags_ with the following properties:
-
-         1. The _tag string_ of the node is set to the `[` character at
-            the _current-position_
-         2. The _node type_ of the node is set as _internally
-            referential link node_
-         3. The _internal reference string_ of the node is set to the
-            _reference id string_
-
- 2. If the above condition does not apply, and if the character at the
-    _current-position_ is a `[` character, then the following is
-    done:
-    
-     1. The `[` character at the _current-position_ is identified as a
-        _span tag candidate_, which can potentially get interpreted as
-        either an _opening referential link tag_ or an _opening direct
-        link tag_ in the future
-
-     2. A new node is pushed onto the _stack of potential opening span
-        tags_ with the following properties:
-
-         1. The _tag string_ of the node is set to the `[` character at
-            the current position
-         2. The _node type_ of the node is set as _other link node_
+     1. The _tag string_ of the node is set to the `[` character at
+        the current position
+     2. The _node type_ of the node is set as _link node_
+     3. The _linked content start position_ of the node is set to
+        ( _current-position_ + 1 )
 
 If the character at the _current-position_ is a `]` character, it might
-indicate the start of a _closing referential link tag_ or a _closing
-direct link tag_, as described below:
+indicate the start of a _closing link tag_, as described below:
 
- 1. If the _topmost node_ of type _internally referential link node_ is
+ 1. If the _topmost node_ of type _link node_ is
     not _null_, and the if the _remaining-character-sequence_ matches
     any of the following regular expression patterns:
 
@@ -1387,28 +1333,43 @@ direct link tag_, as described below:
      1. The matching substring for the first and only parenthesized
         subexpression in the matching pattern is identified as a _span
         tag candidate_, and interpreted as a _closing span tag_, or more
-        specifically, as a **closing referential link tag**
+        specifically, as a **closing link tag**
 
-     2. If the _topmost node_ of type _internally referential link node_
-        is not already the _top node_, all nodes above it are popped off
-        and interpreted as _text fragments_
+     2. If the _topmost node_ of type _link node_ is not already the
+        _top node_, all nodes above it are popped off and interpreted as
+        _text fragments_
 
-     3. The _top node_ (which should have its _node type_ equal to
-        _internally referential link node_) is interpreted as an _opening span
-        tag_, or more specifically, as an **opening referential link
-        tag**
+     3. The _top node_ (which should have its _node type_ equal to _link
+        node_) is interpreted as an _opening span tag_, or more
+        specifically, as an **opening link tag**
 
-     4. The _closing referential link tag_ is said to correspond to the
-        _opening referential link tag_, and any _span tags_ or _text
-        fragments_ occuring between the _opening referential link tag_
-        and the _closing referential link tag_ are considered to form
-        the linked content of the link
+     4. The _closing link tag_ is said to correspond to the _opening
+        link tag_, and any _span tags_ or _text fragments_ occuring
+        between the _opening link tag_ and the _closing link tag_ are
+        considered to form the _enclosed content_ of the link
+
+     5. Let _reference id start position_ be the _linked content start
+        position_ of the _top node_; Let _reference id end position_ be
+        ( _current-position_ - 1 ). The substring of the _input
+        character sequence_ starting from the _reference id start
+        position_ and ending at the _reference id end position_, both
+        inclusive, is called the _reference id string_.
         
-     5. The _internal reference string_ of the _opening referential link
-        tag_ shall be used to look up the actual link url and link title
-        from the _link reference association map_. If the _internal
-        reference string_ cannot be resolved into a link, it is output
-        as is.
+        The _reference id string_ shall be used to look up the actual
+        link url and link title from the _link reference association
+        map_.
+
+        If the _link reference association map_ contains an entry for
+        _reference id string_, then the output shall have the _enclosed
+        content_ linked to the link url and link title specified in the
+        entry for the _reference id string_ in the _link reference
+        association map_.
+        
+        If the _link reference association map_ does not contain an
+        entry for _reference id string_, then the output shall have the
+        _enclosed content_ appear as text, without being linked,
+        enclosed within the text forming the _opening link tag_ and the
+        text forming the _closing link tag_.
 
      6. The _top node_ is popped off
 
@@ -1419,31 +1380,41 @@ direct link tag_, as described below:
 
      1. The matching substring for the whole of the pattern is
         identified as a _span tag candidate_, and interpreted as a
-        _closing span tag_, or more specifically, as a **closing
-        referential link tag**
+        _closing span tag_, or more specifically, as a **closing link
+        tag**
 
      2. The matching substring for the first and only parenthesized
         subexpression in the pattern is _simplified_ to obtain the
-        _external reference string_
+        _reference id string_
 
-     3. If the _topmost node_ of type _other link node_ is not already
+     3. If the _topmost node_ of type _link node_ is not already
         the _top node_, all nodes above it are popped off and
         interpreted as _text fragments_
 
      4. The _top node_ (which should have its _node type_ equal to
-        _other link node_) is interpreted as an _opening span tag_, or more
-        specifically, as an **opening referential link tag**
+        _link node_) is interpreted as an _opening span tag_, or
+        more specifically, as an **opening link tag**
 
-     5. The _closing referential link tag_ is said to correspond to the
-        _opening referential link tag_, and any _span tags_ or _text
-        fragments_ occuring between the _opening referential link tag_
-        and the _closing referential link tag_ are considered to form
-        the linked content of the link
+     5. The _closing link tag_ is said to correspond to the _opening
+        link tag_, and any _span tags_ or _text fragments_ occuring
+        between the _opening link tag_ and the _closing link tag_ are
+        considered to form the _enclosed content_ of the link
 
-     6. The _external reference string_ shall be used to look up the
-        actual link url and link title from the _link reference
-        association map_. If the _external reference string_ cannot be
-        resolved into a link, it is output as is.
+     6. The _reference id string_ shall be used to look up the actual
+        link url and link title from the _link reference association
+        map_. 
+
+        If the _link reference association map_ contains an entry for
+        _reference id string_, then the output shall have the _enclosed
+        content_ linked to the link url and link title specified in the
+        entry for the _reference id string_ in the _link reference
+        association map_.
+        
+        If the _link reference association map_ does not contain an
+        entry for _reference id string_, then the output shall have the
+        _enclosed content_ appear as text, without being linked,
+        enclosed within the text forming the _opening link tag_ and the
+        text forming the _closing link tag_.
 
      7. The _top node_ is popped off
 
@@ -1525,28 +1496,27 @@ direct link tag_, as described below:
         _close-link-tag-length_ characters of the
         _remaining-character-sequence_ are collectively identified as a
         _span tag candidate_, and interpreted as a _closing span tag_,
-        or more specifically, as a **closing direct link tag**
+        or more specifically, as a **closing link tag**
 
-     2. If the _topmost node_ of type _other link node_
-        is not already the _top node_, all nodes above it are popped off
-        and interpreted as _text fragments_
+     2. If the _topmost node_ of type _link node_ is not already the
+        _top node_, all nodes above it are popped off and interpreted as
+        _text fragments_
 
-     3. The _top node_ (which should have its _node type_ equal to
-        _other link node_) is interpreted as an _opening span tag_, or more
-        specifically, as an **opening direct link tag**
+     3. The _top node_ (which should have its _node type_ equal to _link
+        node_) is interpreted as an _opening span tag_, or more
+        specifically, as an **opening link tag**
 
-     4. The _closing direct link tag_ is said to correspond to the
-        _opening direct link tag_, and any _span tags_ or _text
-        fragments_ occuring between the _opening direct link tag_ and
-        the _closing direct link tag_ are considered to form the
-        linked content of the link
+     4. The _closing link tag_ is said to correspond to the _opening
+        link tag_, and any _span tags_ or _text fragments_ occuring
+        between the _opening link tag_ and the _closing link tag_ are
+        considered to form the _enclosed content_ of the link
 
-     5. The _link url string_ shall be used as the link url for the link
+     5. The _link url string_ shall be used as the link url for the
+        link.  If the _title string_ is not _null_, the _title string_
+        shall be used as the title for the link. The output shall have
+        the _enclosed content_ linked to the link url and link title.
 
-     6. If the _title string_ is not _null_, the _title string_ shall be
-        used as the title for the link
-
-     7. The _top node_ is popped off
+     6. The _top node_ is popped off
         
  4. If none of the above 3 conditions are satisfied, then the `]` at the
     _current-position_ is interpreted as a _text fragment_
@@ -1554,9 +1524,7 @@ direct link tag_, as described below:
 Thus, using this procedure, the `[` or `]` at the _current-position_ is
 identified to be the start of either a _span tag candidate_ or a _text
 fragment_. In some cases, the _span tag candidate_ is also interpreted
-as one of these _span tags_: _opening referential link tag_ , _closing
-referential link tag_, _opening direct link tag_ or _closing direct link
-tag_.
+as one of these _span tags_: _opening link tag_ or _closing link tag_.
 
 #### Handling potential emphasis tags
 
