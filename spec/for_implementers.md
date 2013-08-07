@@ -1264,7 +1264,10 @@ to be followed:
     `*` (asterisk) character, or an unescaped `_` (underscore or low
     line) character, then set _is-potential-span-tag_ as true and follow
     the procedure discussed in _Handling potential emphasis tags_
- 5. TODO: Code
+ 5. If the character at the _current-position_ is an unescaped `` ` ``
+    (backtick) character, then set _is-potential-span-tag_ as true and
+    follow the procedure discussed in _Handling potential code-span
+    tags_
  6. TODO: Image
  7. TODO: Automatic links (\<http://link\> or http\://link)
  8. TODO: Raw HTML
@@ -1800,5 +1803,102 @@ _current-tag-string_.
         of kind _strong importance_ and an emphasis of kind _emphatic
         stress_.  In HTML output, this shall be output as an `em`
         element nested within a `strong` element.
+
+#### Handling potential code-span tags
+
+In this section, we discuss how to identify _span tags_ related to
+code-spans. This section assumes that the character at the
+_current-position_ is an unescaped `` ` `` character.
+
+The following procedure is followed:
+
+ 1. The _remaining-character-sequence_ shall match one of the following
+    regular expression patterns:
+    
+     1. Backticks followed by a non-backtick: ``/^(`+)([^`].*)$/``
+        
+        Example: ```` ```p ````
+
+     1. Backticks at the end of the _input character sequence_:
+        ``/^(`+)$/``
+        
+        Example: ```` ``` ````
+
+    In case of either pattern, the matching substring for the first
+    parenthesized subexpression in the pattern is called the
+    _opening-backticks-string_. The length of the
+    _opening-backticks-string_ is called the _opening-backticks-count_.
+
+    In case the match is with the first regular expression pattern, the
+    matching substring for the second parenthesized subexpression in the
+    pattern shall be called the _residual-code-span-sequence_. In case
+    the match is with the second regular expression pattern, the
+    _residual-code-span-sequence_ is said to be _null_.
+    
+ 2. Set _code-content-length_ to 0
+
+ 3. If the _residual-code-span-sequence_ matches one of the following
+    regular expression patterns:
+    
+     1. Non-backticks followed by backticks followed by a non-backtick:
+        ``/^([^`]+)(`+)([^`].*)$/``
+
+        Example: ````printf()```.````
+
+     2. Non-backticks followed by backticks, at the end of the _input
+        character sequence_: ``/^([^`]+)(`+)$/``
+
+        Example: ````printf()``` ````
+
+    then, the following is done:
+
+    <!-- For some reason, Redcarpet requires a comment here to correctly
+    display the following list -->
+
+     1. The matching substring for the first parenthesized subexpression
+        in the matching pattern is called the _code-fragment-string_.
+        The matching substring for the second parenthesized
+        subexpression in the matching pattern is called the
+        _backticks-fragment-string_.
+
+     2. The _code-content-length_ is incremented by the length of the
+        _code-fragment-string_
+        
+     3. In case the match is with the first regular expression pattern,
+        the _residual-code-span-sequence_ is set to the matching
+        substring for the third parenthesized subexpression in the
+        pattern. In case the match is with the second regular expression
+        pattern, the _residual-code-span-sequence_ is set to _null_. 
+
+     4. If the length of the _backticks-fragment-string_ is equal to the
+        length of the _opening-backticks-count_, then the
+        _backticks-fragment-string_ is identified as the
+        _closing-code-string_
+
+     5. If the length of the _backticks-fragment-string_ is not equal to
+        the _opening-backticks-count_, then the _code-content-length_ is
+        incremented by the length of the _backticks-fragment-string_
+
+ 4. If a _closing-code-string_ has not yet been identified, and if the
+    _residual-code-span-sequence_ contains one or more `` ` ``
+    characters, go to Step 3
+
+ 5. If a _closing-code-string_ has not yet been identified, the
+    _opening-backticks-string_ is identified as a _text fragment_
+ 
+ 6. If a _closing-code-string_ has been identified, the following is
+    done:
+
+     1. Let _code-span-length_ be equal to 
+        ( ( _opening-backticks-count_ * 2 ) + _code-content-length_ )
+     2. The first _code-span-length_ characters of the
+        _remaining-character-sequence_ is identified as a _span tag
+        candidate_, and interpreted as a **code span tag**
+     3. Among the characters that form the _code span tag_, the first
+        _opening-backticks-count_ characters and the last
+        _opening-backticks-count_ characters are considered to be
+        markup. The middle _code-content-length_ characters shall form
+        the content of the code span. For HTML output, the content of
+        the code-span should be _html-escaped_.
 
 
