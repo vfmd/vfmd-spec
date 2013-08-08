@@ -8,10 +8,28 @@ to write a document using vfmd, see the [userguide].
 [vfmd Markdown syntax]: introduction.md
 [userguide]: userguide.md
 
-This document is organized as follows: We start by defining a few terms
-that shall be used in the rest of this spec. Then, we discuss how
-block-level vfmd elements may be identified, and then, we discuss how
-span-level vfmd elements within a block-level element may be identified.
+This document is organized as follows:
+
+  * [Definitions]
+  * [Identifying block-elements]
+    * [The block-element line sequence]
+    * [Type and extent of a block-element]
+  * [Interpreting block-elements]
+    * [atx-style header]
+    * [setext-style header]
+    * [code block]
+    * [blockquote]
+    * [horizontal rule]
+    * [unordered list]
+    * [ordered list]
+    * [paragraph]
+    * [reference-resolution block]
+    * [null block]
+  * [Identifying span-elements]
+    * [Identifying and interpreting span tags]
+      * [Handling potential link tags]
+      * [Handling potential emphasis tags]
+      * [Handling potential code-span tags]
 
 <h2 id="definitions">Definitions</h2>
 
