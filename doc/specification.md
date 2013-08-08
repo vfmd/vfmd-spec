@@ -1,4 +1,4 @@
-# vfmd specification
+<h1 id="vfmd-specification">vfmd specification</h1>
 
 This spec describes the [vfmd Markdown syntax] in formal terms, and
 is intended to be read by someone implementing this spec to parse or
@@ -13,94 +13,150 @@ that shall be used in the rest of this spec. Then, we discuss how
 block-level vfmd elements may be identified, and then, we discuss how
 span-level vfmd elements within a block-level element may be identified.
 
-## Definitions
+<h2 id="definitions">Definitions</h2>
 
-### Document
+[Definitions]: #definitions
+
+<h3 id="document">Document</h3>
+
+[document]: #document
 
 The input Markdown text is called the **document**.
 
-The _document_ contains Unicode text in UTF-8 encoding without any
+The [document] contains Unicode text in UTF-8 encoding without any
 leading Byte-Order-Mark. Any byte sequences in the input that are
 invalid in UTF-8 encoding are filtered off and are ignored. Therefore,
-for the following discussion, the _document_ is considered to not have
+for the following discussion, the [document] is considered to not have
 any invalid byte sequences.
 
-### Characters
+<h3 id="characters">Characters</h3>
+
+[character]: #characters
+[characters]: #characters
 
 A **character** is an atomic unit of text specified as a Unicode code
 point and encoded in UTF-8 encoding.
 
-The _document_ consists of a sequence of _characters_, where the
-_characters_ may represent either markup or character data.
+The [document] consists of a sequence of [characters], where the
+[characters] may represent either markup or character data.
 
-A `#x09 (TAB)` _character_ in the input shall be treated as four
+A `#x09 (TAB)` character in the input shall be treated as four
 consecutive `#x20 (SPACE)` characters.
 
+<span id="space">
 A `#x20 (SPACE)` character is henceforth called a **space** character.
-Any _character_ that is not a `#x20 (SPACE)` character is henceforth
+</span>
+<span id="non-space">
+Any character that is not a `#x20 (SPACE)` character is henceforth
 called a **non-space** character.
+</span>
 
 The character sequence `#x0D #x0A (CRLF)` in the input shall be treated
 as a single `#x0A (LF)` character.
 
-A `#x0A (LF)` character is henceforth called a **line break**.
+<span id="line-break">
+A `#x0A (LF)` character is called a **line break** character.
+</span>
+<span id="non-line-break">
+Any [character] that is not a _line break_ character is called a
+**non-line-break** character.
+</span>
 
+<span id="whitespace">
 A **whitespace** character is one of the following characters: `#x09
 (TAB)`, `#x0A (LF)`, `#x0C (FF)`, `#x0D (CR)` or `#x20 (SPACE)`.
+</span>
 
-A **string** is a sequence of zero or more _characters_.
+<span id="string">
+A **string** is a sequence of zero or more characters.
+</span>
 
-**Trimming** a _string_ means removing any leading or trailing
-_whitespace_ characters from the _string_. For example, _trimming_ <code
-style="white-space: pre;">   yellow  </code> yields `yellow`; _trimming_
-<code style="white-space: pre;">green  </code> yields `green`.
-_Trimming_ a _string_ that does  not have any leading or trailing
-_spaces_ has no effect on the _string_. Trimming a _string_ that is
-entirely composed of _whitespace_ characters yields an empty
-(zero-length) _string_.
+<span id="trimming">
+**Trimming** a [string] means removing any leading or trailing
+[whitespace] characters from the [string].
+</span>
+For example, trimming 
+<code style="white-space: pre;">   yellow  </code> yields `yellow`;
+trimming <code style="white-space: pre;">green  </code>
+yields `green`. Trimming a [string] that does  not have any leading
+or trailing [whitespace] has no effect on the [string]. Trimming a
+[string] that is entirely composed of [whitespace] characters yields
+an empty (zero-length) [string].
 
-**Simplifying** a _string_ means _trimming_ the string, and in addition,
-replacing each sequence of internal _whitespace_ characters in the
-_string_ with a single _space_ character. For example, _simplifying_ <code
-style="white-space: pre;">   Amazing   Maurice  </code> yields `Amazing Maurice`; _simplifying_
-<code style="white-space: pre;">educated   rodents  </code> yields
-`educated rodents`.
+<span id="simplifying">
+**Simplifying** a [string] means [trimming] the [string], and in
+addition, replacing each sequence of internal [whitespace] characters in
+the [string] with a single [space] character.
+</span>
+For example, simplifying 
+<code style="white-space: pre;">     Amazing   Maurice  </code>
+yields `Amazing Maurice`; simplifying 
+<code style="white-space: pre;">educated   rodents   </code>
+yields `educated rodents`.
 
-**Escaping** a _character_ in a string means placing a `\` (backslash)
-just before the _character_ in the string, where the `\` used for
-escaping remains unescaped (i.e. the escaping `\` shall not be preceded
-by an unescaped `\`).
+<span id="escaping">**Escaping**</span> a [character] in a [string]
+means placing a `\` (backslash) just before the [character] in the
+[string], where the `\` used for escaping remains unescaped (i.e.
+the escaping `\` shall not itself be preceded by an unescaped `\`).
 
-A **quoted string** is a _string_ that consists at least two
-characters and either
+<span id="quoted-string">A **quoted string**</span> is a [string] that
+consists at least two characters and either
 
- 1. begins with an unescaped `'` (single quote) character, and ends with
-    an unescaped `'` character, and does not contain any other instance
-    of an unescaped `'` character
+ 1. begins with an [unescaped] `'` (single quote) character, and ends
+    with an [unescaped] `'` character, and does not contain any other
+    instance of an [unescaped] `'` character
 
     or
 
- 2. begins with an unescaped `"` (double quote) character, and ends with
-    an unescaped `"` character, and does not contain any other instance
-    of an unescaped `"` character
+ 2. begins with an [unescaped] `"` (double quote) character, and ends
+    with an [unescaped] `"` character, and does not contain any other
+    instance of an [unescaped] `"` character
 
-The substring of the _quoted string_ that excludes the first and the
-last character of the _quoted string_ is called the _enclosed string_ of
-the _quoted string_.
+<span id="enclosed-string">The substring of the [quoted string] that
+excludes the first and the last character of the [quoted string] is
+called the **enclosed string** of the [quoted string].</span>
 
-### Lines
+[space]: #space
+[non-space]: #non-space
+[line break]: #line-break
+[line breaks]: #line-break
+[non-line-break]: #non-line-break
+[whitespace]: #whitespace
+[string]: #string
+[trimming]: #trimming
+[trimmed]: #trimming
+[simplifying]: #simplifying
+[simplified]: #simplifying
+[escaping]: #escaping
+[unescaped]: #escaping
+[quoted string]: #quoted-string
+[enclosed string]: #enclosed-string
 
-When we split the _document_ on _line breaks_, we get **lines**. The
-_document_ can then be seen as a sequence of _lines_, separated by _line
-breaks_.
+<h3 id="lines">Lines</h3>
 
-If a _line_ contains no _characters_, or if all _characters_ in the
-_line_ are _space_ characters, that line is called a **blank line**.
+[line]: #lines
+[lines]: #lines
 
-### Block-elements
+A **line** is a sequence of [non-line-break] characters.
 
-The _document_ can be seen as a sequence of block-elements, where each
-block-element consists of a sequence of one or more _lines_.
+When we split the [document] on [line breaks], we get _lines_. The
+[document] can then be seen as a sequence of _lines_, separated by [line
+breaks].
+
+<span id="blank-line">
+If a [line] contains no [characters], or if all [characters] in the
+[line] are [space] characters, that line is called a **blank line**.
+</span>
+
+[blank line]: #blank-line
+[blank lines]: #blank-line
+
+<h3 id="block-elements">Block-elements</h3>
+
+[block-elements]: #block-elements
+
+The [document] can be seen as a sequence of block-elements, where each
+block-element consists of a sequence of one or more [lines].
 
 There are different types of block-elements: 
 
@@ -112,134 +168,169 @@ There are different types of block-elements:
 - Horizontal rule
 - Null block
 
-To identify the block-elements in the _document_, the _document_ is
-seen as a sequence of _lines_.
+To [identify the block-elements] in the [document], the [document] is seen
+as a sequence of [lines].
 
-## Identifying block-elements
+[identify the block-elements]: #identifying-block-elements
 
-Given a sequence of _lines_, henceforth called the **input line
-sequence**, we need to identify the block-elements in the input,
-identify the type of the block-elements and identify which sub-sequence
-of lines in the input correspond to which block-element.
 
-### The block-element line sequence
+<h2 id="identifying-block-elements">Identifying block-elements</h2>
 
-The line at which a block-element begins is called a **block-element
-start line**. The line at which a block-element ends is called a
-**block-element end line**. The sub-sequence of lines starting from the
-_block-element start line_ and ending at the _block-element end line_,
-both inclusive, constitute the **block-element line sequence**.
+[Identifying block-elements]: #identifying-block-elements
 
-Every _block-element end line_ in the _input line sequence_ is
-immediately followed by a _block-element start line_, unless the
-_block-element end line_ is the last line in the _input line sequence_.
-The first line in the _input line sequence_ is a _block-element start
-line_, and the last line in the _input line sequence_ is a
-_block-element end line_.
-
-The idea is to break the _input line sequence_ into a series of
-_block-element line sequences_. Each _block-element line sequence_ shall
-consist of only the _lines_ that correspond to a particular
+Given a sequence of [lines], henceforth
+called the **input line sequence**, we need to identify the
+block-elements in the input, identify the type of the block-elements and
+identify which sub-sequence of lines in the input correspond to which
 block-element.
 
-### Type and extent of a block-element
+[input line sequence]: #identifying-block-elements
 
-The type of the block-element is determined based on the _block-element
-start line_ and, in some cases, the line following the _block-element
-start line_.  The line at which the block should end (i.e.  the
-corresponding _block-element end line_) is determined based on the
-_block-element start line_ and subsequent lines.
+<h3 id="block-element-line-sequence">The block-element line sequence</h3>
 
-**Definitions:** The regular expression pattern `/^( *[\*\-\+] +)[^ ]/`
-is called the **unordered list starter pattern**. The regular expression
-pattern `/^( *([0-9]+)\. +)[^ ]/` is called the **ordered list starter
-pattern**.
+[The block-element line sequence]: #block-element-line-sequence
+[block-element line sequence]: #block-element-line-sequence
+[block-element line sequences]: #block-element-line-sequence
+
+The [line] at which a block-element begins is called a **block-element
+start line**. The [line] at which a block-element ends is called a
+**block-element end line**. The sub-sequence of [lines] starting from
+the _block-element start line_ and ending at the _block-element end
+line_, both inclusive, constitute the **block-element line sequence**.
+
+Every _block-element end line_ in the [input line sequence] is
+immediately followed by a _block-element start line_, unless the
+_block-element end line_ is the last line in the [input line sequence].
+The first line in the [input line sequence] is a _block-element start
+line_, and the last line in the [input line sequence] is a
+_block-element end line_.
+
+The idea is to break the [input line sequence] into a series of
+_block-element line sequences_. Each _block-element line sequence_ shall
+consist of only the [lines] that correspond to a particular
+block-element.
+
+[block-element start line]: #block-element-line-sequence
+[block-element end line]: #block-element-line-sequence
+
+<h3 id="type-and-extent-block-element">Type and extent of a block-element</h3>
+
+[Type and extent of a block-element]: #type-and-extent-block-element
+
+The type of the block-element is determined based on the [block-element
+start line] and, in some cases, the line following the [block-element
+start line].  The line at which the block should end (i.e.  the
+corresponding [block-element end line]) is determined based on the
+[block-element start line] and subsequent lines.
+
+**Definitions:**
+<span id="unordered-list-starter-pattern">
+The regular expression pattern `/^( *[\*\-\+] +)[^ ]/` is called the
+**unordered list starter pattern**.
+</span>
+<span id="ordered-list-starter-pattern">
+The regular expression pattern `/^( *([0-9]+)\. +)[^ ]/` is called the
+**ordered list starter pattern**.
+</span>
+
+[unordered list starter pattern]: #unordered-list-starter-pattern
+[ordered list starter pattern]: #ordered-list-starter-pattern
 
 The following rules are to be followed in determining the type of the
-block-element and the _block-element end line_:
+block-element and the [block-element end line]:
 
- 1. If the _block-element start line_ is a _blank line_, then the body
-    element is of type **null**. The same line is the _block-element end
-    line_.
+ 1. If the [block-element start line] is a [blank line], then the body
+    element is of type [**null block**]. The same line is the
+    [block-element end line].
  
- 2. If the _block-element start line_ does not begin with four or more
-    consecutive _space_ characters, and if the _block-element start
-    line_ matches the regular expression pattern
+ 2. If the [block-element start line] does not begin with four or more
+    consecutive [space] characters, and if the [block-element start
+    line] matches the regular expression pattern
     `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ <>]+|<[^<>]*>)/`, then the
-    block-element is of type **reference-resolution block**. The same
-    line is the _block-element end line_.
+    block-element is of type [**reference-resolution block**]. The same
+    line is the [block-element end line].
 
- 3. If none of the above conditions apply, and if the _block-element
-    start line_ is not the last line in the _input line sequence_, and
+ 3. If none of the above conditions apply, and if the [block-element
+    start line] is not the last line in the [input line sequence], and
     is immediately followed by a succeeding line that matches the
     regular expression pattern `/^(-+|=+) *$/`, then the block-element
-    is said to be of type **setext-style header**, and the succeeding
-    line is said to be the _block-element end line_.
+    is said to be of type [**setext-style header**], and the succeeding
+    line is said to be the [block-element end line].
 
- 4. If none of the above conditions apply, and if the _block-element
-    start line_ begins with four or more consecutive _space_ characters,
-    it signifies the start of a block-element of type **code block**.
-    The _block-element end line_ is the next subsequent line in the
-    _input line sequence_, starting from and inclusive of the
-    _block-element start line_, that is immediately succeeded by a
+ 4. If none of the above conditions apply, and if the [block-element
+    start line] begins with four or more consecutive [space] characters,
+    it signifies the start of a block-element of type [**code block**].
+    The [block-element end line] is the next subsequent line in the
+    [input line sequence], starting from and inclusive of the
+    [block-element start line], that is immediately succeeded by a
     succeeding line that satisfies one of the following conditions:
 
-     1. The succeeding line is not a _blank line_, and it does not
-        begin with four or more consecutive _space_ characters (or)
-     2. The succeeding line is a _blank line_, and is immediately
-        followed by a line that does not begin with four or more
-        consecutive _space_ characters
+     1. The succeeding line is not a [blank line], and it does not
+        begin with four or more consecutive [space] characters
+        
+        (or)
 
-    If no such _block-element end line_ is found, the last line in the
-    _input line sequence_ is the _block-element end line_.
+     2. The succeeding line is a [blank line], and is immediately
+        followed by a line that does not begin with four or more
+        consecutive [space] characters
+
+    If no such [block-element end line] is found, the last line in the
+    [input line sequence] is the [block-element end line].
 
  5. If none of the above conditions apply, and if the first character
-    of the _block-element start line_ is a `#` character, it signifies
-    the start of a block-element of type **atx-style header**.  The same
-    line is the _block-element end line_.
+    of the [block-element start line] is a `#` character, it signifies
+    the start of a block-element of type [**atx-style header**]. The
+    same line is the [block-element end line].
 
  6. If none of the above conditions apply, and if the first
-    _non-space_ character in the _block-element start line_ is a `>`
-    character, then the block-element is of type **blockquote**. The
-    _block-element end line_ is the next subsequent line in the _input
-    line sequence_ that is a _blank line_ and is immediately succeeded
+    [non-space] character in the [block-element start line] is a `>`
+    character, then the block-element is of type [**blockquote**]. The
+    [block-element end line] is the next subsequent line in the [input
+    line sequence] that is a [blank line] and is immediately succeeded
     by a succeeding line that satisfies one of the following conditions:
 
-     1. The succeeding line is a _blank line_ (or)
-     2. The succeeding line begins with four or more consecutive _space_
-        characters (or)
-     3. The first _non-space_ character in the succeeding line is not
+     1. The succeeding line is a [blank line]
+     
+        (or)
+
+     2. The succeeding line begins with four or more consecutive [space]
+        characters
+        
+        (or)
+
+     3. The first [non-space] character in the succeeding line is not
         a `>` character
     
-    If no such _block-element end line_ is found, the last line in the
-    _input line sequence_ is the _block-element end line_.
+    If no such [block-element end line] is found, the last line in the
+    [input line sequence] is the [block-element end line].
 
- 7. If none of the above conditions apply, and if the _block-element
-    start line_ contains three or more `*` characters, and is composed
-    entirely of instances of the `*` character and optional _space_
-    characters, then the line forms a block-element of type **horizontal
-    rule**.
+ 7. If none of the above conditions apply, and if the [block-element
+    start line] contains three or more `*` characters, and is composed
+    entirely of instances of the `*` character and optional [space]
+    characters, then the line forms a block-element of type
+    [**horizontal rule**].
 
-    Similarly, if the _block-element start line_ contains either three
+    Similarly, if the [block-element start line] contains either three
     or more `-` characters, or three or more `_` characters, and is
-    composed entirely of the same character and optional _space_
-    characters, then the block-element is of type _horizontal rule_.
+    composed entirely of the same character and optional [space]
+    characters, then the block-element is of type [horizontal rule].
 
-    The _block-element end line_ is the same as the _block-element start
-    line_.
+    The [block-element end line] is the same as the [block-element start
+    line].
 
  8. If none of the conditions specified above apply, and if the
-    _block-element start line_ matches the _unordered list starter
-    pattern_ (i.e. the regular expression `/^( *[\*\-\+] +)[^ ]/`) then
-    the block-element is of type **unordered list**. The matching
+    [block-element start line] matches the [unordered list starter
+    pattern] \(i.e. the regular expression `/^( *[\*\-\+] +)[^ ]/`\)
+    then the block-element is of type [**unordered list**]. The matching
     substring for the first and only parenthesized subexpression in the
     pattern is called the _unordered list starter string_. The number of
-    _characters_ in the _unordered list starter string_ is called the
+    [characters] in the _unordered list starter string_ is called the
     _unordered-list-starter-string-length_.
 
-    For example, consider the following _block-element start line_
-    (which has three _space_ characters, followed by an asterisk,
-    followed by two _space_ characters, followed by the word "Peanuts"):
+    For example, consider the following [block-element start line]
+    \(which has three [space] characters, followed by an asterisk,
+    followed by two [space] characters, followed by the word
+    "Peanuts"\):
   
            *  Peanuts
 
@@ -247,99 +338,99 @@ block-element and the _block-element end line_:
     the first 6 characters of the line, i.e. the entire part before the
     word "Peanuts". The _unordered-list-starter-string-length_ is 6.
    
-    The _block-element end line_ is the next subsequent line in the
-    _input line sequence_, starting from and inclusive of the
-    _block-element start line_, that satisfies one of the following
+    The [block-element end line] is the next subsequent line in the
+    [input line sequence], starting from and inclusive of the
+    [block-element start line], that satisfies one of the following
     conditions:
 
-     1. The line is a _blank line_ and is immediately succeeded by
-        another _blank line_
+     1. The line is a [blank line] and is immediately succeeded by
+        another [blank line]
 
         (or)
 
-     2. The line is a _blank line_ and is immediately succeeded by a
+     2. The line is a [blank line] and is immediately succeeded by a
         succeeding line that satisfies all of the following conditions:
 
          1. The succeeding line does not start with the _unordered list
-            starter string_ seen in the _block-element start line_
+            starter string_ seen in the [block-element start line]
          2. The first _unordered-list-starter-string-length_ characters
-            of the succeeding line include _non-space_ characters
+            of the succeeding line include [non-space] characters
 
         (or)
 
-     3. The line is not a _blank line_ and is immediately succeeded by
+     3. The line is not a [blank line] and is immediately succeeded by
         a succeeding line that statisfies all of the following
         conditions:
 
          1. The succeeding line does not start with the _unordered list
-            starter string_ seen in the _block-element start line_
+            starter string_ seen in the [block-element start line]
          2. The first _unordered-list-starter-string-length_ characters
-            of the succeeding line include _non-space_ characters
-         3. The succeeding line matches either the _unordered list
-            starter pattern_ or the _ordered list starter pattern_
+            of the succeeding line include [non-space] characters
+         3. The succeeding line matches either the [unordered list
+            starter pattern] or the [ordered list starter pattern]
 
-    If no such _block-element end line_ is found, the last line in the
-    _input line sequence_ is the _block-element end line_.
+    If no such [block-element end line] is found, the last line in the
+    [input line sequence] is the [block-element end line].
 
  9. If none of the conditions specified above apply, and if the
-    _block-element start line_ matches the _ordered list starter
-    pattern_ (i.e. the regular expression `/^( *([0-9]+)\. +)[^ ]/`)
-    then the block-element is of type **ordered list**. The length of
+    [block-element start line] matches the [ordered list starter
+    pattern] \(i.e. the regular expression `/^( *([0-9]+)\. +)[^ ]/`\)
+    then the block-element is of type [**ordered list**]. The length of
     the matching substring for the first (i.e. inner) parenthesized
     subexpression in the pattern is called the
     _ordered-list-starter-string-length_.
     
-    For example, consider the following _block-element start line_
-    (which has three _space_ characters, followed by the number '1',
-    followed by a dot, followed by two _space_ characters, followed by
-    the word "Peanuts"):
+    For example, consider the following [block-element start line]
+    \(which has three [space] characters, followed by the number '1',
+    followed by a dot, followed by two [space] characters, followed by
+    the word "Peanuts"\):
   
            1.  Peanuts
 
     The _ordered-list-starter-string-length_ in the above example is 7.
    
-    The _block-element end line_ is the next subsequent line in the
-    _input line sequence_, starting from and inclusive of the
-    _block-element start line_, that satisfies one of the following
+    The [block-element end line] is the next subsequent line in the
+    [input line sequence], starting from and inclusive of the
+    [block-element start line], that satisfies one of the following
     conditions:
 
-     1. The line is a _blank line_ and is immediately succeeded by
-        another _blank line_
+     1. The line is a [blank line] and is immediately succeeded by
+        another [blank line]
 
         (or)
 
-     2. The line is a _blank line_ and is immediately succeeded by a
+     2. The line is a [blank line] and is immediately succeeded by a
         succeeding line that satisfies all of the following conditions:
 
-         1. The succeeding line does not match the _ordered list starter
-            pattern_
+         1. The succeeding line does not match the [ordered list starter
+            pattern]
          2. The first _ordered-list-starter-string-length_ characters of
-            the succeeding line include _non-space_ characters
+            the succeeding line include [non-space] characters
 
         (or)
 
-     3. The line is not a _blank line_ and is immediately succeeded by
-        a succeeding line that statisfies all of the following
+     3. The line is not a [blank line] and is immediately succeeded by
+        a succeeding line that satisfies all of the following
         conditions:
 
-         1. The succeeding line does not match the _ordered list starter
-            pattern_
+         1. The succeeding line does not match the [ordered list starter
+            pattern]
          2. The first _ordered-list-starter-string-length_ characters of
-            the succeeding line include _non-space_ characters
-         3. The succeeding line matches the _unordered list starter
-            pattern_
+            the succeeding line include [non-space] characters
+         3. The succeeding line matches the [unordered list starter
+            pattern]
 
-    If no such _block-element end line_ is found, the last line in the
-    _input line sequence_ is the _block-element end line_.
+    If no such [block-element end line] is found, the last line in the
+    [input line sequence] is the [block-element end line].
 
 10. If none of the above conditions apply, then the block-element is of
-    type **paragraph**.
+    type [**paragraph**].
 
-    In order to find the _block-element end line_, we need to make use
+    In order to find the [block-element end line], we need to make use
     of a HTML parser. To the HTML parser, we feed the characters of each
-    line, starting from the _block-element start line_. After feeding
+    line, starting from the [block-element start line]. After feeding
     all characters of every line, we feed a `#x0A (LF)` character (i.e.
-    a _line break_) to the HTML parser, and observe the state of the
+    a [line break]) to the HTML parser, and observe the state of the
     HTML parser.
 
     Of the the many possible states of a HTML parser, the following is
@@ -351,15 +442,15 @@ block-element and the _block-element end line_:
      3. Within a HTML comment
      4. Outside of any HTML element or comment
  
-    The _block-element end line_ is the next subsequent _line_ in the
-    _input line sequence_, starting from and inclusive of the
-    _block-element start line_, that satisfies all the following
+    The [block-element end line] is the next subsequent [line] in the
+    [input line sequence], starting from and inclusive of the
+    [block-element start line], that satisfies all the following
     conditions:
 
     <!-- For some reason, Redcarpet requires a comment here to
          correctly display the following list -->
 
-     1. At the end of feeding the _line_ and a _line break_ to the HTML
+     1. At the end of feeding the [line] and a [line break] to the HTML
         parser, all the following conditions are satisfied:
 
          1. The HTML parser state is not "within a HTML tag"
@@ -371,39 +462,44 @@ block-element and the _block-element end line_:
             ancestor elements is not one of the following HTML elements:
             `pre`, `script`, `style`
 
-     2. The _line_ is a _blank line_, or is immediately succeeded by a
+     2. The [line] is a [blank line], or is immediately succeeded by a
         succeeding line that satisfies at least one of the following
         conditions:
 
-         1. The leftmost _non-space_ character in the succeeding line is
+         1. The leftmost [non-space] character in the succeeding line is
             a `>` character
 
             (or)
 
          2. The succeeding line contains three or more `*` characters,
             and is composed entirely of instances of the `*` character
-            and optional _space_ characters (or similarly with `-` or
-            `_` characters)
+            and optional [space] characters (or similarly with `-` or
+            `[` characters)
 
 
-Using the above rules, the _input line sequence_ is broken down into a
-series of _block-element line sequences_, and the block-element type of
-each _block-element line sequence_ is identified.
+Using the above rules, the [input line sequence] is broken down into a
+series of [block-element line sequences], and the block-element type of
+each [block-element line sequence] is identified.
 
-## Interpreting block-elements
+<h2 id="interpreting-block-elements">Interpreting block-elements</h2>
 
-This section assumes that the _input line sequence_ has been broken down
-into a series of _block-element line sequences_, and that the
-block-element type of each _block-element line sequence_ has been
+[Interpreting block-elements]: #interpreting-block-elements
+
+This section assumes that the [input line sequence] has been broken down
+into a series of [block-element line sequences], and that the
+block-element type of each [block-element line sequence] has been
 identified. For a given block-element type, the procedure to interpret a
-_block-element line sequence_ is discussed in this section.
+[block-element line sequence] is discussed in this section.
 
-### atx-style header
+<h3 id="atx-style-header">atx-style header</h3>
 
-The  _block-element line sequence_ for an atx-style header shall have a
+[atx-style header]: #atx-style-header
+[**atx-style header**]: #atx-style-header
+
+The  [block-element line sequence] for an atx-style header shall have a
 single line that starts with a `#` character.
 
-The single _line_ in the _block-element line sequence_ shall match one
+The single [line] in the [block-element line sequence] shall match one
 of the following regular expression patterns:
 
  1. With header text: `/^(#+)(.*[^#])#*$/`
@@ -422,8 +518,8 @@ of the following regular expression patterns:
     subexpression is the heading level, subject to a maximum of 6.
 
     The matching substring for the second parenthesized subexpression
-    shall be _trimmed_ to give a _header text run_. The result of
-    processing the _header text run_ as a _text run_ shall form the
+    shall be [trimmed] to give a _header text run_. The result of
+    processing the _header text run_ as a [text run] shall form the
     content of the header element.
 
     For example, the HTML outputs for the above expressions are:
@@ -442,7 +538,7 @@ of the following regular expression patterns:
     subexpression is the heading level, subject to a maximum of 6.
     The header text is empty.
 
-    For example, if the complete _line_ reads:
+    For example, if the complete [line] reads:
 
         #####
 
@@ -450,14 +546,17 @@ of the following regular expression patterns:
 
         <h5></h5>
 
-### setext-style header
+<h3 id="setext-style-header">setext-style header</h3>
 
-The  _block-element line sequence_ for a setext-style header shall have
+[setext-style header]: #setext-style-header
+[**setext-style header**]: #setext-style-header
+
+The  [block-element line sequence] for a setext-style header shall have
 exactly two lines, with the second line beginning with either a `-`
 character or a `=` character.
 
-The first line shall be _trimmed_ to give a _header text run_. The
-result of processing the _header text run_ as a _text run_ shall form
+The first line shall be [trimmed] to give a _header text run_. The
+result of processing the _header text run_ as a [text run] shall form
 the content of the header element.
 
 If the second line starts with the `=` character, the heading level
@@ -465,7 +564,7 @@ shall be 1. If the second line starts with the `-` character, the
 heading level shall be 2. No other heading levels are possible in a
 setext-style header.
 
-For example, consider the following pairs of _lines_:
+For example, consider the following pairs of [lines]:
 
     Level One
     =========
@@ -489,18 +588,21 @@ The corresponding HTML outputs for the above lines are:
 
     <h2>Another level two</h2>
 
-### code block
+<h3 id="code-block">code block</h3>
 
-Each line in the  _block-element line sequence_ for a code block element
-shall either be a _blank line_ or a _line_ beginning with four or more
-_space_ characters.
+[code block]: #code-block
+[**code block**]: #code-block
 
-For each line in the _block-element line sequence_, the leading four
-_space_ characters are removed, if present, and the resulting sequence
-of _lines_, separated by _line breaks_, forms the content of the code
+Each line in the  [block-element line sequence] for a code block element
+shall either be a [blank line] or a [line] beginning with four or more
+[space] characters.
+
+For each line in the [block-element line sequence], the leading four
+[space] characters are removed, if present, and the resulting sequence
+of [lines], separated by [line breaks], forms the content of the code
 block.
 
-For example, if the following sequence of _lines_ form the code block
+For example, if the following sequence of [lines] form the code block
 element:
 
         int main() {
@@ -514,40 +616,43 @@ The corresponding HTML output shall be:
     }
     </code></pre>
 
-### blockquote
+<h3 id="blockquote">blockquote</h3>
 
-The _block-element line sequence_ for a blockquote element shall
-have one or more _lines_, some of which might have the `>` character as
-the first _non-space_ character in the _line_.
+[blockquote]: #blockquote
+[**blockquote**]: #blockquote
 
-If the last _line_ in the _block-element line sequence_ is a _blank
-line_, the last _line_ is ignored.
+The [block-element line sequence] for a blockquote element shall
+have one or more [lines], some of which might have the `>` character as
+the first [non-space] character in the [line].
 
-Each _line_ in the _block-element line sequence_ is processed to produce
-a modified sequence of _lines_, called the _blockquote-processed line
-sequence_. The following processing is to be done for each _line_:
+If the last [line] in the [block-element line sequence] is a [blank
+line], the last [line] is ignored.
 
- 1. If the _line_ matches the regular expression `/^ *> /`, then the
-part of the _line_ that matches the said regular expression shall be removed
+Each [line] in the [block-element line sequence] is processed to produce
+a modified sequence of [lines], called the _blockquote-processed line
+sequence_. The following processing is to be done for each [line]:
+
+ 1. If the [line] matches the regular expression `/^ *> /`, then the
+part of the [line] that matches the said regular expression shall be removed
 from the line  
- 2. If the pattern in (1) above is not satisfied, and if the _line_ matches
-the regular expression `/^ *>/`, then the part of the _line_ that
+ 2. If the pattern in (1) above is not satisfied, and if the [line] matches
+the regular expression `/^ *>/`, then the part of the [line] that
 matches the said regular expression shall be removed from the line
 
 The _blockquote-processed line sequence_ obtained this way can be
-considered as the _input line sequence_ for a sequence of block-elements
-nested within the blockquote. The result of interpreting that _input
-line sequence_ further into block-elements shall form the content of the
+considered as the [input line sequence] for a sequence of block-elements
+nested within the blockquote. The result of interpreting that [input
+line sequence] further into block-elements shall form the content of the
 blockquote element.
 
-For example, consider the following _block-element line sequence_:
+For example, consider the following [block-element line sequence]:
 
       > In Perl, a Hello World is 
       > written as follows:
       >
       >     print "Hello World!\n";
 
-After processing each line in the above _block-element line sequence_,
+After processing each line in the above [block-element line sequence],
 the _blockquote-processed line sequence_ obtained is as follows:
 
     In Perl, a Hello World is 
@@ -555,9 +660,9 @@ the _blockquote-processed line sequence_ obtained is as follows:
     
         print "Hello World!\n";
 
-When we treat the _blockquote-processed line sequence_ as an _input line
-sequence_, we can recognize nested block elements in it of type
-paragraph and code block. The HTML equivalent for the _lines_ in the
+When we treat the _blockquote-processed line sequence_ as an [input line
+sequence], we can recognize nested block elements in it of type
+paragraph and code block. The HTML equivalent for the [lines] in the
 _blockquote-processed line sequence_ is as follows:
 
     <p>In Perl, a Hello World is 
@@ -566,8 +671,8 @@ _blockquote-processed line sequence_ is as follows:
     <pre><code>print "Hello World!\n";
     </code></pre>
 
-Therefore, the HTML equivalent for the given  _block-element line
-sequence_ is:
+Therefore, the HTML equivalent for the given  [block-element line
+sequence] is:
 
     <blockquote>
     <p>In Perl, a Hello World is 
@@ -577,11 +682,14 @@ sequence_ is:
     </code></pre>
     </blockquote>
 
-### horizontal rule
+<h3 id="horizontal-rule">horizontal rule</h3>
 
-The  _block-element line sequence_ for a null block element shall have a
-single _line_ that is composed entirely of either `*`, `-` or `_`
-characters, along with optional _space_ characters.
+[horizontal rule]: #horizontal-rule
+[**horizontal rule**]: #horizontal-rule
+
+The  [block-element line sequence] for a horizontal rule element shall
+have a single [line] that is composed entirely of either `*`, `-` or `_`
+characters, along with optional [space] characters.
 
 The output shall consist of a horizontal rule.
 
@@ -601,76 +709,79 @@ The corresponding HTML output shall be:
 
     <p>First line of a paragraph.</p>
 
-### unordered list
+<h3 id="unordered-list">unordered list</h3>
 
-The _block-element line sequence_ for an unordered list block shall have
-one or more _lines_.
+[unordered list]: #unordered-list
+[**unordered list**]: #unordered-list
 
-The first line in the _block-element line sequence_ would match the
-_unordered list starter pattern_ (i.e. the regular expression
-`/^( *[\*\-\+] +)[^ ]/`). The matching substring for the first and only
+The [block-element line sequence] for an unordered list block shall have
+one or more [lines].
+
+The first line in the [block-element line sequence] would match the
+[unordered list starter pattern] \(i.e. the regular expression
+`/^( *[\*\-\+] +)[^ ]/`\). The matching substring for the first and only
 parenthesized subexpression in that pattern is called the _unordered
 list starter string_. The number of characters in the _unordered list
 starter string_ is called the _unordered-list-starter-string-length_.
 
-We first divide the _block-element line sequence_ into a series of
-_unordered list item line sequences_. The lines in a particular
+We first divide the [block-element line sequence] into a series of
+_unordered list item line sequences_. The [lines] in a particular
 _unordered list item line sequence_ correspond to one list item in the
 list.
 
-Every _line_ in the _block-element line sequence_ that starts with the
+Every [line] in the [block-element line sequence] that starts with the
 _unordered list starter string_ is called an _unordered list item start
 line_. Each _unordered list item start line_ signifies the beginning of
 a new _unordered list item line sequence_. An _unordered list item line
-sequence_ consists of the sequence of _lines_ starting from (and
+sequence_ consists of the sequence of [lines] starting from (and
 inclusive of) an _unordered list item start line_, and ending at (and
 excluding) the next subsequent _unordered list item start line_. If
 there is no subsequent _unordered list item start line_, the _unordered
-list item line sequence_ ends at the last _line_ of the _block-element
-line sequence_.
+list item line sequence_ ends at the last [line] of the [block-element
+line sequence].
 
-We have now divided the _block-element line sequence_ into a series of
-_unordered list item line sequences_. The first line of each _unordered
-list item line sequence_ starts with the _unordered list starter
-string_.
+We have now divided the [block-element line sequence] into a series of
+_unordered list item line sequences_. The first [line] of each
+_unordered list item line sequence_ starts with the _unordered list
+starter string_.
 
-Each _line_ in the _unordered list item line sequence_ is processed to
-produce a modified sequence of _lines_, called the
+Each [line] in the _unordered list item line sequence_ is processed to
+produce a modified sequence of [lines], called the
 _unordered-list-item-processed line sequence_. The following processing
-is to be done for each _line_:
+is to be done for each [line]:
 
- 1. If the _line_ is the first line of the _unordered list item line
+ 1. If the [line] is the first line of the _unordered list item line
     sequence_:
     
-    The _line_ would start with the _unordered list starter string_.
+    The [line] would start with the _unordered list starter string_.
     The _unordered list starter string_ shall be removed from the
-    beginning of the _line_.
+    beginning of the [line].
 
- 2. If the _line_ is not the first line of the _unordered list item line
+ 2. If the [line] is not the first line of the _unordered list item line
     sequence_:
     
-    The _line_ would start with zero or more _space_ characters. The
-    leading _space_ characters, if any, should be removed as given
+    The [line] would start with zero or more [space] characters. The
+    leading [space] characters, if any, should be removed as given
     below:
 
-     1. If the number of leading _space_ characters exceeds the
+     1. If the number of leading [space] characters exceeds the
         _unordered-list-starter-string-length_, the number of leading
-        _space_ characters removed should be equal to the
+        [space] characters removed should be equal to the
         _unordered-list-starter-string-length_.
-     2. If the number of leading _space_ characters is less than or
+     2. If the number of leading [space] characters is less than or
         equal to the _unordered-list-starter-string-length_, all the
-        leading _space_ characters should be removed.
+        leading [space] characters should be removed.
 
 The _unordered-list-item-processed line sequence_ obtained this way can
-be considered as the _input line sequence_ for a sequence of
+be considered as the [input line sequence] for a sequence of
 block-elements nested within the list item. The result of interpreting
-that _input line sequence_ further into block-elements shall form the
+that [input line sequence] further into block-elements shall form the
 content of the list element. 
 
 The list elements so obtained are combined into a sequence to form the
 complete unordered list in the output.
 
-For example, consider the following _block-element line sequence_:
+For example, consider the following [block-element line sequence]:
 
     * First item 1
 
@@ -684,27 +795,27 @@ For example, consider the following _block-element line sequence_:
         * Nested item 1
 
 The _unordered list starter string_ for the above example is an asterisk
-followed by a single _space_ character. The
+followed by a single [space] character. The
 _unordered-list-starter-string-length_ is 2.
 
 The 1<sup>st</sup>, 3<sup>rd</sup> and 8<sup>th</sup> lines in the
-_block-element line sequence_ start with the _unordered list starter
+[block-element line sequence] start with the _unordered list starter
 string_, and are therefore _unordered list item start lines_. (The
 10<sup>th</sup> line does contain the _unordered list starter string_,
 but does not start with the _unordered list starter string_, so it's not
 an _unordered list item start line_.)  Therefore, there are three
 _unordered list item line sequences_ in the above example, as follows:
 
- 1. The _lines_ 1 and 2 form the first _unordered list item
+ 1. The lines 1 and 2 form the first _unordered list item
     line sequence_
- 2. The _lines_ 3-7 form the second _unordered list item line sequence_
- 3. The _lines_ 8-10 form the third and last _unordered list item
+ 2. The lines 3-7 form the second _unordered list item line sequence_
+ 3. The lines 8-10 form the third and last _unordered list item
     line sequence_
 
 Each _unordered list item line sequence_ is then processed to obtain the
 _unordered-list-item-processed line sequence_.  When we treat each
-_unordered-list-item-processed line sequence_ as an _input line
-sequence_, we can recognize nested block elements in it.
+_unordered-list-item-processed line sequence_ as an [input line
+sequence], we can recognize nested block elements in it.
 
 The first _unordered list item line sequence_ looks like:
 
@@ -723,7 +834,7 @@ The first _unordered-list-item-processed line sequence_ is therefore:
 </code></pre>
 
 When this _unordered-list-item-processed line sequence_ is processed as
-an _input line sequence_ to identify block-elements in it, we get a
+an [input line sequence] to identify block-elements in it, we get a
 single paragraph block-element.  The corresponding HTML would be:
 
     <p>First item 1</p>
@@ -739,8 +850,8 @@ Second item 2
 
 To obtain the corresponding _unordered-list-item-processed line
 sequence_, we need to remove the _unordered list starter string_ from
-the beginning of the first line, and remove leading _space_ characters,
-subject to a maximum of 2 _space_ characters (because the
+the beginning of the first line, and remove leading [space] characters,
+subject to a maximum of 2 [space] characters (because the
 _unordered-list-starter-string-length_ is 2), from the subsequent lines.
 
 The second _unordered-list-item-processed line sequence_ is therefore:
@@ -753,7 +864,7 @@ Second item 2
 </code></pre>
 
 When this _unordered-list-item-processed line sequence_ is processed as
-an _input line sequence_ to identify block-elements in it, we get a
+an [input line sequence] to identify block-elements in it, we get a
 paragraph followed by a code block.  The corresponding HTML would be:
 
     <p>Second item 1
@@ -770,8 +881,8 @@ The third _unordered list item line sequence_ looks like:
 
 To obtain the corresponding _unordered-list-item-processed line
 sequence_, we need to remove the _unordered list starter string_ from
-the beginning of the first line, and remove leading _space_ characters,
-subject to a maximum of 2 _space_ characters, from the subsequent lines.
+the beginning of the first line, and remove leading [space] characters,
+subject to a maximum of 2 [space] characters, from the subsequent lines.
 
 The third _unordered-list-item-processed line sequence_ is therefore:
 
@@ -780,7 +891,7 @@ The third _unordered-list-item-processed line sequence_ is therefore:
       * Nested item 1
 
 When this _unordered-list-item-processed line sequence_ is processed as
-an _input line sequence_ to identify block-elements in it, we get a
+an [input line sequence] to identify block-elements in it, we get a
 paragraph followed by an unordered list.  The corresponding HTML would
 be:
 
@@ -791,7 +902,7 @@ be:
     </ul>
 
 Putting the content of all the list items together, the HTML equivalent
-for the complete _block-element line sequence_ of the unordered list in
+for the complete [block-element line sequence] of the unordered list in
 this example would be:
 
     <ul>
@@ -808,74 +919,77 @@ this example would be:
         </ul></li>
     <ul>
 
-### ordered list
+<h3 id="ordered-list">ordered list</h3>
 
-The _block-element line sequence_ for an ordered list block shall have
-one or more _lines_.
+[ordered list]: #ordered-list
+[**ordered list**]: #ordered-list
 
-The first line in the _block-element line sequence_ would match the
-_ordered list starter pattern_ (i.e. the regular expression
-`/^( *([0-9]+)\. +)[^ ]/`). The length of the matching substring for the
+The [block-element line sequence] for an ordered list block shall have
+one or more [lines].
+
+The first line in the [block-element line sequence] would match the
+[ordered list starter pattern] \(i.e. the regular expression
+`/^( *([0-9]+)\. +)[^ ]/`\). The length of the matching substring for the
 first (i.e. outer) parenthesized subexpression in the pattern is called
 the _ordered-list-starter-string-length_. The matching substring for the
 second (i.e. inner) parenthesized subexpression in the pattern is called
 the _ordered list starting number_.
 
-We first divide the _block-element line sequence_ into a series of
+We first divide the [block-element line sequence] into a series of
 _ordered list item line sequences_. The lines in a particular
 _ordered list item line sequence_ correspond to one list item in the
 list.
 
-Every _line_ in the _block-element line sequence_ that satisfies all the
+Every [line] in the [block-element line sequence] that satisfies all the
 following conditions is called an _ordered list item start line_:
 
- 1. The _line_ matches the _ordered list starter pattern_
+ 1. The [line] matches the [ordered list starter pattern]
  2. The first _ordered-list-starter-string-length_ characters of the
-    _line_ include _non-space_ characters
+    [line] include [non-space] characters
 
 Each _ordered list item start line_ signifies the beginning of a new
 _ordered list item line sequence_. An _ordered list item line sequence_
-consists of the sequence of _lines_ starting from (and inclusive of) an
+consists of the sequence of [lines] starting from (and inclusive of) an
 _ordered list item start line_, and ending at (and excluding) the next
 subsequent _ordered list item start line_. If there is no subsequent
 _ordered list item start line_, the _ordered list item line sequence_
-ends at the last _line_ of the _block-element line sequence_.
+ends at the last [line] of the [block-element line sequence].
 
-We have now divided the _block-element line sequence_ into a series of
+We have now divided the [block-element line sequence] into a series of
 _ordered list item line sequences_. The first line of each _ordered list
-item line sequence_ matches the _ordered list starter pattern_.
+item line sequence_ matches the [ordered list starter pattern].
 
-Each _line_ in the _ordered list item line sequence_ is processed to
-produce a modified sequence of _lines_, called the
+Each [line] in the _ordered list item line sequence_ is processed to
+produce a modified sequence of [lines], called the
 _ordered-list-item-processed line sequence_. The following processing is
-to be done for each _line_:
+to be done for each [line]:
 
- 1. If the _line_ is the first line of the _ordered list item line
+ 1. If the [line] is the first line of the _ordered list item line
     sequence_:
     
-    The _line_ would match the _ordered list starter pattern_. The
+    The [line] would match the [ordered list starter pattern]. The
     matching substring for the first (i.e. outer) parenthesized
     subexpression in the pattern shall be removed from the beginning of
-    the _line_.
- 2. If the _line_ is not the first line of the _ordered list item line
+    the [line].
+ 2. If the [line] is not the first line of the _ordered list item line
     sequence_:
     
-    The _line_ would start with zero or more _space_ characters. The
-    leading _space_ characters, if any, should be removed as given
+    The [line] would start with zero or more [space] characters. The
+    leading [space] characters, if any, should be removed as given
     below:
 
-     1. If the number of leading _space_ characters exceeds the
+     1. If the number of leading [space] characters exceeds the
         _ordered-list-starter-string-length_, the number of leading
-        _space_ characters removed should be equal to the
+        [space] characters removed should be equal to the
         _ordered-list-starter-string-length_.
-     2. If the number of leading _space_ characters is less than or
+     2. If the number of leading [space] characters is less than or
         equal to the _ordered-list-starter-string-length_, all the
-        leading _space_ characters should be removed.
+        leading [space] characters should be removed.
 
 The _ordered-list-item-processed line sequence_ obtained this way can be
-considered as the _input line sequence_ for a sequence of block-elements
-nested within the list item. The result of interpreting that _input line
-sequence_ further into block-elements shall form the content of the list
+considered as the [input line sequence] for a sequence of block-elements
+nested within the list item. The result of interpreting that [input line
+sequence] further into block-elements shall form the content of the list
 element.
 
 The list elements so obtained are combined into a sequence to form the
@@ -889,7 +1003,7 @@ not the number '1', the corresponding `ol` start tag in the output shall
 include the `start` attribute with the the _ordered list starting
 number_ as the attribute value.
 
-For example, consider the following _block-element line sequence_:
+For example, consider the following [block-element line sequence]:
 
     1. First item 1
 
@@ -902,30 +1016,30 @@ For example, consider the following _block-element line sequence_:
 
         1. Nested item 1
 
-When we match the first line against the _ordered list starter pattern_,
+When we match the first line against the [ordered list starter pattern],
 the matching substring for the parenthesized subexpression is obtained
-as <code>1. </code> (i.e. the number '1', followed by a dot, followed by
-a single _space_ character). The _ordered-list-starter-string-length_ is
-therefore 3. Also, the _ordered list starting number_ is identified as
-the number '1'.
+as <code style="whitespace: pre;">1. </code> (i.e. the number '1',
+followed by a dot, followed by a single [space] character). The
+_ordered-list-starter-string-length_ is therefore 3. Also, the _ordered
+list starting number_ is identified as the number '1'.
 
 The 1<sup>st</sup>, 3<sup>rd</sup>, 8<sup>th</sup> and 10<sup>th</sup>
-lines in the _block-element line sequence_ match the _ordered list
+lines in the [block-element line sequence] match the _ordered list
 starter pattern_, but only the 1<sup>st</sup>, 3<sup>rd</sup> and
 8<sup>th</sup> lines are such that the first 3 characters of the line
-include _non-space_ characters. So only the 1<sup>st</sup>,
+include [non-space] characters. So only the 1<sup>st</sup>,
 3<sup>rd</sup> and 8<sup>th</sup> lines are are _ordered list item start
 lines_.  Therefore, there are three _ordered list item line sequences_
 in the above example, as follows:
 
- 1. The _lines_ 1 and 2 form the first _ordered list item line sequence_
- 2. The _lines_ 3-7 form the second _ordered list item line sequence_
- 3. The _lines_ 8-10 form the third and last _ordered list item line
+ 1. The lines 1 and 2 form the first _ordered list item line sequence_
+ 2. The lines 3-7 form the second _ordered list item line sequence_
+ 3. The lines 8-10 form the third and last _ordered list item line
     sequence_
 
 Each _ordered list item line sequence_ is then processed to obtain the
 _ordered-list-item-processed line sequence_.  When we treat each
-_ordered-list-item-processed line sequence_ as an _input line sequence_,
+_ordered-list-item-processed line sequence_ as an [input line sequence],
 we can recognize nested block elements in it.
 
 The first _ordered list item line sequence_ looks like:
@@ -935,10 +1049,11 @@ The first _ordered list item line sequence_ looks like:
 </code></pre>
 
 To obtain the corresponding _ordered-list-item-processed line sequence_,
-we need to match the line against the _ordered list starter pattern_ and
+we need to match the line against the [ordered list starter pattern] and
 remove the matching substring for the first parenthesized subexpression.
-The matching substring in this case is <code>1. </code> (i.e. the number
-'1', followed by a dot, followed by a single space character).
+The matching substring in this case is <code  style="whitespace:
+pre;">1. </code> (i.e. the number '1', followed by a dot, followed by a
+single space character).
 
 The first _ordered-list-item-processed line sequence_ is therefore:
 
@@ -947,7 +1062,7 @@ The first _ordered-list-item-processed line sequence_ is therefore:
 </code></pre>
 
 When this _ordered-list-item-processed line sequence_ is processed as an
-_input line sequence_ to identify block-elements in it, we get a single
+[input line sequence] to identify block-elements in it, we get a single
 paragraph block-element.  The corresponding HTML would be:
 
     <p>First item 1</p>
@@ -964,11 +1079,12 @@ Second item 2
 To obtain the corresponding _ordered-list-item-processed line sequence_,
 we need to match the first line against the _ordered list starter
 pattern_ and remove the matching substring for the first parenthesized
-subexpression. The matching substring in this case is <code>2. </code>
-(i.e. the number '2', followed by a dot, followed by a single space
-character). From subsequent lines, we need to remove leading _space_
-characters, subject to a maximum of 3 _space_ characters (because the
-_ordered-list-starter-string-length_ is 3).
+subexpression. The matching substring in this case is <code
+style="whitespace: pre;">2. </code> (i.e. the number '2', followed by a
+dot, followed by a single space character). From subsequent lines, we
+need to remove leading [space] characters, subject to a maximum of 3
+[space] characters (because the _ordered-list-starter-string-length_ is
+3).
 
 The second _ordered-list-item-processed line sequence_ is therefore:
 
@@ -980,7 +1096,7 @@ Second item 2
 </code></pre>
 
 When this _ordered-list-item-processed line sequence_ is processed as
-an _input line sequence_ to identify block-elements in it, we get a
+an [input line sequence] to identify block-elements in it, we get a
 paragraph followed by a code block.  The corresponding HTML would be:
 
     <p>Second item 1
@@ -996,13 +1112,14 @@ The third _ordered list item line sequence_ looks like:
         1. Nested item 1
 
 To obtain the corresponding _ordered-list-item-processed line sequence_,
-we need to match the first line against the _ordered list starter
-pattern_ and remove the matching substring for the first parenthesized
-subexpression. The matching substring in this case is <code>3. </code>
-(i.e. the number '3', followed by a dot, followed by a single space
-character). From subsequent lines, we need to remove leading _space_
-characters, subject to a maximum of 3 _space_ characters (because the
-_ordered-list-starter-string-length_ is 3).
+we need to match the first line against the [ordered list starter
+pattern] and remove the matching substring for the first parenthesized
+subexpression. The matching substring in this case is <code
+style="whitespace: pre;">3. </code> (i.e. the number '3', followed by a
+dot, followed by a single space character). From subsequent lines, we
+need to remove leading [space] characters, subject to a maximum of 3
+[space] characters (because the _ordered-list-starter-string-length_ is
+3).
 
 The third _ordered-list-item-processed line sequence_ is therefore:
 
@@ -1011,7 +1128,7 @@ The third _ordered-list-item-processed line sequence_ is therefore:
      1. Nested item 1
 
 When this _ordered-list-item-processed line sequence_ is processed as
-an _input line sequence_ to identify block-elements in it, we get a
+an [input line sequence] to identify block-elements in it, we get a
 paragraph followed by an ordered list.  The corresponding HTML would
 be:
 
@@ -1022,7 +1139,7 @@ be:
     </ol>
 
 Putting the content of all the list items together, the HTML equivalent
-for the complete _block-element line sequence_ of the ordered list in
+for the complete [block-element line sequence] of the ordered list in
 this example would be:
 
 
@@ -1040,15 +1157,18 @@ this example would be:
         </ol></li>
     </ol>
 
-### paragraph
+<h3 id="paragraph">paragraph</h3>
 
-The _block-element line sequence_ for a paragraph block shall have
-one or more _lines_.
+[paragraph]: #paragraph
+[**paragraph**]: #paragraph
 
-The lines in the _block-element line sequence_ are joined together into
-a single sequence of _characters_, with a _line feed_ after each line.
-The resulting sequence of _characters_ is called the _paragraph text_.
-The result of interpreting the _paragraph text_ as a _text run_ shall
+The [block-element line sequence] for a paragraph block shall have
+one or more [lines].
+
+The lines in the [block-element line sequence] are joined together into
+a single sequence of [characters], with a [line break] after each line.
+The resulting sequence of [characters] is called the _paragraph text_.
+The result of interpreting the _paragraph text_ as a [text run] shall
 form the content of the paragraph element.
 
 The _paragraph text_ needs to be run through a HTML parser to determine
@@ -1067,12 +1187,12 @@ in `p` tags if all the following conditions are satisfied:
 
  3. At least one of the following conditions is satisfied:
 
-     1. The first _non-space_ character of the _paragraph text_ is not
+     1. The first [non-space] character of the _paragraph text_ is not
         part of a HTML tag (open or close or self-closing tag)
 
         (or)
 
-     2. The last _non-space_ character of the _paragraph text_ is not
+     2. The last [non-space] character of the _paragraph text_ is not
         part of a HTML tag (open or close or self-closing tag)
 
  4. At least one of the following conditions is satisfied:
@@ -1083,23 +1203,26 @@ in `p` tags if all the following conditions are satisfied:
 
         (or)
 
-     2. The last line in the _block-element line sequence_ is a _blank
-        line_
+     2. The last line in the [block-element line sequence] is a [blank
+        line]
 
 If any of the above 4 conditions is not satisfied, the HTML output of
 the paragraph shall be the same as the content of the paragraph, without
 wrapping it in `p` tags.
 
-### reference-resolution block
+<h3 id="reference-resolution-block">reference-resolution block</h3>
 
-The _block-element line sequence_ for a reference-resolution block shall
-have a single _line_.
+[reference-resolution block]: #reference-resolution-block
+[**reference-resolution block**]: #reference-resolution-block
+
+The [block-element line sequence] for a reference-resolution block shall
+have a single [line].
 
 The reference-resolution block does not result in any output by itself.
 It is used to resolve the URLs of reference-style links and images in
 the rest of the document.
 
-The single _line_ in the _block-element line sequence_ shall match one
+The single [line] in the [block-element line sequence] shall match one
 of the following regular expression patterns:
 
  1. Just the URL:
@@ -1121,44 +1244,54 @@ of the following regular expression patterns:
     `[ref id]: http://example.net/ just random ignored text`  
 
 In case of either pattern, the matching substring for the first
-parenthesized subexpression in the pattern is _simplified_ to obtain the
+parenthesized subexpression in the pattern is [simplified] to obtain the
 _reference id string_. The matching substring for the second
 parathesized subexpression is called the _unprocessed url string_.
 
-Any `<`, `>` or _whitespace_ characters in the _unprocessed url string_
+Any `<`, `>` or [whitespace] characters in the _unprocessed url string_
 are removed, and the resultant string is called the _link url string_.
 
 In case the match is with the second regular expression pattern, the
 matching substring for the third parenthesized subexpression in the
 pattern is called the _trailing string_. If the _trailing string_ begins
-with a _quoted string_, the _enclosed string_ of the _quoted string_ is
+with a [quoted string], the [enclosed string] of the [quoted string] is
 called the _link title string_, and the rest of the _trailing string_ is
-ignored. If the _trailing string_ does not begin with a _quoted string_,
+ignored. If the _trailing string_ does not begin with a [quoted string],
 the whole of the _trailing string_ is ignored, and the _link title
 string_ is said to be _null_.
 
 The _reference id string_ is said to be associated with the _link url
-string_ and the _link title string_. A new entry is added to the _link
-reference association map_ with the _reference id string_ as the key,
+string_ and the _link title string_. A new entry is added to the [link
+reference association map] with the _reference id string_ as the key,
 and the _link url string_ and the _link title string_ as values, unless
-the _link reference association map_ already has an entry with the
+the [link reference association map] already has an entry with the
 _reference id string_ as the key.
 
-The **link reference association map** is an associative array that
-contains data from all the reference-resolution blocks in the document,
-that helps in mapping a _reference id_ to the _link url_ and _link
-title_ that the _reference id_ represents. It is used to resolve link
-references elsewhere in the document (either in a _closing referential
-link tag_, or in an _image tag_).
+The <span id="link-reference-association-map">**link reference
+association map**</span> is an associative array that contains data from
+all the reference-resolution blocks in the document, that helps in
+mapping a _reference id_ to the _link url_ and _link title_ that the
+_reference id_ represents. It is used to resolve link references
+elsewhere in the document (either in a [closing link tag],
+or in an [image tag]).
 
-### null block
+[link reference association map]: #link-reference-association-map
 
-The  _block-element line sequence_ for a null block element shall have a
-single _blank line_.
+<h3 id="null-block">null block</h3>
+
+[null block]: #null-block
+[**null block**]: #null-block
+
+The  [block-element line sequence] for a null block element shall have a
+single [blank line].
 
 A null block does not result in any output.
 
-## Identifying span-elements
+<h2 id="identifying-span-elements">Identifying span-elements</h2>
+
+[Identifying span-elements]: #identifying-span-elements
+[text run]: #identifying-span-elements
+[input character sequence]: #identifying-span-elements
 
 A **text run** is a sequence of span-level vfmd constructs in a
 paragraph block.
@@ -1175,11 +1308,12 @@ other characters form _text fragments_.
 There are three categories of _span tags_: _opening span tags_, _closing
 span tags_ and _self-contained span tags_.
 
-For example, consider the following _text run_:
+For example, consider the following _input character sequence_:
 
     The **`ls` command** [_lists_ files](/ls-cmd).
 
-The above _text run_ can be broken down into the following:
+The above _input character sequence_ can be broken down into the
+following:
 
     "The "       : text fragment
     "**"         : opening span tag (emphasis)
@@ -1195,7 +1329,9 @@ The above _text run_ can be broken down into the following:
     "."          : text fragment
 
 To identify and interpret the _span tags_ in the _input character
-sequence_, we make use of a **stack of potential opening span tags**.
+sequence_, we make use of a 
+<span id="stack-of-potential-opening-span-tags">
+**stack of potential opening span tags**</span>.
 Each node in the _stack of potential opening span tags_ eventually might
 or might not get interpreted as an _opening span tag_. If a
 corresponding _closing span tag_ is identified, the node gets
@@ -1205,7 +1341,10 @@ _text fragment_.
 Initially, the _stack of potential opening span tags_ is empty. The
 stack grows upwards: the bottommost node in the stack is the first one
 added to the stack, and pushing a node onto the stack places it on top
-of the stack. Each node in the stack contains the following fields:
+of the stack. 
+
+<span id="stack-node-properties">
+Each node in the stack contains the following properties:</span>
 
  1. A _tag string_ that contains the substring of the _input character
     sequence_ that forms the _span tag_
@@ -1215,100 +1354,119 @@ of the stack. Each node in the stack contains the following fields:
  3. A _linked content start position_ that is set only if the _node
     type_ is equal to _link node_
 
-The topmost node in the stack is called the _top node_.
+<span id="top-node">The topmost node in the [stack of potential opening
+span tags] is called the _top node_.</span>
 
-A node _n_ is said to be the _topmost node_ of type _t_ if, and only if,
-all the following conditions are satisfied:
+<span id="topmost-node-of-type">A node _n_ is said to be the _topmost
+node_ of type _t_ if, and only if, all the following conditions are
+satisfied:</span>
 
  1. The _node type_ of _n_ is equal to _t_
- 2. The node _n_ is present in the _stack of potential opening span tags_
+ 2. The node _n_ is present in the [stack of potential opening span
+    tags]
  3. There is no other node _m_ (where _n_ != _m_) such that both the
     following are true:
-     1. The node _m_ is above the node _n_ in the _stack of potential
-        opening span tags_
+     1. The node _m_ is above the node _n_ in the [stack of potential
+        opening span tags]
      2. The _node type_ of _m_ is equal to _t_
 
 The _topmost node_ of type _t_ is said to be _null_ if, and only if, the
-_stack of potential opening span tags_ does not contain any node whose
+[stack of potential opening span tags] does not contain any node whose
 _node type_ is equal to _t_.
 
-To identify and interpret the _span tags_ in the _input character
-sequence_, we follow the procedure described in the next subsection,
-_Identifying and interpreting span tags_.
+To identify and interpret the _span tags_ in the [input character
+sequence], we follow the procedure described in the next subsection,
+[Identifying and interpreting _span tags_].
 
-### Identifying and interpreting _span tags_
+[stack of potential opening span tags]: #stack-of-potential-opening-span-tags
+[stack-node-properties]: #stack-node-properties
+[top node]: #top-node
+[topmost node of type]: #topmost-node-of-type
+
+<h3 id="identifying-and-interpreting-span-tags">
+Identifying and interpreting <em>span tags</em></h3>
+
+[Identifying and interpreting _span tags_]: #identifying-and-interpreting-span-tags
+[Identifying and interpreting span tags]: #identifying-and-interpreting-span-tags
 
 In this section, we discuss the procedure to identify and interpret the
-_span tags_ in the _input character sequence_.
+_span tags_ in the [input character sequence].
 
-The procedure involves iterating over the characters in the _input
-character sequence_. The current character position in the _input
-character sequence_ is called the _current-position_. A
-_current-position_ value of 1 indicates that we are going to process the
-first character in the _input character sequence_.  The substring of the
-_input character sequence_ starting from and including the character at
-the _current-position_ and ending at the end of the _input character
-sequence_ is called the _remaining-character-sequence_.
+The procedure involves iterating over the characters in the [input
+character sequence]. <span id="current-position">The current character
+position in the [input character sequence] is called the
+**current-position**.</span> A _current-position_ value of 1 indicates
+that we are going to process the first character in the [input character
+sequence]. <span id="remaining-character-sequence">The substring of the
+[input character sequence] starting from and including the character at
+the [current-position] and ending at the end of the [input character
+sequence] is called the **remaining-character-sequence**.</span>
+
+[current-position]: #current-position
+[remaining-character-sequence]: #remaining-character-sequence
 
 To identify and interpret the _span tags_, the following procedure is
 to be followed:
 
- 1. Set _current-position_ as 1
+ 1. Set [current-position] as 1
  2. Set _is-potential-span-tag_ as false
- 3. If the character at the _current-position_ is either an unescaped
+ 3. If the character at the [current-position] is either an unescaped
     `[` (open square bracket) character, or an unescaped `]` (close
     square bracket) character, then set _is-potential-span-tag_ as true
-    and follow the procedure discussed in _Handling potential link 
-    tags_
- 4. If the character at the _current-position_ is either an unescaped
+    and follow the procedure discussed in [Handling potential link 
+    tags]
+ 4. If the character at the [current-position] is either an unescaped
     `*` (asterisk) character, or an unescaped `_` (underscore or low
     line) character, then set _is-potential-span-tag_ as true and follow
-    the procedure discussed in _Handling potential emphasis tags_
- 5. If the character at the _current-position_ is an unescaped `` ` ``
+    the procedure discussed in [Handling potential emphasis tags]
+ 5. If the character at the [current-position] is an unescaped `` ` ``
     (backtick) character, then set _is-potential-span-tag_ as true and
-    follow the procedure discussed in _Handling potential code-span
-    tags_
+    follow the procedure discussed in [Handling potential code-span
+    tags]
  6. TODO: Image
  7. TODO: Automatic links (\<http://link\> or http\://link)
  8. TODO: Raw HTML
  9. If _is-potential-span-tag_ is true, the above steps (3-7) should
     have identified either a _span tag candidate_ or a _text fragment_;
-    Increment the _current-position_ by the length of the _span tag
+    Increment the [current-position] by the length of the _span tag
     candidate_ or the _text fragment_ that was identified
  10. If _is-potential-span-tag_ is false, the character at the _current
      position_ is identified as being part of a _text fragment_;
-     Increment the _current-position_ by 1
- 11. If the _current-position_ is greater than the length of the _input
+     Increment the [current-position] by 1
+ 11. If the [current-position] is greater than the length of the _input
      character sequence_, then stop this procedure; else, go to Step 2.
 
-#### Handling potential link tags
+<h4 id="handling-potential-link-tags">Handling potential link tags</h4>
+
+[Handling potential link tags]: #handling-potential-link-tags
+[closing link tag]: #handling-potential-link-tags
 
 In this section, we discuss how to identify _span tags_ related to
-links. This section assumes that the character at the _current-position_
+links. This section assumes that the character at the [current-position]
 is either an unescaped `[` character or an unescaped `]` character.
 
-If the character at the _current-position_ is a `[` character, it might
+If the character at the [current-position] is a `[` character, it might
 indicate  an _opening link tag_, as described below:
 
- 1. The `[` character at the _current-position_ is identified as a
+ 1. The `[` character at the [current-position] is identified as a
     _span tag candidate_, which can potentially get interpreted as
     an _opening link tag_ in the future
 
- 2. A new node is pushed onto the _stack of potential opening span
-    tags_ with the following properties:
+ 2. A new node is pushed onto the [stack of potential opening span
+    tags] with the following [properties][stack-node-properties]:
 
      1. The _tag string_ of the node is set to the `[` character at
         the current position
      2. The _node type_ of the node is set as _link node_
      3. The _linked content start position_ of the node is set to
-        ( _current-position_ + 1 )
+        ( [current-position] + 1 )
 
-If the character at the _current-position_ is a `]` character, it might
+If the character at the [current-position] is a `]` character, it might
 indicate the start of a _closing link tag_, as described below:
 
- 1. If the _topmost node_ of type _link node_ is
-    not _null_, and the if the _remaining-character-sequence_ matches
-    any of the following regular expression patterns:
+ 1. If the [topmost node of type] _link node_ is not _null_, and the if
+    the [remaining-character-sequence] matches any of the following
+    regular expression patterns:
 
      1. With trailing empty square brackets:
         `/^(\]\s*\[\s*\])/`
@@ -1338,11 +1496,11 @@ indicate the start of a _closing link tag_, as described below:
         tag candidate_, and interpreted as a _closing span tag_, or more
         specifically, as a **closing link tag**
 
-     2. If the _topmost node_ of type _link node_ is not already the
-        _top node_, all nodes above it are popped off and interpreted as
+     2. If the [topmost node of type] _link node_ is not already the
+        [top node], all nodes above it are popped off and interpreted as
         _text fragments_
 
-     3. The _top node_ (which should have its _node type_ equal to _link
+     3. The [top node] (which should have its _node type_ equal to _link
         node_) is interpreted as an _opening span tag_, or more
         specifically, as an **opening link tag**
 
@@ -1353,34 +1511,34 @@ indicate the start of a _closing link tag_, as described below:
 
      5. Let _reference id start position_ be the _linked content start
         position_ of the _top node_; Let _reference id end position_ be
-        ( _current-position_ - 1 ). The substring of the _input
+        ( [current-position] - 1 ). The substring of the _input
         character sequence_ starting from the _reference id start
         position_ and ending at the _reference id end position_, both
         inclusive, is called the _reference id string_.
         
         The _reference id string_ shall be used to look up the actual
-        link url and link title from the _link reference association
-        map_.
+        link url and link title from the [link reference association
+        map].
 
-        If the _link reference association map_ contains an entry for
+        If the [link reference association map] contains an entry for
         _reference id string_, then the output shall have the _enclosed
         content_ linked to the link url and link title specified in the
-        entry for the _reference id string_ in the _link reference
-        association map_.
+        entry for the _reference id string_ in the [link reference
+        association map].
         
-        If the _link reference association map_ does not contain an
+        If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
         _enclosed content_ appear as text, without being linked,
         enclosed within the text forming the _opening link tag_ and the
         text forming the _closing link tag_.
 
-     6. The _top node_ is popped off
+     6. The [top node] is popped off
 
      7. All nodes with _node type_ equal to _link node_ are removed from
-        the _stack of potential opening span tags_
+        the [stack of potential opening span tags]
 
- 2. If the _topmost node_ of type _other link node_ is not _null_, and
-    if the _remaining-character-sequence_ matches the regular expression
+ 2. If the [topmost node of type] _link node_ is not _null_, and
+    if the [remaining-character-sequence] matches the regular expression
     pattern `/^\]\s*\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
     then the following is done:
 
@@ -1390,14 +1548,14 @@ indicate the start of a _closing link tag_, as described below:
         tag**
 
      2. The matching substring for the first and only parenthesized
-        subexpression in the pattern is _simplified_ to obtain the
+        subexpression in the pattern is [simplified] to obtain the
         _reference id string_
 
-     3. If the _topmost node_ of type _link node_ is not already
-        the _top node_, all nodes above it are popped off and
+     3. If the [topmost node of type] _link node_ is not already
+        the [top node], all nodes above it are popped off and
         interpreted as _text fragments_
 
-     4. The _top node_ (which should have its _node type_ equal to
+     4. The [top node] (which should have its _node type_ equal to
         _link node_) is interpreted as an _opening span tag_, or
         more specifically, as an **opening link tag**
 
@@ -1407,30 +1565,30 @@ indicate the start of a _closing link tag_, as described below:
         considered to form the _enclosed content_ of the link
 
      6. The _reference id string_ shall be used to look up the actual
-        link url and link title from the _link reference association
-        map_. 
+        link url and link title from the [link reference association
+        map]. 
 
-        If the _link reference association map_ contains an entry for
+        If the [link reference association map] contains an entry for
         _reference id string_, then the output shall have the _enclosed
         content_ linked to the link url and link title specified in the
-        entry for the _reference id string_ in the _link reference
-        association map_.
+        entry for the _reference id string_ in the [link reference
+        association map].
         
-        If the _link reference association map_ does not contain an
+        If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
         _enclosed content_ appear as text, without being linked,
         enclosed within the text forming the _opening link tag_ and the
         text forming the _closing link tag_.
 
-     7. The _top node_ is popped off
+     7. The [top node] is popped off
 
      8. All nodes with _node type_ equal to _link node_ are removed from
-        the _stack of potential opening span tags_
+        the [stack of potential opening span tags]
 
  3. If the _topmost node_ of type _other link node_ is not _null_, and
     if both the following conditions are satisfied:
 
-     1. The _remaining-character-sequence_ matches one of the following
+     1. The [remaining-character-sequence] matches one of the following
         regular expression patterns:
 
          1. URL without angle brackets: `/^\]\s*\(\s*([^\(\)<>\s]+)([\)\s].*)$/`
@@ -1447,15 +1605,15 @@ indicate the start of a _closing link tag_, as described below:
         parenthesised subexpression shall be called the _unprocessed url
         string_, and the matching substring for the second parenthesized
         subexpression shall be called the
-        _residual-link-attribute-sequence_.  Any _whitespace_ characters
+        _residual-link-attribute-sequence_.  Any [whitespace] characters
         in the _unprocessed url string_ are removed, and the resultant
         string is called the _link url string_.
 
         The position at which the _residual-link-attribute-sequence_
-        starts within the _remaining-character-sequence_ (i.e. the
+        starts within the [remaining-character-sequence] \(i.e. the
         number of characters present in the
-        _remaining-character-sequence_ before the start of the
-        _residual-link-attribute-sequence_) shall be called the
+        [remaining-character-sequence] before the start of the
+        _residual-link-attribute-sequence_\) shall be called the
         _url-pattern-match-length_.
 
      2. The _residual-link-attribute-sequence_ matches one of the
@@ -1482,11 +1640,11 @@ indicate the start of a _closing link tag_, as described below:
 
             If this is the matching pattern, the matching substring for
             the first parenthesized subexpression in the pattern is
-            _trimmed_ to give the _attributes-string_. If the
-            _attributes-string_ begins with a _quoted string_, then the
-            _enclosed string_ of the _quoted string_ is called the
+            [trimmed] to give the _attributes-string_. If the
+            _attributes-string_ begins with a [quoted string], then the
+            [enclosed string] of the [quoted string] is called the
             _title string_. If the _attributes-string_ does not begin
-            with a _quoted string_, then the _title string_ is said to
+            with a [quoted string], then the _title string_ is said to
             be _null_.
 
         The number of characters in the
@@ -1503,15 +1661,15 @@ indicate the start of a _closing link tag_, as described below:
         _url-pattern-match-length_ and the
         _attributes-pattern-match-length_. The first
         _close-link-tag-length_ characters of the
-        _remaining-character-sequence_ are collectively identified as a
+        [remaining-character-sequence] are collectively identified as a
         _span tag candidate_, and interpreted as a _closing span tag_,
         or more specifically, as a **closing link tag**
 
-     2. If the _topmost node_ of type _link node_ is not already the
-        _top node_, all nodes above it are popped off and interpreted as
+     2. If the [topmost node of type] _link node_ is not already the
+        [top node], all nodes above it are popped off and interpreted as
         _text fragments_
 
-     3. The _top node_ (which should have its _node type_ equal to _link
+     3. The [top node] (which should have its _node type_ equal to _link
         node_) is interpreted as an _opening span tag_, or more
         specifically, as an **opening link tag**
 
@@ -1525,29 +1683,31 @@ indicate the start of a _closing link tag_, as described below:
         shall be used as the title for the link. The output shall have
         the _enclosed content_ linked to the link url and link title.
 
-     6. The _top node_ is popped off
+     6. The [top node] is popped off
 
      7. All nodes with _node type_ equal to _link node_ are removed from
-        the _stack of potential opening span tags_
+        the [stack of potential opening span tags]
 
  4. If none of the above 3 conditions are satisfied, then the `]` at the
-    _current-position_ is interpreted as a _text fragment_
+    [current-position] is interpreted as a _text fragment_
 
-Thus, using this procedure, the `[` or `]` at the _current-position_ is
+Thus, using this procedure, the `[` or `]` at the [current-position] is
 identified to be the start of either a _span tag candidate_ or a _text
 fragment_. In some cases, the _span tag candidate_ is also interpreted
 as one of these _span tags_: _opening link tag_ or _closing link tag_.
 
-#### Handling potential emphasis tags
+<h4 id="handling-potential-emphasis-tags">Handling potential emphasis tags</h4>
+
+[Handling potential emphasis tags]: #handling-potential-emphasis-tags
 
 In this section, we discuss how to identify _span tags_ related to
 emphasis. This section assumes that the character at the
-_current-position_ is either an unescaped `*` character or an unescaped
+[current-position] is either an unescaped `*` character or an unescaped
 `_` character.
 
-We define a **word separator** character to be a unicode code point
-whose 'General\_Category' unicode property has one of the following
-values:
+<span id="word-separator">We define a **word separator** [character] to
+be a unicode code point whose 'General\_Category' unicode property has
+one of the following values:</span>
 
  1. One of: Zs, Zl, Zp (i.e. a 'Separator')
 
@@ -1562,32 +1722,35 @@ values:
 For example, the _space_ character, the _line break_ character, `.`,
  `,`, `(`, `)` are all _word separator_ characters.
 
-Given that the character at the _current-position_ is either `*` or `_` ,
-then the _remaining character sequence_ will definitely match one of the following
-regular expression patterns:
+Given that the character at the [current-position] is either `*` or `_` ,
+then the [remaining-character-sequence] will definitely match one of the
+following regular expression patterns:
 
- 1. At the end of the _input character sequence_:
+ 1. At the end of the [input character sequence]:
     `/^([\*_]+)$/`
 
- 2. In the middle of the _input character sequence_:
+ 2. In the middle of the [input character sequence]:
     `/^([\*_]+)([^\*_])/`
 
+<span id="emphasis-indicator-string">
 In case of either pattern, the matching substring for the first
 parenthesized subexpression is called the _emphasis indicator
-string_.
+string_.</span>
 
+<span id="left-flanking">
 If the match is with the second regular expression pattern given
 above, and if the single character in the matching substring for the
-second parenthesized subexpression in the pattern is not a _word
-separator_ character, then the _emphasis indicator string_ is said
+second parenthesized subexpression in the pattern is not a [word
+separator] character, then the _emphasis indicator string_ is said
 to be _left-flanking_, else, the _emphasis indicator string_ is said
-to be not _left-flanking_.
+to be not _left-flanking_.</span>
 
-If the _current position_ is greater than 1, and if the character at
-the previous position (i.e. at _current position_ minus 1) is not a
-_word separator_ character, then the _emphasis indicator string_ is
+<span id="right-flanking">
+If the [current-position] is greater than 1, and if the character at
+the previous position (i.e. at [current-position] minus 1) is not a
+[word separator] character, then the _emphasis indicator string_ is
 said to be _right-flanking_, else, the _emphasis indicator string_
-is said to be not _right-flanking_.
+is said to be not _right-flanking_.</span>
 
 For example, the string `I'm ***Bond***, *** James***Bond` contains 4
 _emphasis indicator strings_, each consisting of 3 `*` characters.  The
@@ -1598,11 +1761,12 @@ indicator string_ is neither _left-flanking_ nor _right-flanking_, and
 the fourth _emphasis indicator string_ is both _left-flanking_ and
 _right-flanking_.
 
-An _emphasis indicator string_ can contain both `*` and `_`
-characters. When we split the _emphasis indicator string_ into
+<span id="emphasis-tag-string">
+An [emphasis indicator string] can contain both `*` and `_`
+characters. When we split the [emphasis indicator string] into
 substrings composed of the same character, with no adjacent
 substring having a common character, we get a list of _emphasis
-tag strings_.
+tag strings_.</span>
 
 For example:
 
@@ -1625,98 +1789,110 @@ For example:
 </tr>
 </table>
 
-An _emphasis tag string_ shall either be composed entirely of `*`
+<span id="constituent-character">
+An [emphasis tag string] shall either be composed entirely of `*`
 characters, or be composed entirely of `_` characters. If it's
 composed entirely of `*` characters, the _constituent character_ of
-the _emphasis tag string_ is said to be `*`. If it's composed
+the [emphasis tag string] is said to be `*`. If it's composed
 entirely of `_` characters, the _constituent character_ of the
-_emphasis tag string_ is said to be `_`.
+[emphasis tag string] is said to be `_`.</span>
 
-If the _emphasis indicator string_ is neither _left-flanking_ nor
-_right-flanking_, the the _emphasis indicator string_ is interpreted as
+[word separator]: #word-separator
+[emphasis indicator string]: #emphasis-indicator-string
+[left-flanking]: #left-flanking
+[right-flanking]: #right-flanking
+[emphasis tag string]: #emphasis-tag-string
+[emphasis tag strings]: #emphasis-tag-string
+[constituent character]: #constituent-character
+
+If the [emphasis indicator string] is neither [left-flanking] nor
+[right-flanking], the the [emphasis indicator string] is interpreted as
 a _text fragment_.
 
-Similarly, if the _emphasis indicator string_ is both _left-flanking_
-and _right-flanking_, the the _emphasis indicator string_ is interpreted
+Similarly, if the [emphasis indicator string] is both [left-flanking]
+and [right-flanking], the the [emphasis indicator string] is interpreted
 as a _text fragment_.
 
-If the _emphasis indicator string_ is _left-flanking_ and not
-_right-flanking_, then the _emphasis tag strings_ in the _emphasis
-indicator string_ can potentially become _opening emphasis tags_. In
+If the [emphasis indicator string] is [left-flanking] and not
+[right-flanking], then the [emphasis tag strings] in the [emphasis
+indicator string] can potentially become _opening emphasis tags_. In
 this case, the following shall be done:
 
- 1. The _emphasis indicator string_ is identified as a _span tag
+ 1. The [emphasis indicator string] is identified as a _span tag
     candidate_, which can potentially get interpreted as one or more
     _opening emphasis tags_ in the future
 
- 2. For each _emphasis tag string_ in the _emphasis indicator string_
-    (listed in the order in which the _emphasis tag string_ appears in
-    the _emphasis indicator string_) a new node is pushed onto the
-    _stack of potential opening span tags_ with the following
-    properties:
+ 2. For each [emphasis tag string] in the [emphasis indicator string]
+    \(listed in the order in which the [emphasis tag string] appears in
+    the [emphasis indicator string]\) a new node is pushed onto the
+    [stack of potential opening span tags] with the following
+    [properties][stack-node-properties]:
 
      1. The _tag string_ of the node is set to the _emphasis tag string_
-     2. If the  _constituent character_ of the _emphasis tag string_ is
+     2. If the [constituent character] of the [emphasis tag string] is
         `*`, then the _node type_ of the node is set as _asterisk
-        emphasis node_; if the  _constituent character_ of the _emphasis
+        emphasis node_; if the  [constituent character] of the _emphasis
         tag string_ is `_`, then the _node type_ of the node is set as
         _underscore emphasis node_
 
-If the _emphasis indicator string_ is _right-flanking_ and not
-_left-flanking_, then the _emphasis tag strings_ in the _emphasis
-indicator string_ can potentially be interpreted as _closing emphasis
+If the [emphasis indicator string] is [right-flanking] and not
+[left-flanking], then the [emphasis tag strings] in the [emphasis
+indicator string] can potentially be interpreted as _closing emphasis
 tags_.  In this case, the following shall be done:
 
- 1. Set _current-tag-string_ to the first _emphasis tag string_ in
-    the _emphasis indicator string_
+ 1. Set _current-tag-string_ to the first [emphasis tag string] in
+    the [emphasis indicator string]
 
- 2. If the _constituent character_ of the _current-tag-string_ is `*`,
-    then the _matching emphasis node_ is the _topmost node_ of type
-    _asterisk emphasis node_; if the _constituent character_ of the
+ 2. If the [constituent character] of the _current-tag-string_ is `*`,
+    then the _matching emphasis node_ is the [topmost node of type]
+    _asterisk emphasis node_; if the [constituent character] of the
     _current-tag-string_ is `_`, then the _matching emphasis node_ is
-    the _topmost node_ of type _underscore emphasis node_
+    the [topmost node of type] _underscore emphasis node_
 
  3. If _matching emphasis node_ is _null_, then the _emphasis tag
     string_ is interpreted as a _text fragment_
 
  4. If the _matching emphasis node_ is not _null_, and if it is not
-    already the _top node_, then all nodes above it are popped off and
+    already the [top node], then all nodes above it are popped off and
     interpreted as _text fragments_
  
  5. If the _matching emphasis node_ is not _null_, the procedure
-    described in _Matching opening and closing emphasis_ is followed.
-    The _current-tag-string_ and/or the _top node_ can get modified in
+    described in [Matching opening and closing emphasis] is followed.
+    The _current-tag-string_ and/or the [top node] can get modified in
     this process.
 
  6. If the _current-tag-string_ is empty, and if there are any more
-    unprocessed _emphasis tag strings_ in the _emphasis indicator
-    string_, set the _current-tag-string_ to the next
-    _emphasis-tag-string_ 
+    unprocessed [emphasis tag strings] in the [emphasis indicator
+    string], set the _current-tag-string_ to the next
+    [emphasis tag string]
  
  7. If the _current-tag-string_ is not empty, go to Step 2
 
 
-##### Matching opening and closing emphasis
+<h5 id="matching-opening-and-closing-emphasis">
+Matching opening and closing emphasis</h5>
+
+[Matching opening and closing emphasis]: #matching-opening-and-closing-emphasis
 
 This section describes how the _current-tag-string_ is to be matched
-with the _matching emphasis node_ at the top of the _stack of potential
-opening span tags_.
+with the _matching emphasis node_ at the top of the [stack of potential
+opening span tags].
 
-In this section, the _top node_ is assumed to be of a _node type_ that
-matches the _constituent character_ of the _current-tag-string_. If the
-_constituent character_ of the _current-tag-string_ is `*`, the _node
-type_ of the _top node_ should be _asterisk emphasis node_. If the
-_constituent character_ of the _current-tag-string_ is `_`, the _node
-type_ of the _top node_ should be _underscore emphasis node_.
+In this section, the [top node] is assumed to be of a _node type_ that
+matches the [constituent character] of the _current-tag-string_. If the
+[constituent character] of the _current-tag-string_ is `*`, the _node
+type_ of the [top node] should be _asterisk emphasis node_. If the
+[constituent character] of the _current-tag-string_ is `_`, the _node
+type_ of the [top node] should be _underscore emphasis node_.
 
-Let the _tag string_ of the _top node_ be called the _top node tag
+Let the _tag string_ of the [top node] be called the _top node tag
 string_. The _top node tag string_ is compared with the
 _current-tag-string_.
 
  1. If the _top node tag string_ and the _current-tag-string_ are
     exactly the same strings, then:
 
-     1. The _top node_ is interpreted as an _opening span tag_, or more
+     1. The [top node] is interpreted as an _opening span tag_, or more
         specifically, as an **opening emphasis tag**
 
      2. The _current-tag-string_ is interpreted as a _closing span tag_,
@@ -1729,7 +1905,7 @@ _current-tag-string_.
 
      4. Set the _current-tag-string_ to _null_
 
-     5. The _top node_ is popped off
+     5. The [top node] is popped off
         
  2. If the _top node tag string_ and the _current-tag-string_ are not
     exactly the same strings, and if the _current-tag-string_ is a
@@ -1755,14 +1931,14 @@ _current-tag-string_.
 
      5. The characters of the _top node tag string_ that were
         interpreted as the _opening emphasis tag_ are removed from the
-        _tag string_ of the _top node_ while the _top node_ is still
-        retained in the _stack of potential opening span tags_
+        _tag string_ of the [top node] while the [top node] is still
+        retained in the [stack of potential opening span tags]
 
  3. If the _top node tag string_ and the _current-tag-string_ are
     not exactly the same strings, and if the _top node tag string_
     is a substring of the _current-tag-string_, then:
     
-     1. The _top node_ is interpreted as an _opening span tag_, or more
+     1. The [top node] is interpreted as an _opening span tag_, or more
         specifically, as an **opening emphasis tag**
 
      2. Let the length of the _top node tag string_ be called the
@@ -1780,7 +1956,7 @@ _current-tag-string_.
      4. The characters of the _current-tag-string_ that were interpreted as
         the _closing emphasis tag_ are removed from the  _current-tag-string_ 
         
-     5. The _top node_ is popped off
+     5. The [top node] is popped off
 
  4. If any of the above conditions are satisfied, then we would have
     identified an _opening emphasis tag_ and a _closing emphasis tag_.
@@ -1804,15 +1980,18 @@ _current-tag-string_.
         stress_.  In HTML output, this shall be output as an `em`
         element nested within a `strong` element.
 
-#### Handling potential code-span tags
+<h4 id="handling-potential-code-span-tags">
+Handling potential code-span tags</h4>
+
+[Handling potential code-span tags]: #handling-potential-code-span-tags
 
 In this section, we discuss how to identify _span tags_ related to
 code-spans. This section assumes that the character at the
-_current-position_ is an unescaped `` ` `` character.
+[current-position] is an unescaped `` ` `` character.
 
 The following procedure is followed:
 
- 1. The _remaining-character-sequence_ shall match one of the following
+ 1. The [remaining-character-sequence] shall match one of the following
     regular expression patterns:
     
      1. Backticks followed by a non-backtick: ``/^(`+)([^`].*)$/``
@@ -1892,7 +2071,7 @@ The following procedure is followed:
      1. Let _code-span-length_ be equal to 
         ( ( _opening-backticks-count_ * 2 ) + _code-content-length_ )
      2. The first _code-span-length_ characters of the
-        _remaining-character-sequence_ is identified as a _span tag
+        [remaining-character-sequence] is identified as a _span tag
         candidate_, and interpreted as a **code span tag**
      3. Among the characters that form the _code span tag_, the first
         _opening-backticks-count_ characters and the last
