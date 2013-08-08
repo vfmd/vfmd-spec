@@ -1,4 +1,4 @@
-# vfmd for writers
+# vfmd userguide
 
 This document describes the [vfmd] syntax in simple terms, and
 is intended to be of help for people writing in vfmd.
