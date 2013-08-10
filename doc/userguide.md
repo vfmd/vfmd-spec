@@ -227,68 +227,100 @@ But the following lines don't result in a horizontal rule:
 
 ## Mixing HTML with vfmd
 
-The expressive power of vfmd is rather limited compared to plain old
-HTML. However, if you are capable of authoring HTML documents, you can
-use snippets of HTML in your vfmd document to augument the vfmd feature
-set. That said, if you're planning to convert the vfmd document to a
-format other than HTML, the support for using HTML tags in the vfmd
-document might be limited or absent, depending on the implementation.
+If you are capable of authoring HTML documents, you can use snippets of
+HTML in your vfmd document to augument the vfmd feature set. That said,
+if you would like to convert a vfmd source document to any output format
+other than HTML, the support for using HTML tags in the vfmd source
+document is implementation-dependant.
 
-The following HTML elements are handled specially in vfmd: `address`,
-`article`, `aside`, `blockquote`, `div`, `dl`, `fieldset`, `form`, `hr`,
-`nav`, ` noscript`, `ol`, `pre`, `section`, `table`, `ul`. Let's call
-them _HTML grouping elements_. (These are basically the [HTML4 block
-elements][HTML4-block], except the paragraph element `p` and the heading
-elements `h1` to `h6`, put together with the [HTML5 sectioning content
-elements][HTML5-sectioning]).
+vfmd handles different HTML elements differently. In vfmd, HTML elements
+are seen as belonging to one of the following four groups:
 
-[HTML4-block]: http://www.w3.org/TR/html4/sgml/dtd.html#block
-[HTML5-sectioning]: http://www.w3.org/html/wg/drafts/html/master/dom.html#sectioning-content
+ 1. **Phrasing HTML elements** are HTML elements that belong to the
+    [phrasing content] category in [HTML5]. The elements in this group
+    are: `a`, `abbr`, `area`, `b`, `bdi`, `bdo`, `br`, `button`,
+    `canvas`, `cite`, `code`, `data`, `datalist`, `del`, `dfn`, `em`,
+    `embed`, `i`, `iframe`, `img`, `input`, `ins`, `kbd`, `keygen`,
+    `label`, `map`, `mark`, `meter`, `noscript`, `object`, `output`,
+    `progress`, `q`, `ruby`, `s`, `samp`, `select`, `small`, `span`,
+    `strong`, `sub`, `sup`, `textarea`, `time`, `u`, `var` and `wbr`.
+ 2. **Verbatim HTML starter elements** are HTML elements that are [flow
+    content], but not [phrasing content], and can in turn
+    [contain][content models] [flow content]. The elements in this group
+    are: `address`, `article`, `aside`, `blockquote`, `details`,
+    `dialog`, `div`, `dl`, `fieldset`, `figure`, `footer`, `form`,
+    `header`, `main`, `nav`, `ol`, `section`, `table` and `ul`.
+ 3. **Verbatim HTML container elements** are HTML elements within which
+    vfmd syntax should never be recognized. `pre`, `style` and `script`
+    elements fall in this group.
+ 4. **Other HTML elements** are HTML elements that don't belong to any
+    of the above groups.
 
-### Verbatim HTML
+[HTML5]: http://www.w3.org/TR/html5/ "HTML5 Specification"
+[content models]: http://www.w3.org/TR/html5/dom.html#content-models
+[flow content]: http://www.w3.org/TR/html5/dom.html#flow-content-1
+[phrasing content]: http://www.w3.org/TR/html5/dom.html#phrasing-content-1
 
-If you want the vfmd input to include a HTML block that should appear
-verbatim in the HTML output, start the HTML block with a _HTML grouping
-element_ and do not include any blank lines in the content of any of the
-HTML elements.
+### Using vfmd along with HTML markup
+
+_Phrasing HTML elements_ can be freely intermingled with vfmd text. Such
+HTML elements can contain, and be contained in, vfmd markup.
 
 For example:
 
-    <table>
-      <tr>
-        <td>One *asterisk*</td>
-        <td>Two **asterisks**</td>
-      </tr>
-      <tr>
-        <td>One _underscore_</td>
-        <td>Two __underscores__</td>
-      </tr>
-    </table>
+    According to the <u>_Special_ Theory of Relativity</u>,
+    **E** <em>(energy)</em> = **mc<sup>2</sup>**
 
-The text within the `td` tags in the above example shall not be
-processed as vfmd, and shall be reproduced as-is in the HTML output.
+becomes, in HTML output:
 
-### vfmd within HTML elements
+    <p>According to the <u><em>Special</em> Theory of Relativity</u>,
+    <strong>E</strong> <em>(energy)</em> = <strong>mc<sup>2</sup></strong></p>
 
-If you want some text within the HTML elements to be treated and
-processed as vfmd, separate out the vfmd-processable part from the
-verbatim-HTML part with one or more blank lines. The vfmd-processable
-parts should not start with a _HTML grouping element_. Also, please make
-sure that the line following the separating blank line is not indented
-by more than 3 spaces (if it's indented by 4 or more spaces, it would
-become a code block).
+_Other HTML elements_ can contain vfmd text, but cannot be contained
+within vfmd markup. Moreover, vfmd paragraphs containing any of the
+_other HTML elements_ are not wrapped in `p` tags.
+
+The following example shows how vfmd markup can be used within `td`
+elements of a HTML table:
+
+    <td>Apply some _stress_</td>
+    <td>Make it sound **important**</td>
+
+The HTML output for the above example shall not have any `p` tags:
+
+    <td>Apply some <em>stress</em></td>
+    <td>Make it sound <strong>important</strong></td>
+
+Also, if the vfmd paragraph contains any mismatched or misnested HTML
+tags (i.e. opening tags without correctly-placed closing tags or vice
+versa), vfmd will not wrap the paragraph content in `p` tags, because
+doing so might result in invalid HTML output.
+
+### Verbatim HTML
+
+Anything within a _verbatim HTML container element_ (i.e. a `pre`,
+`script` or `style` element) is preserved as-is in the HTML output.
+
+Moreover, any tag (opening, closing or self-closing tag) of a _verbatim
+HTML starter element_ marks the start of verbatim HTML, and the
+verbatim-HTML-mode stays on till the next blank line.
+
+So, if you'd like to use vfmd syntax within a _verbatim HTML starter
+element_ (like `div` or `table`), you can use one or more blank lines to
+separate the parts that need to be output verbatim, from the parts in
+which vfmd syntax needs to be processed.
 
 For example, for the input:
 
     <table>
       <tr>
-        <td>One *asterisk*</td>
-        <td>Two **asterisks**</td>
+        <th>Single *asterisk* or _underscore_</th>
+        <th>Double **asterisks** or __underscores__</th>
       </tr>
       <tr>
 
-    <td>One _underscore_</td>
-    <td>Two __underscores__</td>
+    <td>Apply some _stress_</td>
+    <td>Make it sound **important**</td>
 
       </tr>
     </table>
@@ -297,101 +329,44 @@ The corresponding HTML output shall be:
 
     <table>
       <tr>
-        <td>One *asterisk*</td>
-        <td>Two **asterisks**</td>
+        <th>Single *asterisk* or _underscore_</th>
+        <th>Double **asterisks** or __underscores__</th>
       </tr>
       <tr>
 
-    <td>One <em>underscore</em></td>
-    <td>Two <strong>underscores</strong></td>
+    <td>Apply some <em>stress</em></td>
+    <td>Make it sound <strong>important</strong></td>
 
       </tr>
     </table>
 
-You can also use HTML tags inlined within the text of a vfmd paragraph.
-However, if you use any _HTML grouping element_ inside a vfmd paragraph,
-vfmd syntax will not be recognized within the _HTML grouping element_.
+However, please make sure that the starting line of each snippet of HTML
+is not indented by more than 3 spaces (if it's indented by 4 or more
+spaces, it would become a code block).
+
+On the contrary, if you want the whole block of HTML reproduced verbatim
+in the HTML output, make sure that there are no blank lines in the
+content of any of the HTML elements.
 
 For example:
 
-    This paragraph has **bold**, *italics* and
-    <s>strikethrough _text_</s>. When we add a <div> here, we can 
-    no longer use vfmd for *emphasis* or [linking](http://example.net),
-    until we close the </div>, _or_
+    <table>
+      <tr>
+        <th>Single *asterisk* or _underscore_</th>
+        <th>Double **asterisks** or __underscores__</th>
+      </tr>
+      <tr>
+    <td>Apply some _stress_</td>
+    <td>Make it sound **important**</td>
+      </tr>
+    </table>
 
-    start a **new** paragraph.
+The text within the `td` tags in the above example shall not be
+processed as vfmd, and shall be reproduced as-is in the HTML output.
 
-results in the following HTML output:
-
-    This paragraph has <strong>bold</strong>, <em>italics</em> and
-    <s>strikethrough <em>text</em></s>. When we add a <div> here, we can 
-    no longer use vfmd for *emphasis* or [linking](http://example.net).
-    until we close the </div>, <em>or</em>
-
-    <p>start a <strong>new</strong> paragraph.</p>
-
-You might have noticed that in this example, the second paragraph of
-text is wrapped in `p` tags, while the first paragraph is not. Also, in
-the previous example, the `td` elements were not wrapped in `p` tags.
-
-vfmd skips wrapping a paragraph of text in `p` tags if any of the
-following is true:
-
- 1. The paragraph contains one or more _HTML grouping elements_
- 2. There are one or more unmatched tags (i.e. open tag without a
-    corresponding close tag, or vice versa) in the paragraph
- 3. There is a HTML tag (open tag or close tag or self-closing tag) at
-    both the beginning and the end of the paragraph
-
-In case any of the above is true, the vfmd syntax assumes that it's
-really a HTML block with some embedded vfmd content and does not wrap it
-in `p` tags. If you still want it become a HTML paragraph, you will have
-to supply the open and close `p` tags yourself.
-
-For example, consider the vfmd paragraph:
-
-    <del>Deleted content at the _beginning_.</del> Intact content
-    in the _middle_. <ins>Added content at the _end_.</ins>
-
-Since there's a HTML tag at both the beginning (`<del>`) and end
-(`</ins>`) of the paragraph, it will not be automatically wrapped in `p`
-tags. For it to become a paragraph in HTML, it should we wrapped in `p`
-tags in the vfmd input itself:
-
-
-    <p><del>Deleted content at the _beginning_.</del> Intact content
-    in the _middle_. <ins>Added content at the _end_.</ins></p>
-
-### Special cases
-
-As we said earlier, blank lines can be used to separate the
-verbatim-HTML parts from the vfmd-processable parts. However, in the
-following situations, a blank line does not break a verbatim HTML block:
-
- 1. When the blank line is within a HTML tag, like:
-
-        <p class="wrapper"
-
-           style="color: #555;">
-        </p
-
-        >
-
- 2. When the blank line is within a HTML comment, like:
-
-        <!-- There is a blank line below
-
-        There is a blank line above -->
-
- 3. When the blank line is contained within a `pre`, `script` or `style`
-    HTML element, like:
-
-        <pre>
-
-        The blank line above and the blank line below
-        don't break this verbatim HTML block
-
-        </pre>
+Note that `pre`, `script` or `style` elements can have blank lines
+enclosed within, and those blank lines don't cause the
+verbatim-HTML-mode to end.
 
 ### HTML blocks within blockquotes and lists
 
@@ -453,12 +428,25 @@ lines following a blank line) to line up with the list.
 ### Matching open and close HTML tags
 
 When you use HTML tags within the vfmd document, please take care to
-correctly match up the open tags with the close tags. If the vfmd
-document contains unmatched tags of _HTML grouping elements_, those
-mismatches will be present in the output HTML as well, resulting in the
-output being invalid HTML. If the vfmd document contains unmatched tags
-of other HTML elements, the output HTML will not have the mismatch, but
-how it turns out in the output HTML might not be what you intended.
+correctly match up the open tags with the close tags. Any mismatched or
+misnested HTML tags will remain mismatched or misnested in the output
+HTML as well. Some implementations might clean up the invalid HTML, but
+then their output might not really match what you intended in your
+input. The best way to be clear about your intent is to provide
+correctly matching HTML tags in the vfmd source document.
+
+In addition, span-level vfmd markup will not be recognized
+across mismatching or misnested HTML tags. 
+
+For example, the asterisks in the following vfmd input are not
+interpreted to mean strong emphasis:
+
+    Cannot span **across <b><i>misnested</b></i> HTML tags** _at all_
+
+For them to be recognized as vfmd markup, the HTML tags should be fixed
+to nest correctly:
+
+    Can span **across <b><i>correctly nested</i></b> HTML tags** _anytime_
 
 So, when mixing HTML with vfmd, please ensure that the open HTML tags
 and the close HTML tags you insert match up correctly.
