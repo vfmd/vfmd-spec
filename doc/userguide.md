@@ -13,7 +13,9 @@ also supports span-level markup like emphasis, links and inline-code.
 [vfmd]: introduction.md
 [original Markdown syntax]: http://daringfireball.net/projects/markdown/syntax
 
-## Encoding
+<h2 id="encoding">Encoding</h2>
+
+[Encoding]: #encoding
 
 The input text should be in UTF-8 encoding. If you are writing your vfmd
 document in English, it is most likely in UTF-8. If you are writing in
@@ -21,16 +23,22 @@ another language, please make sure that the document is in UTF-8
 encoding (for example, if you are using a text editor to write the
 document, ensure that it saves the document in UTF-8 encoding).
 
-## Block-level elements
+<h2 id="block-level-elements">Block-level elements</h2>
 
-### Headers
+[Block-level elements]: #block-level-elements
+
+<h3 id="headers">Headers</h3>
+
+[Headers]: #headers
 
 vfmd supports both [setext]-style and [atx]-style headers.
 
 [setext]: http://docutils.sourceforge.net/mirror/setext.html
 [atx]: http://www.aaronsw.com/2002/atx/
 
-#### setext-style headers
+<h4 id="setext-style-headers">setext-style headers</h4>
+
+[setext-style headers]: #setext-style-headers
 
 To create a setext-style header, follow the header text with a line that
 "underlines" the text with equal signs (`=`) or dashes (`-`).
@@ -70,7 +78,9 @@ not be identified as a header.
     This is a section title
     -----------------------
 
-#### atx-style headers
+<h4 id="atx-style-headers">atx-style headers</h4>
+
+[atx-style headers]: #atx-style-headers
 
 atx-style headers start with one or more `#` characters. The first-level
 header starts with a single `#`, second-level headers with `##`,
@@ -115,7 +125,10 @@ not be identified as a header.
 
     # This is a section title
 
-### Code blocks
+<h3 id="code-blocks">Code blocks</h3>
+
+[Code blocks]: #code-blocks
+[code block]: #code-blocks
 
 Code blocks can be used to quote text verbatim. For example, it can be
 used to quote source code. Every line of the code block should be
@@ -143,7 +156,10 @@ becomes, in HTML output:
     This is &lt;del&gt;normal text&lt;/del&gt; an intro.
     </pre></code>
 
-### Blockquotes
+<h3 id="blockquotes">Blockquotes</h3>
+
+[Blockquotes]: #blockquotes
+[blockquote]: #blockquotes
 
 Blockquoting is done by starting a line with `>` characters, like it's
 done in email. It looks best if you hard wrap the text and start every
@@ -193,7 +209,9 @@ For example:
     >         return 42;
     >     }
 
-### Horizontal rule
+<h3 id="horizontal-rule">Horizontal rule</h3>
+
+[Horizontal rule]: #horizontal-rule
 
 A horizontal rule tag (`<hr/>`) can be created by placing three or more
 hyphens (`-`), or three or more underscores (`_`) or three or more
@@ -225,7 +243,9 @@ But the following lines don't result in a horizontal rule:
     _-_-_-_
 
 
-## Mixing HTML with vfmd
+<h2 id="mixing-html-with-vfmd">Mixing HTML with vfmd</h2>
+
+[Mixing HTML with vfmd]: #mixing-html-with-vfmd
 
 If you are capable of authoring HTML documents, you can use snippets of
 HTML in your vfmd document to augument the vfmd feature set. That said,
@@ -236,34 +256,51 @@ document is implementation-dependant.
 vfmd handles different HTML elements differently. In vfmd, HTML elements
 are seen as belonging to one of the following four groups:
 
- 1. **Phrasing HTML elements** are HTML elements that belong to the
-    [phrasing content] category in [HTML5]. The elements in this group
-    are: `a`, `abbr`, `area`, `b`, `bdi`, `bdo`, `br`, `button`,
-    `canvas`, `cite`, `code`, `data`, `datalist`, `del`, `dfn`, `em`,
-    `embed`, `i`, `iframe`, `img`, `input`, `ins`, `kbd`, `keygen`,
-    `label`, `map`, `mark`, `meter`, `noscript`, `object`, `output`,
-    `progress`, `q`, `ruby`, `s`, `samp`, `select`, `small`, `span`,
-    `strong`, `sub`, `sup`, `textarea`, `time`, `u`, `var` and `wbr`.
- 2. **Verbatim HTML starter elements** are HTML elements that are [flow
-    content], but not [phrasing content], and can in turn
-    [contain][content models] [flow content]. The elements in this group
-    are: `address`, `article`, `aside`, `blockquote`, `details`,
-    `dialog`, `div`, `dl`, `fieldset`, `figure`, `footer`, `form`,
-    `header`, `main`, `nav`, `ol`, `section`, `table` and `ul`.
- 3. **Verbatim HTML container elements** are HTML elements within which
-    vfmd syntax should never be recognized. `pre`, `style` and `script`
+ 1. <span id="phrasing-html-elements">**Phrasing HTML elements** are
+    HTML elements that belong to the [phrasing content] category in
+    [HTML5].</span> The elements in this group are: `a`, `abbr`, `area`,
+    `b`, `bdi`, `bdo`, `br`, `button`, `canvas`, `cite`, `code`, `data`,
+    `datalist`, `del`, `dfn`, `em`, `embed`, `i`, `iframe`, `img`,
+    `input`, `ins`, `kbd`, `keygen`, `label`, `map`, `mark`, `meter`,
+    `noscript`, `object`, `output`, `progress`, `q`, `ruby`, `s`,
+    `samp`, `select`, `small`, `span`, `strong`, `sub`, `sup`,
+    `textarea`, `time`, `u`, `var` and `wbr`.
+
+ 2. <span id="verbatim-html-starter-elements">**Verbatim HTML starter
+    elements** are HTML elements that are [flow content], but not
+    [phrasing content], and can in turn [contain][content models] [flow
+    content].</span> The elements in this group are: `address`,
+    `article`, `aside`, `blockquote`, `details`, `dialog`, `div`, `dl`,
+    `fieldset`, `figure`, `footer`, `form`, `header`, `main`, `nav`,
+    `ol`, `section`, `table` and `ul`.
+
+ 3. <span id="verbatim-html-container-elements">**Verbatim HTML
+    container elements** are HTML elements within which vfmd syntax
+    should never be recognized.</span> `pre`, `style` and `script`
     elements fall in this group.
- 4. **Other HTML elements** are HTML elements that don't belong to any
-    of the above groups.
+
+ 4. <span id="other-html-elements">**Other HTML elements** are HTML
+    elements that don't belong to any of the above groups.</span>
 
 [HTML5]: http://www.w3.org/TR/html5/ "HTML5 Specification"
 [content models]: http://www.w3.org/TR/html5/dom.html#content-models
 [flow content]: http://www.w3.org/TR/html5/dom.html#flow-content-1
 [phrasing content]: http://www.w3.org/TR/html5/dom.html#phrasing-content-1
+[Phrasing HTML elements]: #phrasing-html-elements
+[phrasing HTML elements]: #phrasing-html-elements
+[Verbatim HTML starter elements]: #verbatim-html-starter-elements
+[verbatim HTML starter elements]: #verbatim-html-starter-elements
+[Verbatim HTML container elements]: #verbatim-html-container-elements
+[verbatim HTML container elements]: #verbatim-html-container-elements
+[Other HTML elements]: #other-html-elements
+[other HTML elements]: #other-html-elements
 
-### Using vfmd along with HTML markup
 
-_Phrasing HTML elements_ can be freely intermingled with vfmd text. Such
+<h3 id="using-vfmd-along-with-html">Using vfmd along with HTML markup</h3>
+
+[Using vfmd along with HTML markup]: #using-vfmd-along-with-html
+
+[Phrasing HTML elements] can be freely intermingled with vfmd text. Such
 HTML elements can contain, and be contained in, vfmd markup.
 
 For example:
@@ -276,9 +313,9 @@ becomes, in HTML output:
     <p>According to the <u><em>Special</em> Theory of Relativity</u>,
     <strong>E</strong> <em>(energy)</em> = <strong>mc<sup>2</sup></strong></p>
 
-_Other HTML elements_ can contain vfmd text, but cannot be contained
+[Other HTML elements] can contain vfmd text, but cannot be contained
 within vfmd markup. Moreover, vfmd paragraphs containing any of the
-_other HTML elements_ are not wrapped in `p` tags.
+[other HTML elements] are not wrapped in `p` tags.
 
 The following example shows how vfmd markup can be used within `td`
 elements of a HTML table:
@@ -296,18 +333,20 @@ tags (i.e. opening tags without correctly-placed closing tags or vice
 versa), vfmd will not wrap the paragraph content in `p` tags, because
 doing so might result in invalid HTML output.
 
-### Verbatim HTML
+<h3 id="verbatim-html">Verbatim HTML</h3>
 
-Anything within a _verbatim HTML container element_ (i.e. a `pre`,
-`script` or `style` element) is preserved as-is in the HTML output.
+[Verbatim HTML]: #verbatim-html
 
-Moreover, any tag (opening, closing or self-closing tag) of a _verbatim
-HTML starter element_ marks the start of verbatim HTML, and the
+Anything within a [verbatim HTML container element] \(i.e. a `pre`,
+`script` or `style` element\) is preserved as-is in the HTML output.
+
+Moreover, any tag (opening, closing or self-closing tag) of a [verbatim
+HTML starter element] marks the start of verbatim HTML, and the
 verbatim-HTML-mode stays on till the next blank line.
 
-So, if you'd like to use vfmd syntax within a _verbatim HTML starter
-element_ (like `div` or `table`), you can use one or more blank lines to
-separate the parts that need to be output verbatim, from the parts in
+So, if you'd like to use vfmd syntax within a [verbatim HTML starter
+element] \(like `div` or `table`\), you can use one or more blank lines
+to separate the parts that need to be output verbatim, from the parts in
 which vfmd syntax needs to be processed.
 
 For example, for the input:
@@ -342,7 +381,7 @@ The corresponding HTML output shall be:
 
 However, please make sure that the starting line of each snippet of HTML
 is not indented by more than 3 spaces (if it's indented by 4 or more
-spaces, it would become a code block).
+spaces, it would become a [code block]).
 
 On the contrary, if you want the whole block of HTML reproduced verbatim
 in the HTML output, make sure that there are no blank lines in the
@@ -368,10 +407,13 @@ Note that `pre`, `script` or `style` elements can have blank lines
 enclosed within, and those blank lines don't cause the
 verbatim-HTML-mode to end.
 
-### HTML blocks within blockquotes and lists
+<h3 id="html-blocks-within-blockquotes-and-lists">
+HTML blocks within blockquotes and lists</h3>
 
-When including a HTML block within a blockquote, please make sure that
-the HTML block is completely contained within the blockquote.
+[HTML blocks within blockquotes and lists]: #html-blocks-within-blockquotes-and-lists
+
+When including a HTML block within a [blockquote], please make sure that
+the HTML block is completely contained within the [blockquote].
 
 For example, the following is wrong, and will result in invalid HTML
 output:
@@ -385,7 +427,7 @@ output:
     Outside the blockquote
     </div>
 
-To correctly include the HTML block within the blockquote, please use
+To correctly include the HTML block within the [blockquote], please use
 the `>` prefix for all the lines in the HTML block (or atleast for any
 line following a blank line in the HTML block).
 
@@ -425,7 +467,10 @@ lines following a blank line) to line up with the list.
         Still inside the list
         </div>
 
-### Matching open and close HTML tags
+<h3 id="matching-open-and-close-html-tags">
+Matching open and close HTML tags</h3>
+
+[Matching open and close HTML tags]: #matching-open-and-close-html-tags
 
 When you use HTML tags within the vfmd document, please take care to
 correctly match up the open tags with the close tags. Any mismatched or
