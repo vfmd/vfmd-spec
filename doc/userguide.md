@@ -13,6 +13,20 @@ also supports span-level markup like emphasis, links and inline-code.
 [vfmd]: introduction.md
 [original Markdown syntax]: http://daringfireball.net/projects/markdown/syntax
 
+This document is organized as follows:
+
+  * [Encoding]
+  * [Block-level elements]
+      * [Headers]
+          * [setext-style headers]
+          * [atx-style headers]
+      * [Code blocks]
+      * [Blockquotes]
+      * [Horizontal rule]
+  * [Mixing HTML with vfmd]
+      * [Using vfmd along with HTML markup]
+      * [Verbatim HTML]
+
 <h2 id="encoding">Encoding</h2>
 
 [Encoding]: #encoding
