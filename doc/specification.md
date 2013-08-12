@@ -1547,7 +1547,8 @@ indicate the start of a _closing link tag_, as described below:
         _reference id string_, then the output shall have the _enclosed
         content_ linked to the link url and link title specified in the
         entry for the _reference id string_ in the [link reference
-        association map].
+        association map]. For HTML output, the link title should be
+        [attribute-value-escaped].
         
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
@@ -1595,13 +1596,16 @@ indicate the start of a _closing link tag_, as described below:
         _reference id string_, then the output shall have the _enclosed
         content_ linked to the link url and link title specified in the
         entry for the _reference id string_ in the [link reference
-        association map].
+        association map]. For HTML output, the link title should be
+        [attribute-value-escaped].
         
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
         _enclosed content_ without being part of a link,
         enclosed within the text forming the _opening link tag_ and the
-        text forming the _closing link tag_.
+        text forming the _closing link tag_. For HTML output, the text
+        forming the _closing link tag_ should be [html-escaped] before
+        being output.
 
      7. The [top node] is popped off
 
@@ -1705,6 +1709,8 @@ indicate the start of a _closing link tag_, as described below:
         link.  If the _title string_ is not _null_, the _title string_
         shall be used as the title for the link. The output shall have
         the _enclosed content_ linked to the link url and link title.
+        For HTML output, the link title should be
+        [attribute-value-escaped].
 
      6. The [top node] is popped off
 
