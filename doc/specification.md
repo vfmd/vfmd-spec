@@ -844,7 +844,8 @@ The first _unordered list item line sequence_ looks like:
 
 To obtain the corresponding _unordered-list-item-processed line
 sequence_, we need to remove the _unordered list starter string_ from
-the beginning of the first line.
+the beginning of the first line. Since the second line is a [blank
+line], no processing is done on the second line.
 
 The first _unordered-list-item-processed line sequence_ is therefore:
 
@@ -1069,11 +1070,12 @@ The first _ordered list item line sequence_ looks like:
 </code></pre>
 
 To obtain the corresponding _ordered-list-item-processed line sequence_,
-we need to match the line against the [ordered list starter pattern] and
-remove the matching substring for the first parenthesized subexpression.
-The matching substring in this case is <code  style="whitespace:
-pre;">1. </code> (i.e. the number '1', followed by a dot, followed by a
-single space character).
+we need to match the first line against the [ordered list starter
+pattern] and remove the matching substring for the first parenthesized
+subexpression.  The matching substring in this case is <code
+style="whitespace: pre;">1. </code> (i.e. the number '1', followed by a
+dot, followed by a single space character). Since the second line is a
+[blank line], no processing is done on the second line.
 
 The first _ordered-list-item-processed line sequence_ is therefore:
 
