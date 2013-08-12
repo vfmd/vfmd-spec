@@ -1891,6 +1891,9 @@ tags_.  In this case, the following shall be done:
  
  7. If the _current-tag-string_ is not empty, go to Step 2
 
+Thus, using this procedure, a sequence of one or more `*` or `_`
+characters at the [current-position] is identified to be the start of
+either a _span tag candidate_ or a _text fragment_.
 
 <h5 id="matching-opening-and-closing-emphasis">
 Matching opening and closing emphasis</h5>
@@ -2102,6 +2105,10 @@ The following procedure is followed:
         markup. The middle _code-content-length_ characters shall form
         the content of the code span. For HTML output, the content of
         the code-span should be _html-escaped_.
+
+Thus, using this procedure, a sequence of one or more `` ` `` characters
+at the [current-position] is identified to be the start of either a
+_span tag candidate_ (of an _code-span tag_) or a _text fragment_.
 
 <h4 id="handling-potential-image-tags">Handling potential image tags</h4>
 
