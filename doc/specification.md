@@ -1537,8 +1537,8 @@ indicate the start of a _closing link tag_, as described below:
         ( [current-position] - 1 ). The substring of the _input
         character sequence_ starting from the _reference id start
         position_ and ending at the _reference id end position_, both
-        inclusive, is called the _reference id string_.
-        
+        inclusive, is [simplified] to obtain the _reference id string_.
+
         The _reference id string_ shall be used to look up the actual
         link url and link title from the [link reference association
         map].
