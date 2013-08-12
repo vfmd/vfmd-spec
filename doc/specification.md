@@ -395,7 +395,7 @@ block-element and the [block-element end line]:
     [block-element start line] matches the [ordered list starter
     pattern] \(i.e. the regular expression `/^( *([0-9]+)\. +)[^ ]/`\)
     then the block-element is of type [**ordered list**]. The length of
-    the matching substring for the first (i.e. inner) parenthesized
+    the matching substring for the first (i.e. outer) parenthesized
     subexpression in the pattern is called the
     _ordered-list-starter-string-length_.
     
@@ -1036,11 +1036,12 @@ For example, consider the following [block-element line sequence]:
         1. Nested item 1
 
 When we match the first line against the [ordered list starter pattern],
-the matching substring for the parenthesized subexpression is obtained
-as <code style="whitespace: pre;">1. </code> (i.e. the number '1',
-followed by a dot, followed by a single [space] character). The
-_ordered-list-starter-string-length_ is therefore 3. Also, the _ordered
-list starting number_ is identified as the number '1'.
+the matching substring for the first (i.e. outer) parenthesized
+subexpression is obtained as <code style="whitespace: pre;">1. </code>
+(i.e. the number '1', followed by a dot, followed by a single [space]
+character). The _ordered-list-starter-string-length_ is therefore 3.
+Also, the _ordered list starting number_ is identified as the number
+'1'.
 
 The 1<sup>st</sup>, 3<sup>rd</sup>, 8<sup>th</sup> and 10<sup>th</sup>
 lines in the [block-element line sequence] match the _ordered list
@@ -1571,7 +1572,7 @@ indicate the start of a _closing link tag_, as described below:
         _closing span tag_, or more specifically, as a **closing link
         tag**
 
-     2. The matching substring for the first and only parenthesized
+     2. The matching substring for the first (i.e. outer) parenthesized
         subexpression in the pattern is [simplified] to obtain the
         _reference id string_
 
