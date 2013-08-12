@@ -1393,11 +1393,20 @@ satisfied:</span>
     following are true:
      1. The node _m_ is above the node _n_ in the [stack of potential
         opening span tags]
-     2. The _node type_ of _m_ is equal to _t_
+     2. The _node type_ of _m_ is equal to _t_, or the _node type_ of
+        _m_ is equal to _raw html node_
 
-The _topmost node_ of type _t_ is said to be _null_ if, and only if, the
-[stack of potential opening span tags] does not contain any node whose
-_node type_ is equal to _t_.
+The _topmost node_ of type _t_ is said to be _null_ if, and only if, any
+of the following conditions is true:
+
+ 1. The [stack of potential opening span tags] does not contain any node
+    whose _node type_ is equal to _t_
+
+    (or)
+ 
+ 2. All nodes whose _node type_ is equal to _t_ in the [stack of
+    potential opening span tags] have a _html node_ above them (where
+    _html node_ means a node whose _node type_ is _raw html node_)
 
 To identify and interpret the _span tags_ in the [input character
 sequence], we follow the procedure described in the next subsection,
