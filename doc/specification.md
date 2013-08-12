@@ -30,6 +30,7 @@ This document is organized as follows:
       * [Handling potential link tags]
       * [Handling potential emphasis tags]
       * [Handling potential code-span tags]
+      * [Handling potential image tags]
 
 <h2 id="definitions">Definitions</h2>
 
@@ -1441,7 +1442,11 @@ to be followed:
     (backtick) character, then set _is-potential-span-tag_ as true and
     follow the procedure discussed in [Handling potential code-span
     tags]
- 6. TODO: Image
+ 6. If the character at the [current-position] is an unescaped `!`
+    (exclamation mark) character, and if the
+    [remaining-character-sequence] matches the regular expression
+    pattern `/!\[/`, then set _is-potential-span-tag_ as true and follow
+    the procedure discussed in [Handling potential image tags]
  7. TODO: Automatic links (\<http://link\> or http\://link)
  8. TODO: Raw HTML
  9. If _is-potential-span-tag_ is true, the above steps (3-7) should
@@ -2098,4 +2103,240 @@ The following procedure is followed:
         the content of the code span. For HTML output, the content of
         the code-span should be _html-escaped_.
 
+<h4 id="handling-potential-image-tags">Handling potential image tags</h4>
+
+[Handling potential image tags]: #handling-potential-image-tags
+
+In this section, we discuss how to identify _span tags_ related to
+images. This section assumes that the character at the
+[current-position] is an unescaped `!` character, and that the immediate
+next character is a `[` character.
+
+<span id="image-tag-starter-pattern">The regular expression pattern
+`/^!\[(([^\\\[\]]|\\.)*)(\].*)$/` is called the
+**image-tag-starter-pattern**.</span>
+
+Example: `![alt text` + _residual-image-sequence_
+
+[image-tag-starter-pattern]: #image-tag-starter-pattern
+
+If the [remaining-character-sequence] does not match the
+[image-tag-starter-pattern], then the first 2 characters of the
+[remaining-character-sequence] \(which should form the string `![`\) are
+interpreted as a _text fragment_.
+
+If the [remaining-character-sequence] matches the
+[image-tag-starter-pattern], then:
+
+ 1. <span id="image-alt-text-string">The matching substring for the
+    first parenthesized subexpression in the pattern is called the
+    _image-alt-text-string_</span>
+ 2. <span id="residual-image-sequence">The matching substring for the
+    last parenthesized subexpression in the pattern is called the
+    _residual-image-sequence_</span>
+ 3. <span id="alt-text-pattern-match-length">The position at which the
+    _residual-image-sequence_ starts within the
+    [remaining-character-sequence] \(i.e. the number of characters
+    present in the [remaining-character-sequence] before the start of
+    the _residual-image-sequence_\) shall be called the
+    _alt-text-pattern-match-length_</span>
+
+[image-alt-text-string]: #image-alt-text-string
+[residual-image-sequence]: #residual-image-sequence
+[alt-text-pattern-match-length]: #alt-text-pattern-match-length
+
+If the [remaining-character-sequence] matches the
+[image-tag-starter-pattern], then the following is done:
+
+ 1. If the [residual-image-sequence] matches any of the following
+    regular expression patterns:
+
+     1. With trailing empty square brackets: `/^(\]\s*\[\s*\])/`
+
+        Example: `][]`
+
+     2. With no trailing opening bracket: `/^(\])\s*[^\[\(]/`
+
+        Example: `] a`
+
+     3. At the very end: `/^(\]\s*)$/`
+
+        Example: `]`
+
+    then the following is done:
+
+    <!-- For some reason, Redcarpet requires a comment here to correctly
+    display the following list -->
+
+     1. The matching substring for the first and only
+        parenthesized subexpression in the matching pattern shall be
+        called the _image-ref-close-sequence_. The number of characters
+        in the _image-ref-close-sequence_ is called the
+        _image-ref-close-sequence-length_.
+
+     2. Let _image-ref-tag-length_ be equal to the sum of the
+        [alt-text-pattern-match-length] and the
+        _image-ref-close-sequence-length_. The first
+        _image-ref-tag-length_ characters of the
+        [remaining-character-sequence] are collectively identified as a
+        _span tag candidate_, and interpreted as an **image tag**.
+
+     3. Let _reference id string_ be the string obtained on
+        [simplifying] the [image-alt-text-string].
+
+        The _reference id string_ shall be used to look up the actual
+        image url and image title from the [link reference association
+        map].
+
+        If the [link reference association map] contains an entry for
+        _reference id string_, then the output shall have the source of
+        the image as the link url and the title of the image as the link
+        title (if available) specified in the entry for the _reference
+        id string_ in the [link reference association map]. The
+        [image-alt-text-string] shall be used as the alternate text for
+        the image. For HTML output, the title of the image and the
+        alternate text for the image should be
+        [attribute-value-escaped].
+        
+        If the [link reference association map] does not contain an
+        entry for _reference id string_, then the output shall not
+        include an image for this _image tag_. Instead, the first
+        _image-ref-tag-length_ characters of the
+        [remaining-character-sequence] are output as text. For HTML
+        output, this text should be [html-escaped].
+
+ 2. If the [residual-image-sequence] matches the regular expression
+    pattern `/^\]\s*\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
+    then the following is done:
+
+     1. The matching substring for the first parenthesized subexpression
+        in the pattern is [simplified] to obtain the _reference id
+        string_
+
+     2. The length of the matching substring for the whole of the
+        pattern is called the _image-ref-close-sequence-length_.
+
+        Let _image-ref-tag-length_ be equal to the sum of the
+        [alt-text-pattern-match-length] and the
+        _image-ref-close-sequence-length_. The first
+        _image-ref-tag-length_ characters of the
+        [remaining-character-sequence] are collectively identified as a
+        _span tag candidate_, and interpreted as an **image tag**.
+
+     3. The _reference id string_ shall be used to look up the actual
+        image url and image title from the [link reference association
+        map].
+
+        If the _link reference association map_ contains an entry for
+        _reference id string_, then the output shall have the source of
+        the image as the link url and the title of the image as the link
+        title (if available) specified in the entry for the _reference
+        id string_ in the [link reference association map]. The
+        [image-alt-text-string] shall be used as the alternate text for
+        the image. For HTML output, the title of the image and the
+        alternate text for the image should be
+        [attribute-value-escaped].
+        
+        If the [link reference association map] does not contain an
+        entry for _reference id string_, then the output shall not
+        include an image for this _image tag_. Instead, the first
+        _image-ref-tag-length_ characters of the
+        [remaining-character-sequence] are output as text. For HTML
+        output, this text should be [html-escaped].
+
+ 3. If the [residual-image-sequence] matches the regular expression
+    pattern `/^\]\s*\(/` and if both the following conditions are
+    satisfied:
+
+     1. The [residual-image-sequence] matches one of the following
+        regular expression patterns:
+
+         1. URL without angle brackets: `/^\]\s*\(\s*([^\(\)<>\s]+)([\)\s].*)$/`
+
+            Example: `] (http://www.example.net/image.jpg` + _residual-image-attribute-sequence_
+
+         2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]*)>([\)].+)$/`
+   
+            Examples:  
+            `](<http://example.net/image.jpg>` + _residual-image-attribute-sequence_  
+            `] ( <http://example.net/image(1).jpg>` + _residual-image-attribute-sequence_
+
+        In case of either pattern, the matching substring for the first
+        parenthesised subexpression shall be called the _unprocessed
+        image source string_, and the matching substring for the second
+        parenthesized subexpression shall be called the
+        _residual-image-attribute-sequence_. Any [whitespace]
+        characters in the _unprocessed image source string_ are removed,
+        and the resultant string is called the _image url string_.
+
+        The position at which the _residual-image-attribute-sequence_
+        starts within the _residual-image-sequence_ \(i.e. the
+        number of characters present in the
+        _residual-image-sequence_ before the start of the
+        _residual-link-attribute-sequence_\) shall be called the
+        _image-source-pattern-match-length_.
+
+     2. The _residual-image-attribute-sequence_ matches one of the
+        following regular expression patterns:
+
+         1. Just the closing paranthesis: `/^\s*\)/`
+
+            Example: `)`
+
+            If this is the matching pattern, the _title string_ is said
+            to be _null_.
+        
+         2. Title and/or appended ignorable text and closing paranthesis: 
+            `/^\s*((("(([^"\\]|\\.)*)")|('(([^'\\]|\\.)*)')|(([^"'\)\\]|\\.)*))+)\)/`
+
+            Examples:  
+            `"Title")`  
+            `'Title')`  
+            `"A (nice) \"title\" for the image")`  
+            `'Title' followed by random ignored text)`  
+            `"Title" followed by random "(ignored)" text)`  
+            `just random ignored text)`  
+            `just ignored text with \(escaped parentheses\))`
+
+            If this is the matching pattern, the matching substring for
+            the first parenthesized subexpression in the pattern is
+            [trimmed] to give the _attributes-string_. If the
+            _attributes-string_ begins with a [quoted string], then the
+            [enclosed string] of the [quoted string] is called the
+            _title string_. If the _attributes-string_ does not begin
+            with a [quoted string], then the _title string_ is said to
+            be _null_.
+
+        The number of characters in the
+        _residual-image-attribute-sequence_ that were consumed in
+        matching the whole of the matching pattern is called the
+        _image-attributes-pattern-match-length_.
+
+    then, the following is done:
+
+    <!-- For some reason, Redcarpet requires a comment here to correctly
+    display the following list -->
+
+     1. Let _image-src-tag-length_ be equal to the sum of
+        [alt-text-pattern-match-length] and
+        _image-source-pattern-match-length_ and
+        _image-attributes-pattern-match-length_.  The first
+        _image-src-tag-length_ characters of the
+        [remaining-character-sequence] are collectively identified as a
+        _span tag candidate_, and interpreted as an **image tag**.
+
+     2. The _image url string_ shall be used as the source of the image.
+        If _title string_ is not null, the _title string_ shall be used
+        as the title of the image. The [image-alt-text-string] shall be
+        used as the alternate text for the image. For HTML output, the
+        title of the image and the alternate text for the image should
+        be [attribute-value-escaped].
+
+ 4. If none of the above 3 conditions are satisfied, then the first 2
+    characters of the [remaining-character-sequence] \(which should form
+    the string `![`\) are interpreted as a _text fragment_.
+
+Thus, using this procedure, the `![` sequence at the [current-position]
+is identified to be the start of either a _span tag candidate_ (of an
+_image tag_) or a _text fragment_.
 
