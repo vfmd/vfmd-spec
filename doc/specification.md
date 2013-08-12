@@ -31,6 +31,7 @@ This document is organized as follows:
       * [Handling potential emphasis tags]
       * [Handling potential code-span tags]
       * [Handling potential image tags]
+      * [Handling HTML tags]
 
 <h2 id="definitions">Definitions</h2>
 
@@ -1375,6 +1376,8 @@ Each node in the stack contains the following properties:</span>
     node_, _underscore emphasis node_, _link node_ or _raw html node_
  3. A _linked content start position_ that is set only if the _node
     type_ is equal to _link node_
+ 4. A _html tag name_ that is set only if the _node type_ is equal to
+    _raw html node_
 
 <span id="top-node">The topmost node in the [stack of potential opening
 span tags] is called the _top node_.</span>
@@ -1451,7 +1454,12 @@ to be followed:
     pattern `/!\[/`, then set _is-potential-span-tag_ as true and follow
     the procedure discussed in [Handling potential image tags]
  7. TODO: Automatic links (\<http://link\> or http\://link)
- 8. TODO: Raw HTML
+ 8. If the character at the [current-position] is an unescaped `<` (left
+    angle bracket) character, and if the [remaining-character-sequence]
+    matches neither the regular expression pattern
+    `/<(https?|ftp):\/\/\S]/` nor the regular expression pattern
+    `/<mailto:\S/`, then set _is-potential-span-tag_ as true and follow
+    the procedure discussed in [Handling HTML tags]
  9. If _is-potential-span-tag_ is true, the above steps (3-7) should
     have identified either a _span tag candidate_ or a _text fragment_;
     Increment the [current-position] by the length of the _span tag
@@ -2355,4 +2363,99 @@ If the [remaining-character-sequence] matches the
 Thus, using this procedure, the `![` sequence at the [current-position]
 is identified to be the start of either a _span tag candidate_ (of an
 _image tag_) or a _text fragment_.
+
+
+<h4 id="handling-html-tags">Handling HTML tags</h4>
+
+[Handling HTML tags]: #handling-html-tags
+
+In this section, we discuss how to identify _span tags_ related to
+inline HTML. This section assumes that the character at the
+[current-position] is an unescaped `<` character.
+
+Let _html-tag-detection-sequence_ be the [remaining-character-sequence].
+
+To identify _span tags_ related to inline HTML we need to employ the use
+of a HTML parser. We supply characters in the
+_html-tag-detection-sequence_ to the HTML parser, one character at a
+time, till one of the following happens:
+
+ 1. The HTML parser detects a complete self-closing HTML tag (this also
+    includes tags empty by definition in HTML4, like `<br>` and `<img
+    src="">`)
+
+    If this happens first, the following is done:
+    
+     1. The text that represents the opening HTML tag is identified as a
+        _span tag candidate_, and identified as a **self-closing HTML
+        tag**.
+
+     2. For HTML output, the text that represents the self-closing HTML
+        tag shall be included in the output verbatim.
+
+ 2. The HTML parser detects a complete opening HTML tag.
+
+    If this happens first, the following is done:
+
+     1. The text that represents the opening HTML tag is identified as a
+        _span tag candidate_, and interpreted as an **opening HTML tag**
+    
+     2. A new node is pushed onto the [stack of potential opening span
+        tags] with the following [properties][stack-node-properties]:
+
+         1. The _tag string_ of the node is set to the text that
+            represents the opening HTML tag
+         2. The _node type_ of the node is set as _raw html node_
+         3. The _html tag name_ of the node is set to the HTML tag name
+            of the opening HTML tag that was just identified
+
+     3. For HTML output, the text that represents the opening HTML tag
+        shall be included in the output verbatim.
+
+ 3. The HTML parser detects a complete closing HTML tag.
+
+    If this happens first, the following is done:
+
+     1. The text that represents the closing HTML tag is identified as a
+        _span tag candidate_, and interpreted as a **closing HTML tag**
+    
+     2. Let _currently open html node_ be the [topmost node of type]
+        _raw html node_
+
+     3. If the _currently open html node_ is not _null_, and the _html
+        tag name_ of the _currently open html node_ is the same as the
+        HTML tag name of the closing HTML tag that was just identified,
+        the [top node] shall be popped off
+
+     4. If the _currently open html node_ is null, or if  _html tag
+        name_ of the _currently open html node_ is not the same as the
+        HTML tag name of the closing HTML tag that was just identified,
+        then all nodes in the [stack of potential opening span tags]
+        whose _node type_ is not equal to _raw html node_ shall be
+        removed from the stack and interpreted as _text fragments_
+
+     5. For HTML output, the text that represents the closing HTML tag
+        shall be included in the output verbatim.
+
+ 4. The HTML parser detects a complete HTML comment.
+
+    If this happens first, the text that represents the HTML comment is
+    identified as a _span tag candidate_, and interpreted as a **comment
+    HTML tag**.
+
+    For HTML output, the text that represents the comment HTML tag shall
+    be included in the output verbatim.
+
+ 5. The HTML parser detects HTML text, or the HTML parser detects an
+    error, or the _html-tag-detection-sequence_ has no more characters
+    to supply to the HTML parser.
+
+    If this happens first, the `<` at the [current-position] is
+    identified as a _text fragment_.
+
+Thus, using this procedure, the `<` at the [current-position] is
+identified to be the start of either a _span tag candidate_ or a _text
+fragment_. The _span tag candidate_ is also interpreted as one of these
+_span tags_: _opening HTML tag_ or _closing HTML tag_ or _self-closing
+HTML tag_ or _comment HTML tag_.
 
