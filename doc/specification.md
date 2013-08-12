@@ -1551,7 +1551,7 @@ indicate the start of a _closing link tag_, as described below:
         
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
-        _enclosed content_ appear as text, without being linked,
+        _enclosed content_ without being part of a link,
         enclosed within the text forming the _opening link tag_ and the
         text forming the _closing link tag_.
 
@@ -1599,7 +1599,7 @@ indicate the start of a _closing link tag_, as described below:
         
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
-        _enclosed content_ appear as text, without being linked,
+        _enclosed content_ without being part of a link,
         enclosed within the text forming the _opening link tag_ and the
         text forming the _closing link tag_.
 
