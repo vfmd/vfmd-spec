@@ -26,12 +26,12 @@ This document is organized as follows:
     * [reference-resolution block]
     * [null block]
   * [Identifying span-elements]
-    * [Identifying and interpreting span tags]
-      * [Handling potential link tags]
-      * [Handling potential emphasis tags]
-      * [Handling potential code-span tags]
-      * [Handling potential image tags]
-      * [Handling HTML tags]
+    * [Procedure for identifying span tags]
+    * [Procedure for identifying link tags]
+    * [Procedure for identifying emphasis tags]
+    * [Procedure for identifying code-span tags]
+    * [Procedure for identifying image tags]
+    * [Procedure for identifying HTML tags]
 
 <h2 id="definitions">Definitions</h2>
 
@@ -1409,19 +1409,18 @@ of the following conditions is true:
     _html node_ means a node whose _node type_ is _raw html node_)
 
 To identify and interpret the _span tags_ in the [input character
-sequence], we follow the procedure described in the next subsection,
-[Identifying and interpreting _span tags_].
+sequence], the [procedure for identifying span tags] shall be used.
 
 [stack of potential opening span tags]: #stack-of-potential-opening-span-tags
 [stack-node-properties]: #stack-node-properties
 [top node]: #top-node
 [topmost node of type]: #topmost-node-of-type
 
-<h3 id="identifying-and-interpreting-span-tags">
-Identifying and interpreting <em>span tags</em></h3>
+<h3 id="procedure-for-identifying-span-tags">
+Procedure for identifying span tags</h3>
 
-[Identifying and interpreting _span tags_]: #identifying-and-interpreting-span-tags
-[Identifying and interpreting span tags]: #identifying-and-interpreting-span-tags
+[Procedure for identifying span tags]: #procedure-for-identifying-span-tags
+[procedure for identifying span tags]: #procedure-for-identifying-span-tags
 
 In this section, we discuss the procedure to identify and interpret the
 _span tags_ in the [input character sequence].
@@ -1429,73 +1428,75 @@ _span tags_ in the [input character sequence].
 The procedure involves iterating over the characters in the [input
 character sequence]. <span id="current-position">The current character
 position in the [input character sequence] is called the
-**current-position**.</span> A _current-position_ value of 1 indicates
-that we are going to process the first character in the [input character
-sequence]. <span id="remaining-character-sequence">The substring of the
-[input character sequence] starting from and including the character at
-the [current-position] and ending at the end of the [input character
-sequence] is called the **remaining-character-sequence**.</span>
+**current-position**.</span> When _current-position_ is 0, the first
+character in the [input character sequence] is said to be the character
+at the _current-position_; when _current-position_ is 1, the second
+character in the [input character sequence] is said to be the character
+at the _current-position_, and so on. <span
+id="remaining-character-sequence">The substring of the [input character
+sequence] starting from and including the character at the
+_current-position_ and ending at the end of the [input character
+sequence] is called the **remaining-character-sequence**.</span> When
+_current-position_ is 0, the _remaining-character-sequence_ is equal to
+the [input character sequence].
+
+The procedure to identify and interpret _span tags_ is presented below.
+The procedure in turn invokes other sub-procedures. Please note that
+<span id="consumed-character-count">the _consumed-character-count_
+variable, which is used to track the number of characters that were
+consumed to form a _span tag_ or a _text fragment_</span>, can get
+modified inside the invoked procedures.
 
 [current-position]: #current-position
 [remaining-character-sequence]: #remaining-character-sequence
+[consumed-character-count]: #consumed-character-count
 
-To identify and interpret the _span tags_, the following procedure is
-to be followed:
+The procedure to identify and interpret the _span tags_ is as follows:
 
- 1. Set [current-position] as 1
- 2. Set _is-potential-span-tag_ as false
+ 1. Set [current-position] as 0
+ 2. <span id="span-proc-step-2">Set _consumed-character-count_ as 0
+    </span>
  3. If the character at the [current-position] is either an unescaped
     `[` (open square bracket) character, or an unescaped `]` (close
-    square bracket) character, then set _is-potential-span-tag_ as true
-    and follow the procedure discussed in [Handling potential link 
-    tags]
+    square bracket) character, invoke the [procedure for identifying
+    link tags]
  4. If the character at the [current-position] is either an unescaped
     `*` (asterisk) character, or an unescaped `_` (underscore or low
-    line) character, then set _is-potential-span-tag_ as true and follow
-    the procedure discussed in [Handling potential emphasis tags]
+    line) character, then invoke the [procedure for identifying
+    emphasis tags]
  5. If the character at the [current-position] is an unescaped `` ` ``
-    (backtick) character, then set _is-potential-span-tag_ as true and
-    follow the procedure discussed in [Handling potential code-span
-    tags]
+    (backtick) character, then invoke the [procedure for identifying
+    code-span tags]
  6. If the character at the [current-position] is an unescaped `!`
     (exclamation mark) character, and if the
     [remaining-character-sequence] matches the regular expression
-    pattern `/!\[/`, then set _is-potential-span-tag_ as true and follow
-    the procedure discussed in [Handling potential image tags]
+    pattern `/!\[/`, then invoke the [procedure for identifying image
+    tags]
  7. TODO: Automatic links (\<http://link\> or http\://link)
- 8. If the character at the [current-position] is an unescaped `<` (left
-    angle bracket) character, and if the [remaining-character-sequence]
-    matches neither the regular expression pattern
-    `/<(https?|ftp):\/\/\S]/` nor the regular expression pattern
-    `/<mailto:\S/`, then set _is-potential-span-tag_ as true and follow
-    the procedure discussed in [Handling HTML tags]
- 9. If _is-potential-span-tag_ is true, the above steps (3-7) should
-    have identified either a _span tag candidate_ or a _text fragment_;
-    Increment the [current-position] by the length of the _span tag
-    candidate_ or the _text fragment_ that was identified
- 10. If _is-potential-span-tag_ is false, the character at the _current
-     position_ is identified as being part of a _text fragment_;
-     Increment the [current-position] by 1
- 11. If the [current-position] is greater than the length of the _input
-     character sequence_, then stop this procedure; else, go to Step 2.
+ 8. If _consumed-character-count_ is equal to 0, and if the character at
+    the [current-position] is an unescaped `<` (left angle bracket)
+    character, then invoke the [procedure for identifying HTML tags]
+ 9. If _consumed-character-count_ is equal to 0, interpret the character
+    at the [current-position] to be part of a _text fragment_, and set
+    _consumed-character-count_ as 1
+ 10. Increment [current-position] by _consumed-character-count_
+ 11. If [current-position] is less than the length of the 
+     [input character sequence], go to [Step 2](#span-proc-step-2)
 
-<h4 id="handling-potential-link-tags">Handling potential link tags</h4>
 
-[Handling potential link tags]: #handling-potential-link-tags
-[closing link tag]: #handling-potential-link-tags
+<h3 id="procedure-for-identifying-link-tags">Procedure for identifying link tags</h3>
 
-In this section, we discuss how to identify _span tags_ related to
-links. This section assumes that the character at the [current-position]
+[Procedure for identifying link tags]: #procedure-for-identifying-link-tags
+[procedure for identifying link tags]: #procedure-for-identifying-link-tags
+
+This procedure assumes that the character at the [current-position]
 is either an unescaped `[` character or an unescaped `]` character.
 
-If the character at the [current-position] is a `[` character, it might
-indicate  an _opening link tag_, as described below:
+If the character at the [current-position] is a `[` character, it
+implies that the `[` can potentially get interpreted as an _opening link
+tag_ in the future. In this case, the following is done:
 
- 1. The `[` character at the [current-position] is identified as a
-    _span tag candidate_, which can potentially get interpreted as
-    an _opening link tag_ in the future
-
- 2. A new node is pushed onto the [stack of potential opening span
+ 1. A new node is pushed onto the [stack of potential opening span
     tags] with the following [properties][stack-node-properties]:
 
      1. The _tag string_ of the node is set to the `[` character at
@@ -1503,9 +1504,12 @@ indicate  an _opening link tag_, as described below:
      2. The _node type_ of the node is set as _link node_
      3. The _linked content start position_ of the node is set to
         ( [current-position] + 1 )
+ 
+ 2. Set [consumed-character-count] to 1
 
 If the character at the [current-position] is a `]` character, it might
-indicate the start of a _closing link tag_, as described below:
+be the start of a _closing link tag_. In this case, the following is
+done:
 
  1. If the [topmost node of type] _link node_ is not _null_, and the if
     the [remaining-character-sequence] matches any of the following
@@ -1535,9 +1539,8 @@ indicate the start of a _closing link tag_, as described below:
     display the following list -->
 
      1. The matching substring for the first and only parenthesized
-        subexpression in the matching pattern is identified as a _span
-        tag candidate_, and interpreted as a _closing span tag_, or more
-        specifically, as a **closing link tag**
+        subexpression in the matching pattern is identified as a
+        **closing link tag**.
 
      2. If the [topmost node of type] _link node_ is not already the
         [top node], all nodes above it are popped off and interpreted as
@@ -1581,15 +1584,16 @@ indicate the start of a _closing link tag_, as described below:
      7. All nodes with _node type_ equal to _link node_ are removed from
         the [stack of potential opening span tags]
 
+     8. Set [consumed-character-count] to the number of characters in
+        the _closing link tag_
+
  2. If the [topmost node of type] _link node_ is not _null_, and
     if the [remaining-character-sequence] matches the regular expression
     pattern `/^\]\s*\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
     then the following is done:
 
      1. The matching substring for the whole of the pattern is
-        identified as a _span tag candidate_, and interpreted as a
-        _closing span tag_, or more specifically, as a **closing link
-        tag**
+        identified as a **closing link tag**
 
      2. The matching substring for the first (i.e. outer) parenthesized
         subexpression in the pattern is [simplified] to obtain the
@@ -1631,6 +1635,9 @@ indicate the start of a _closing link tag_, as described below:
 
      8. All nodes with _node type_ equal to _link node_ are removed from
         the [stack of potential opening span tags]
+
+     9. Set [consumed-character-count] to the number of characters in
+        the _closing link tag_
 
  3. If the _topmost node_ of type _other link node_ is not _null_, and
     if both the following conditions are satisfied:
@@ -1709,8 +1716,7 @@ indicate the start of a _closing link tag_, as described below:
         _attributes-pattern-match-length_. The first
         _close-link-tag-length_ characters of the
         [remaining-character-sequence] are collectively identified as a
-        _span tag candidate_, and interpreted as a _closing span tag_,
-        or more specifically, as a **closing link tag**
+        **closing link tag**
 
      2. If the [topmost node of type] _link node_ is not already the
         [top node], all nodes above it are popped off and interpreted as
@@ -1737,22 +1743,20 @@ indicate the start of a _closing link tag_, as described below:
      7. All nodes with _node type_ equal to _link node_ are removed from
         the [stack of potential opening span tags]
 
+     8. Set [consumed-character-count] to _close-link-tag-length_
+
  4. If none of the above 3 conditions are satisfied, then the `]` at the
-    [current-position] is interpreted as a _text fragment_
+    [current-position] is interpreted as a _text fragment_, and
+    [consumed-character-count] is set to 1
 
-Thus, using this procedure, the `[` or `]` at the [current-position] is
-identified to be the start of either a _span tag candidate_ or a _text
-fragment_. In some cases, the _span tag candidate_ is also interpreted
-as one of these _span tags_: _opening link tag_ or _closing link tag_.
+<h3 id="procedure-for-identifying-emphasis-tags">
+Procedure for identifying emphasis tags</h3>
 
-<h4 id="handling-potential-emphasis-tags">Handling potential emphasis tags</h4>
+[Procedure for identifying emphasis tags]: #procedure-for-identifying-emphasis-tags
+[procedure for identifying emphasis tags]: #procedure-for-identifying-emphasis-tags
 
-[Handling potential emphasis tags]: #handling-potential-emphasis-tags
-
-In this section, we discuss how to identify _span tags_ related to
-emphasis. This section assumes that the character at the
-[current-position] is either an unescaped `*` character or an unescaped
-`_` character.
+This procedure assumes that the character at the [current-position] is
+either an unescaped `*` character or an unescaped `_` character.
 
 <span id="word-separator">We define a **word separator** [character] to
 be a unicode code point whose 'General\_Category' unicode property has
@@ -1867,11 +1871,7 @@ If the [emphasis indicator string] is [left-flanking] and not
 indicator string] can potentially become _opening emphasis tags_. In
 this case, the following shall be done:
 
- 1. The [emphasis indicator string] is identified as a _span tag
-    candidate_, which can potentially get interpreted as one or more
-    _opening emphasis tags_ in the future
-
- 2. For each [emphasis tag string] in the [emphasis indicator string]
+ 1. For each [emphasis tag string] in the [emphasis indicator string]
     \(listed in the order in which the [emphasis tag string] appears in
     the [emphasis indicator string]\) a new node is pushed onto the
     [stack of potential opening span tags] with the following
@@ -1884,19 +1884,23 @@ this case, the following shall be done:
         tag string_ is `_`, then the _node type_ of the node is set as
         _underscore emphasis node_
 
+ 2. Set [consumed-character-count] to the length of the [emphasis
+    indicator string]
+
 If the [emphasis indicator string] is [right-flanking] and not
 [left-flanking], then the [emphasis tag strings] in the [emphasis
 indicator string] can potentially be interpreted as _closing emphasis
-tags_.  In this case, the following shall be done:
+tags_. In this case, the following shall be done:
 
  1. Set _current-tag-string_ to the first [emphasis tag string] in
     the [emphasis indicator string]
 
- 2. If the [constituent character] of the _current-tag-string_ is `*`,
-    then the _matching emphasis node_ is the [topmost node of type]
-    _asterisk emphasis node_; if the [constituent character] of the
-    _current-tag-string_ is `_`, then the _matching emphasis node_ is
-    the [topmost node of type] _underscore emphasis node_
+ 2. <span id="emphasis-proc-step-2">If the [constituent character] of
+    the _current-tag-string_ is `*`, then the _matching emphasis node_
+    is the [topmost node of type] _asterisk emphasis node_; if the
+    [constituent character] of the _current-tag-string_ is `_`, then the
+    _matching emphasis node_ is the [topmost node of type] _underscore
+    emphasis node_</span>
 
  3. If _matching emphasis node_ is _null_, then the _emphasis tag
     string_ is interpreted as a _text fragment_
@@ -1905,32 +1909,33 @@ tags_.  In this case, the following shall be done:
     already the [top node], then all nodes above it are popped off and
     interpreted as _text fragments_
  
- 5. If the _matching emphasis node_ is not _null_, the procedure
-    described in [Matching opening and closing emphasis] is followed.
-    The _current-tag-string_ and/or the [top node] can get modified in
-    this process.
+ 5. If the _matching emphasis node_ is not _null_, then invoke the
+    [procedure for matching emphasis tag strings]. The
+    _current-tag-string_ and/or the [top node] can get modified within
+    that procedure.
 
  6. If the _current-tag-string_ is empty, and if there are any more
     unprocessed [emphasis tag strings] in the [emphasis indicator
     string], set the _current-tag-string_ to the next
     [emphasis tag string]
  
- 7. If the _current-tag-string_ is not empty, go to Step 2
+ 7. If the _current-tag-string_ is not empty, go to
+    [Step 2](#emphasis-proc-step-2)
 
-Thus, using this procedure, a sequence of one or more `*` or `_`
-characters at the [current-position] is identified to be the start of
-either a _span tag candidate_ or a _text fragment_.
+ 8. Set [consumed-character-count] to the length of the [emphasis
+    indicator string]
 
-<h5 id="matching-opening-and-closing-emphasis">
-Matching opening and closing emphasis</h5>
+<h4 id="matching-opening-and-closing-emphasis">
+Procedure for matching emphasis tag strings</h4>
 
-[Matching opening and closing emphasis]: #matching-opening-and-closing-emphasis
+[Procedure for matching emphasis tag strings]: #procedure-for-matching-emphasis-tag-strings
+[procedure for matching emphasis tag strings]: #procedure-for-matching-emphasis-tag-strings
 
-This section describes how the _current-tag-string_ is to be matched
+This procedure describes how the _current-tag-string_ is to be matched
 with the _matching emphasis node_ at the top of the [stack of potential
 opening span tags].
 
-In this section, the [top node] is assumed to be of a _node type_ that
+In this procedure, the [top node] is assumed to be of a _node type_ that
 matches the [constituent character] of the _current-tag-string_. If the
 [constituent character] of the _current-tag-string_ is `*`, the _node
 type_ of the [top node] should be _asterisk emphasis node_. If the
@@ -1944,11 +1949,9 @@ _current-tag-string_.
  1. If the _top node tag string_ and the _current-tag-string_ are
     exactly the same strings, then:
 
-     1. The [top node] is interpreted as an _opening span tag_, or more
-        specifically, as an **opening emphasis tag**
+     1. The [top node] is interpreted as an **opening emphasis tag**
 
-     2. The _current-tag-string_ is interpreted as a _closing span tag_,
-        or more specifically, as a **closing emphasis tag**
+     2. The _current-tag-string_ is interpreted as **closing emphasis tag**
     
      3. The _closing emphasis tag_ is said to correspond to the _opening
         emphasis tag_, and any _span tags_ or _text fragments_ occuring
@@ -1958,7 +1961,7 @@ _current-tag-string_.
      4. Set the _current-tag-string_ to _null_
 
      5. The [top node] is popped off
-        
+
  2. If the _top node tag string_ and the _current-tag-string_ are not
     exactly the same strings, and if the _current-tag-string_ is a
     substring of the _top node tag string_, then:
@@ -1967,11 +1970,9 @@ _current-tag-string_.
         _current-tag-string-length_.
         
         The last _current-tag-string-length_ characters of the _top node
-        tag string_ are interpreted as an _opening span tag_, or more
-        specifically, as an **opening emphasis tag**.
+        tag string_ are interpreted as an **opening emphasis tag**.
 
-     2. The whole of the _current-tag-string_ is interpreted as a
-        _closing span tag_, or more specifically, as a **closing
+     2. The whole of the _current-tag-string_ is interpreted a **closing
         emphasis tag**
 
      3. The _closing emphasis tag_ is said to correspond to the _opening
@@ -2032,16 +2033,14 @@ _current-tag-string_.
         stress_.  In HTML output, this shall be output as an `em`
         element nested within a `strong` element.
 
-<h4 id="handling-potential-code-span-tags">
-Handling potential code-span tags</h4>
+<h3 id="procedure-for-identifying-code-span-tags">
+Procedure for identifying code-span tags</h3>
 
-[Handling potential code-span tags]: #handling-potential-code-span-tags
+[Procedure for identifying code-span tags]: #procedure-for-identifying-code-span-tags
+[procedure for identifying code-span tags]: #procedure-for-identifying-code-span-tags
 
-In this section, we discuss how to identify _span tags_ related to
-code-spans. This section assumes that the character at the
-[current-position] is an unescaped `` ` `` character.
-
-The following procedure is followed:
+This procedure assumes that the character at the [current-position] is
+an unescaped `` ` `` character.
 
  1. The [remaining-character-sequence] shall match one of the following
     regular expression patterns:
@@ -2068,8 +2067,8 @@ The following procedure is followed:
     
  2. Set _code-content-length_ to 0
 
- 3. If the _residual-code-span-sequence_ matches one of the following
-    regular expression patterns:
+ 3. <span id="code-proc-step-3">If the _residual-code-span-sequence_
+    matches one of the following regular expression patterns:</span>
     
      1. Non-backticks followed by backticks followed by a non-backtick:
         ``/^([^`]+)(`+)([^`].*)$/``
@@ -2112,10 +2111,12 @@ The following procedure is followed:
 
  4. If a _closing-code-string_ has not yet been identified, and if the
     _residual-code-span-sequence_ contains one or more `` ` ``
-    characters, go to Step 3
+    characters, go to [Step 3](#code-proc-step-3)
 
  5. If a _closing-code-string_ has not yet been identified, the
-    _opening-backticks-string_ is identified as a _text fragment_
+    _opening-backticks-string_ is identified as a _text fragment_, and
+    [consumed-character-count] is set to the length of the
+    _opening-backticks-string_
  
  6. If a _closing-code-string_ has been identified, the following is
     done:
@@ -2123,27 +2124,24 @@ The following procedure is followed:
      1. Let _code-span-length_ be equal to 
         ( ( _opening-backticks-count_ * 2 ) + _code-content-length_ )
      2. The first _code-span-length_ characters of the
-        [remaining-character-sequence] is identified as a _span tag
-        candidate_, and interpreted as a **code span tag**
+        [remaining-character-sequence] is identified as a **code span
+        tag**
      3. Among the characters that form the _code span tag_, the first
         _opening-backticks-count_ characters and the last
         _opening-backticks-count_ characters are considered to be
         markup. The middle _code-content-length_ characters shall form
         the content of the code span. For HTML output, the content of
         the code-span should be _html-escaped_.
+     4.  Set [consumed-character-count] to _code-span-length_
 
-Thus, using this procedure, a sequence of one or more `` ` `` characters
-at the [current-position] is identified to be the start of either a
-_span tag candidate_ (of an _code-span tag_) or a _text fragment_.
+<h3 id="procedure-for-identifying-image-tags">Procedure for identifying image tags</h3>
 
-<h4 id="handling-potential-image-tags">Handling potential image tags</h4>
+[Procedure for identifying image tags]: #procedure-for-identifying-image-tags
+[procedure for identifying image tags]: #procedure-for-identifying-image-tags
 
-[Handling potential image tags]: #handling-potential-image-tags
-
-In this section, we discuss how to identify _span tags_ related to
-images. This section assumes that the character at the
-[current-position] is an unescaped `!` character, and that the immediate
-next character is a `[` character.
+This procedure assumes that the character at the [current-position] is
+an unescaped `!` character, and that the immediate next character is a
+`[` character.
 
 <span id="image-tag-starter-pattern">The regular expression pattern
 `/^!\[(([^\\\[\]]|\\.)*)(\].*)$/` is called the
@@ -2211,8 +2209,8 @@ If the [remaining-character-sequence] matches the
         [alt-text-pattern-match-length] and the
         _image-ref-close-sequence-length_. The first
         _image-ref-tag-length_ characters of the
-        [remaining-character-sequence] are collectively identified as a
-        _span tag candidate_, and interpreted as an **image tag**.
+        [remaining-character-sequence] are collectively identified as an
+        **image tag**.
 
      3. Let _reference id string_ be the string obtained on
         [simplifying] the [image-alt-text-string].
@@ -2238,6 +2236,8 @@ If the [remaining-character-sequence] matches the
         [remaining-character-sequence] are output as text. For HTML
         output, this text should be [html-escaped].
 
+     4. Set [consumed-character-count] to _image-ref-tag-length_
+
  2. If the [residual-image-sequence] matches the regular expression
     pattern `/^\]\s*\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
     then the following is done:
@@ -2253,14 +2253,14 @@ If the [remaining-character-sequence] matches the
         [alt-text-pattern-match-length] and the
         _image-ref-close-sequence-length_. The first
         _image-ref-tag-length_ characters of the
-        [remaining-character-sequence] are collectively identified as a
-        _span tag candidate_, and interpreted as an **image tag**.
+        [remaining-character-sequence] are collectively identified as an
+        **image tag**.
 
      3. The _reference id string_ shall be used to look up the actual
         image url and image title from the [link reference association
         map].
 
-        If the _link reference association map_ contains an entry for
+        If the [link reference association map] contains an entry for
         _reference id string_, then the output shall have the source of
         the image as the link url and the title of the image as the link
         title (if available) specified in the entry for the _reference
@@ -2276,6 +2276,8 @@ If the [remaining-character-sequence] matches the
         _image-ref-tag-length_ characters of the
         [remaining-character-sequence] are output as text. For HTML
         output, this text should be [html-escaped].
+
+     4. Set [consumed-character-count] to _image-ref-tag-length_
 
  3. If the [residual-image-sequence] matches the regular expression
     pattern `/^\]\s*\(/` and if both the following conditions are
@@ -2355,8 +2357,8 @@ If the [remaining-character-sequence] matches the
         _image-source-pattern-match-length_ and
         _image-attributes-pattern-match-length_.  The first
         _image-src-tag-length_ characters of the
-        [remaining-character-sequence] are collectively identified as a
-        _span tag candidate_, and interpreted as an **image tag**.
+        [remaining-character-sequence] are collectively identified as an
+        **image tag**.
 
      2. The _image url string_ shall be used as the source of the image.
         If _title string_ is not null, the _title string_ shall be used
@@ -2364,23 +2366,22 @@ If the [remaining-character-sequence] matches the
         used as the alternate text for the image. For HTML output, the
         title of the image and the alternate text for the image should
         be [attribute-value-escaped].
+ 
+     3. Set [consumed-character-count] to _image-src-tag-length_
 
  4. If none of the above 3 conditions are satisfied, then the first 2
     characters of the [remaining-character-sequence] \(which should form
-    the string `![`\) are interpreted as a _text fragment_.
-
-Thus, using this procedure, the `![` sequence at the [current-position]
-is identified to be the start of either a _span tag candidate_ (of an
-_image tag_) or a _text fragment_.
+    the string `![`\) are interpreted as a _text fragment_, and
+    [consumed-character-count] is set to 2
 
 
-<h4 id="handling-html-tags">Handling HTML tags</h4>
+<h3 id="procedure-for-identifying-html-tags">Procedure for identifying HTML tags</h3>
 
-[Handling HTML tags]: #handling-html-tags
+[Procedure for identifying HTML tags]: #procedure-for-identifying-html-tags
+[procedure for identifying HTML tags]: #procedure-for-identifying-html-tags
 
-In this section, we discuss how to identify _span tags_ related to
-inline HTML. This section assumes that the character at the
-[current-position] is an unescaped `<` character.
+This procedure assumes that the character at the [current-position] is
+an unescaped `<` character.
 
 Let _html-tag-detection-sequence_ be the [remaining-character-sequence].
 
@@ -2391,23 +2392,25 @@ time, till one of the following happens:
 
  1. The HTML parser detects a complete self-closing HTML tag (this also
     includes tags empty by definition in HTML4, like `<br>` and `<img
-    src="">`)
+    src="picture.jpg">`, for example)
 
     If this happens first, the following is done:
     
-     1. The text that represents the opening HTML tag is identified as a
-        _span tag candidate_, and identified as a **self-closing HTML
-        tag**.
+     1. The text that represents the self-closing HTML tag is identified
+        as a **self-closing HTML tag**
 
      2. For HTML output, the text that represents the self-closing HTML
-        tag shall be included in the output verbatim.
+        tag shall be included in the output verbatim
+
+     3. Set [consumed-character-count] to the length of the
+        _self-closing HTML tag_
 
  2. The HTML parser detects a complete opening HTML tag.
 
     If this happens first, the following is done:
 
-     1. The text that represents the opening HTML tag is identified as a
-        _span tag candidate_, and interpreted as an **opening HTML tag**
+     1. The text that represents the opening HTML tag is identified as
+        an **opening HTML tag**
     
      2. A new node is pushed onto the [stack of potential opening span
         tags] with the following [properties][stack-node-properties]:
@@ -2421,12 +2424,15 @@ time, till one of the following happens:
      3. For HTML output, the text that represents the opening HTML tag
         shall be included in the output verbatim.
 
+     4. Set [consumed-character-count] to the length of the
+        _opening HTML tag_
+
  3. The HTML parser detects a complete closing HTML tag.
 
     If this happens first, the following is done:
 
      1. The text that represents the closing HTML tag is identified as a
-        _span tag candidate_, and interpreted as a **closing HTML tag**
+        **closing HTML tag**
     
      2. Let _currently open html node_ be the [topmost node of type]
         _raw html node_
@@ -2446,6 +2452,9 @@ time, till one of the following happens:
      5. For HTML output, the text that represents the closing HTML tag
         shall be included in the output verbatim.
 
+     6. Set [consumed-character-count] to the length of the
+        _closing HTML tag_
+
  4. The HTML parser detects a complete HTML comment.
 
     If this happens first, the text that represents the HTML comment is
@@ -2455,16 +2464,14 @@ time, till one of the following happens:
     For HTML output, the text that represents the comment HTML tag shall
     be included in the output verbatim.
 
+    [consumed-character-count] is set to the length of the _comment HTML
+    tag_.
+
  5. The HTML parser detects HTML text, or the HTML parser detects an
     error, or the _html-tag-detection-sequence_ has no more characters
     to supply to the HTML parser.
 
     If this happens first, the `<` at the [current-position] is
-    identified as a _text fragment_.
-
-Thus, using this procedure, the `<` at the [current-position] is
-identified to be the start of either a _span tag candidate_ or a _text
-fragment_. The _span tag candidate_ is also interpreted as one of these
-_span tags_: _opening HTML tag_ or _closing HTML tag_ or _self-closing
-HTML tag_ or _comment HTML tag_.
+    identified as a _text fragment_, and [consumed-character-count] is
+    set to 1.
 
