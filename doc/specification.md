@@ -31,6 +31,7 @@ This document is organized as follows:
     * [Procedure for identifying emphasis tags]
     * [Procedure for identifying code-span tags]
     * [Procedure for identifying image tags]
+    * [Procedure for detecting automatic links]
     * [Procedure for identifying HTML tags]
 
 <h2 id="definitions">Definitions</h2>
@@ -1480,7 +1481,8 @@ The procedure to identify and interpret the _span tags_ is as follows:
         [remaining-character-sequence] matches the regular expression
         pattern `/!\[/`, then invoke the [procedure for identifying
         image tags]
-     5. TODO: Automatic links (\<http://link\> or http\://link)
+     5. If _consumed-character-count_ is equal to 0, then invoke the
+        [procedure for detecting automatic links]
  5. If _consumed-character-count_ is equal to 0, and if the character at
     the [current-position] is an unescaped `<` (left angle bracket)
     character, then invoke the [procedure for identifying HTML tags]
@@ -2442,6 +2444,134 @@ If the [remaining-character-sequence] matches the
     characters of the [remaining-character-sequence] \(which should form
     the string `![`\) are interpreted as a _text fragment_, and
     [consumed-character-count] is set to 2
+
+
+<h3 id="procedure-for-detecting-automatic-links">Procedure for detecting automatic links</h3>
+
+[Procedure for detecting automatic links]: #procedure-for-detecting-automatic-links
+[procedure for detecting automatic links]: #procedure-for-detecting-automatic-links
+
+<span id="word-separator">We define a **word-separator** [character] to
+be a unicode code point whose 'General\_Category' unicode property has
+one of the following values:</span>
+
+ 1. One of: Zs, Zl, Zp (i.e. a 'Separator')
+
+    (or)
+
+ 2. One of: Pc, Pd, Ps, Pe, Pi, Pf, Po (i.e. a 'Punctuation')
+
+    (or)
+
+ 3. One of: Cc, Cf
+
+For example, the [space] character, the [line break] character, `.`,
+`,`, `(`, `)` are all _word-separator_ characters.
+
+[word-separator]: #word-separator
+
+If any one of the following conditions are satisfied:
+
+ 1. The character at the [current-position] is a `<` character
+
+ 2. The [current-position] is equal to 1
+
+ 3. The [current-position] is greater than 1, and the character at
+    ([current-position] - 1) is a [word-separator] character
+
+then the [current-position] is said to be a
+_potential-auto-link-start-position_.
+
+If the [current-position] is a _potential-auto-link-start-position_,
+then the following is done:
+
+ 1. If the [remaining-character-sequence] matches one of the following
+    regular expression patterns (matching shall be case insensitive):
+
+     1. URL within angle brackets:
+        `/<([a-z0-9\+\.\-]+:\/\/[^<>\s]+)>/`
+
+        Example: `<http://example.net>`
+
+     2. Mailto URL within angle brackets:
+        `/<(mailto:[^<>\s]+)>/`
+
+        Example: `<mailto:someone@example.net?subject=Hi+there>`
+
+
+    then the following is done:
+
+    <!-- For some reason, Redcarpet requires a comment here to correctly
+    display the following list -->
+
+     1. The matching substring for the whole of the matching pattern is
+        identified as an **auto-link tag**
+     2. The matching substring for the first parenthesized subexpression in
+        the matching pattern is called the _auto-link url_
+     3. The output shall have a link with the link url set as _auto-link
+        url_ and the link text content also set as _auto-link url_
+     4. The [consumed-character-count] is set to the length of the
+        _auto-link tag_
+
+ 2. If the [remaining-character-sequence] matches the regular expression
+    pattern `/<([^\/\?#@\s]+@[^\/\?#@\s\.]+\.[^\/\?#@\s]+)>/`
+    (Example: `<someone@example.net>`), then the following is done:
+
+     1. The matching substring for the whole of the matching pattern is
+        identified as an **auto-link tag**
+     2. The matching substring for the first parenthesized subexpression in
+        the matching pattern is called the _auto-link email_. Let the
+        string formed by concatenating the string `mailto:` with the
+        _auto-link email_ be called as _auto-link email url_
+     3. The output shall have a link with the link url set as _auto-link
+        email url_ and the link text content set as _auto-link email_
+     4. The [consumed-character-count] is set to the length of the
+        _auto-link tag_
+
+ 3. If the [remaining-character-sequence] matches one of the following
+    regular expression patterns (matching shall be greedy and case
+    insensitive):
+
+     1. URL without angle brackets:
+        `/([a-z0-9\+\.\-]+:\/\/)[^<>\s]+/`
+
+        Example: `http://example.net`
+
+     3. Mailto URL without angle brackets:
+        `/(mailto:)[^<>\s]+/`
+
+        Example: `mailto:someone@example.net`
+
+    then the following is done:
+
+    <!-- For some reason, Redcarpet requires a comment here to correctly
+    display the following list -->
+
+     1. The matching substring for the whole of the matching pattern is
+        called the _unprocessed auto-link tag_
+     2. The matching substring for the first and only parenthesized
+        subexpression in the pattern is called the _auto-link scheme
+        string_. The number of characters in the _auto-link scheme
+        string_ is called the _auto-link scheme string length_.
+     3. The _unprocessed auto-link tag_ shall be processed to give the
+        _auto-link tag candidate_. The processing to be done is to
+        remove any trailing [word-separator] characters, such that the
+        last character of the _auto-link tag candidate_ is not a
+        [word-separator] character.
+     4. If the length of the _auto-link tag candidate_ is greater than
+        the _auto-link scheme string length_, then the _auto-link tag
+        candidate_ is identified as an **auto-link tag**, and the
+        following is done:
+         1. The output shall have a link with the link url set as
+            _auto-link tag candidate_ and the link text content also set
+            as _auto-link tag candidate_
+         2. The [consumed-character-count] is set to the length of the
+            _auto-link tag candidate_
+     5. If the length of the _auto-link tag candidate_ is lesser than or
+        equal to the _auto-link scheme string length_, then the
+        _auto-link scheme string_ is identified as a _text fragment_,
+        and the [consumed-character-count] is set to _auto-link scheme
+        string length_
 
 
 <h3 id="procedure-for-identifying-html-tags">Procedure for identifying HTML tags</h3>
