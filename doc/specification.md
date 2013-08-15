@@ -1440,48 +1440,56 @@ sequence] is called the **remaining-character-sequence**.</span> When
 _current-position_ is 0, the _remaining-character-sequence_ is equal to
 the [input character sequence].
 
-The procedure to identify and interpret _span tags_ is presented below.
-The procedure in turn invokes other sub-procedures. Please note that
-<span id="consumed-character-count">the _consumed-character-count_
-variable, which is used to track the number of characters that were
-consumed to form a _span tag_ or a _text fragment_</span>, can get
-modified inside the invoked procedures.
+The root procedure in turn invokes other procedures. In the method
+described here, global variables are used to communicate information
+from invoked procedures back to the root procedure, but better means can
+be adopted by an implementation. The global variables used are:
+
+ 1. <span id="consumed-character-count">_consumed-character-count_: The
+    number of characters that were consumed to form a _span tag_ or a
+    _text fragment_</span>
+ 2. <span id="is-verbatim-html-mode">_is-verbatim-html-mode_: A boolean
+    that decides whether vfmd syntax should be recognized at this
+    position in the document, or not</span>
 
 [current-position]: #current-position
 [remaining-character-sequence]: #remaining-character-sequence
 [consumed-character-count]: #consumed-character-count
+[is-verbatim-html-mode]: #is-verbatim-html-mode
 
 The procedure to identify and interpret the _span tags_ is as follows:
 
  1. Set [current-position] as 0
- 2. <span id="span-proc-step-2">Set _consumed-character-count_ as 0
+ 2. Set _is-verbatim-html-mode_ as _false_
+ 3. <span id="span-proc-step-3">Set _consumed-character-count_ as 0
     </span>
- 3. If the character at the [current-position] is either an unescaped
-    `[` (open square bracket) character, or an unescaped `]` (close
-    square bracket) character, invoke the [procedure for identifying
-    link tags]
- 4. If the character at the [current-position] is either an unescaped
-    `*` (asterisk) character, or an unescaped `_` (underscore or low
-    line) character, then invoke the [procedure for identifying
-    emphasis tags]
- 5. If the character at the [current-position] is an unescaped `` ` ``
-    (backtick) character, then invoke the [procedure for identifying
-    code-span tags]
- 6. If the character at the [current-position] is an unescaped `!`
-    (exclamation mark) character, and if the
-    [remaining-character-sequence] matches the regular expression
-    pattern `/!\[/`, then invoke the [procedure for identifying image
-    tags]
- 7. TODO: Automatic links (\<http://link\> or http\://link)
- 8. If _consumed-character-count_ is equal to 0, and if the character at
+ 4. If _is-verbatim-html-mode_ is equal to _false_, do the following:
+     1. If the character at the [current-position] is either an
+        unescaped `[` (open square bracket) character, or an unescaped
+        `]` (close square bracket) character, invoke the [procedure for
+        identifying link tags]
+     2. If the character at the [current-position] is either an
+        unescaped `*` (asterisk) character, or an unescaped `_`
+        (underscore or low line) character, then invoke the [procedure
+        for identifying emphasis tags]
+     3. If the character at the [current-position] is an unescaped `` `
+        `` (backtick) character, then invoke the [procedure for
+        identifying code-span tags]
+     4. If the character at the [current-position] is an unescaped `!`
+        (exclamation mark) character, and if the
+        [remaining-character-sequence] matches the regular expression
+        pattern `/!\[/`, then invoke the [procedure for identifying
+        image tags]
+     5. TODO: Automatic links (\<http://link\> or http\://link)
+ 5. If _consumed-character-count_ is equal to 0, and if the character at
     the [current-position] is an unescaped `<` (left angle bracket)
     character, then invoke the [procedure for identifying HTML tags]
- 9. If _consumed-character-count_ is equal to 0, interpret the character
+ 6. If _consumed-character-count_ is equal to 0, interpret the character
     at the [current-position] to be part of a _text fragment_, and set
     _consumed-character-count_ as 1
- 10. Increment [current-position] by _consumed-character-count_
- 11. If [current-position] is less than the length of the 
-     [input character sequence], go to [Step 2](#span-proc-step-2)
+ 7. Increment [current-position] by _consumed-character-count_
+ 8. If [current-position] is less than the length of the 
+     [input character sequence], go to [Step 3](#span-proc-step-3)
 
 
 <h3 id="procedure-for-identifying-link-tags">Procedure for identifying link tags</h3>
@@ -2383,6 +2391,19 @@ If the [remaining-character-sequence] matches the
 This procedure assumes that the character at the [current-position] is
 an unescaped `<` character.
 
+<span id="verbatim-html-starter-tag-name"> We define a
+**verbatim-html-starter-tag-name** to be one of the following HTML tag
+names:</span> `address`, `article`, `aside`, `blockquote`, `details`,
+`dialog`, `div`, `dl`, `fieldset`, `figure`, `footer`, `form`, `header`,
+`main`, `nav`, `ol`, `section`, `table` or `ul`.
+
+<span id="verbatim-html-container-tag-name"> We define a
+**verbatim-html-container-tag-name** to be one of the following HTML tag
+names:</span> `pre`, `script` or `style`.
+
+[verbatim-html-starter-tag-name]: #verbatim-html-starter-tag-name
+[verbatim-html-container-tag-name]: #verbatim-html-container-tag-name
+
 Let _html-tag-detection-sequence_ be the [remaining-character-sequence].
 
 To identify _span tags_ related to inline HTML we need to employ the use
@@ -2405,6 +2426,11 @@ time, till one of the following happens:
      3. Set [consumed-character-count] to the length of the
         _self-closing HTML tag_
 
+     4. If the HTML tag name of the self-closing HTML tag is either a
+        [verbatim-html-starter-tag-name] or a
+        [verbatim-html-container-tag-name], then set
+        [is-verbatim-html-mode] to _true_
+
  2. The HTML parser detects a complete opening HTML tag.
 
     If this happens first, the following is done:
@@ -2426,6 +2452,11 @@ time, till one of the following happens:
 
      4. Set [consumed-character-count] to the length of the
         _opening HTML tag_
+
+     5. If the HTML tag name of the opening HTML tag is either a
+        [verbatim-html-starter-tag-name] or a
+        [verbatim-html-container-tag-name], then set
+        [is-verbatim-html-mode] to _true_
 
  3. The HTML parser detects a complete closing HTML tag.
 
@@ -2454,6 +2485,11 @@ time, till one of the following happens:
 
      6. Set [consumed-character-count] to the length of the
         _closing HTML tag_
+
+     7. If the HTML tag name of the closing HTML tag is either a
+        [verbatim-html-starter-tag-name] or a
+        [verbatim-html-container-tag-name], then set
+        [is-verbatim-html-mode] to _true_
 
  4. The HTML parser detects a complete HTML comment.
 
