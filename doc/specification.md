@@ -1766,22 +1766,30 @@ Procedure for identifying emphasis tags</h3>
 This procedure assumes that the character at the [current-position] is
 either an unescaped `*` character or an unescaped `_` character.
 
-<span id="word-separator">We define a **word separator** [character] to
-be a unicode code point whose 'General\_Category' unicode property has
-one of the following values:</span>
+<span id="emphasis-fringe-rank">We define **emphasis-fringe-rank** of a
+[character] based on the 'General\_Category' unicode property as
+follows:</span>
 
- 1. One of: Zs, Zl, Zp (i.e. a 'Separator')
+ 1. If the 'General\_Category' unicode property of the character is one
+    of the following: Zs, Zl, Zp, Cc or Cf, then the _emphasis fringe
+    rank_ of the character is said to be 0.
 
-    (or)
+    For example, [space] and [line break] characters have an _emphasis
+    fringe rank_ of 0.
 
- 2. One of: Pc, Pd, Ps, Pe, Pi, Pf, Po (i.e. a 'Punctuation')
+ 2. If the 'General\_Category' unicode property of the character is one
+    of the following: Pc, Pd, Ps, Pe, Pi, Pf or Po, then the _emphasis
+    fringe rank_ of the character is said to be 1.
 
-    (or)
+    For example, the following characters have an _emphasis fringe rank_
+    of 1: `,`, `.`, `(`, `)`, `+`
 
- 3. One of: Cc, Cf
-    
-For example, the _space_ character, the _line break_ character, `.`,
- `,`, `(`, `)` are all _word separator_ characters.
+ 3. If the 'General\_Category' unicode property of the character is not
+    one of the following: Zs, Zl, Zp, Cc, Cf, Pc, Pd, Ps, Pe, Pi, Pf or
+    Po, then the _emphasis fringe rank_ of the character is said to be 2.
+
+    For example, alphanumeric characters have an _emphasis fringe rank_
+    of 2.
 
 Given that the character at the [current-position] is either `*` or `_` ,
 then the [remaining-character-sequence] will definitely match one of the
@@ -1798,29 +1806,82 @@ In case of either pattern, the matching substring for the first
 parenthesized subexpression is called the _emphasis indicator
 string_.</span>
 
-<span id="left-flanking">
-If the match is with the second regular expression pattern given
-above, and if the single character in the matching substring for the
-second parenthesized subexpression in the pattern is not a [word
-separator] character, then the _emphasis indicator string_ is said
-to be _left-flanking_, else, the _emphasis indicator string_ is said
-to be not _left-flanking_.</span>
+<span id="right-fringe-rank">
+In case the match is with the first regular expression pattern given
+above, then the _right-fringe-rank_ of the [emphasis indicator string] is
+said to be 0. In case the match is with the second regular expression
+pattern given above, then the _right-fringe-rank_ of the [emphasis
+indicator string] is the [emphasis-fringe-rank] of the single character
+in the matching substring for the second parenthesized subexpression in
+the pattern.</span>
 
-<span id="right-flanking">
-If the [current-position] is greater than 1, and if the character at
-the previous position (i.e. at [current-position] minus 1) is not a
-[word separator] character, then the _emphasis indicator string_ is
-said to be _right-flanking_, else, the _emphasis indicator string_
-is said to be not _right-flanking_.</span>
+<span id="left-fringe-rank">
+If the [current-position] is equal to 0, the _left-fringe-rank_ of the
+[emphasis indicator string] is said to be 0. If the [current-position]
+is greater than 1, then the _left-fringe-rank_ of the [emphasis indicator
+string] is the [emphasis-fringe-rank] of the character at the previous
+position (i.e. at [current-position] minus 1).</span>
 
-For example, the string `I'm ***Bond***, *** James***Bond` contains 4
-_emphasis indicator strings_, each consisting of 3 `*` characters.  The
-first _emphasis indicator string_ is _left-flanking_ (but not
-_right-flanking_), the second _emphasis indicator string_ is
-_right-flanking_ (but not _left-flanking_), the third _emphasis
-indicator string_ is neither _left-flanking_ nor _right-flanking_, and
-the fourth _emphasis indicator string_ is both _left-flanking_ and
-_right-flanking_.
+<span id="flanking">
+For a given [emphasis indicator string], if its [left-fringe-rank] is
+lesser than its [right-fringe-rank], the [emphasis indicator string] is
+said to be _left-flanking_. On the other hand, if its [right-fringe-rank]
+is lesser than its [left-fringe-rank], the [emphasis indicator string] is
+said to be _right-flanking_. If the [left-fringe-rank] of an [emphasis
+indicator string] is equal to its [right-fringe-rank], the [emphasis
+indicator string] is said to be _non-flanking_.</span>
+
+Consider the following example:
+
+    ***Shaken*, ** not _stirred_**.
+
+There are 5 _emphasis indicator strings_ in the above example. The
+_left-fringe-rank_ and _right-fringe-rank_ of each is given below:
+
+<table>
+<tr>
+    <th>#</th>
+    <th><em>emphasis indicator string</em></th>
+    <th><em>left fringe rank</em></th>
+    <th><em>right fringe rank</em></th>
+    <th>flankingness</th>
+</tr>
+<tr>
+    <td>1</td>
+    <td><code>***</code></td>
+    <td>0</td>
+    <td>2</td>
+    <td><em>left-flanking</em></td>
+</tr>
+<tr>
+    <td>2</td>
+    <td><code>*</code></td>
+    <td>2</td>
+    <td>1</td>
+    <td><em>right-flanking</em></td>
+</tr>
+<tr>
+    <td>3</td>
+    <td><code>**</code></td>
+    <td>0</td>
+    <td>0</td>
+    <td><em>non-flanking</em></td>
+</tr>
+<tr>
+    <td>4</td>
+    <td><code>_</code></td>
+    <td>0</td>
+    <td>2</td>
+    <td><em>left-flanking</em></td>
+</tr>
+<tr>
+    <td>5</td>
+    <td><code>_**</code></td>
+    <td>2</td>
+    <td>1</td>
+    <td><em>right-flanking</em></td>
+</tr>
+</table>
 
 <span id="emphasis-tag-string">
 An [emphasis indicator string] can contain both `*` and `_`
@@ -1858,26 +1919,26 @@ the [emphasis tag string] is said to be `*`. If it's composed
 entirely of `_` characters, the _constituent character_ of the
 [emphasis tag string] is said to be `_`.</span>
 
-[word separator]: #word-separator
-[emphasis indicator string]: #emphasis-indicator-string
-[left-flanking]: #left-flanking
-[right-flanking]: #right-flanking
+[emphasis-fringe-rank]: #emphasis-fringe-rank
+[left-fringe-rank]: #left-fringe-rank
+[right-fringe-rank]: #right-fringe-rank
+[emphasis indicator string]: #emphasis-indicator-string>
+[left-flanking]: #flanking
+[right-flanking]: #flanking
+[non-flanking]: #flanking
 [emphasis tag string]: #emphasis-tag-string
 [emphasis tag strings]: #emphasis-tag-string
 [constituent character]: #constituent-character
 
-If the [emphasis indicator string] is neither [left-flanking] nor
-[right-flanking], the the [emphasis indicator string] is interpreted as
-a _text fragment_.
+If the [emphasis indicator string] is [non-flanking], the the [emphasis
+indicator string] is interpreted as a _text fragment_. The
+[consumed-character-count] is set to the length of the [emphasis
+indicator string].
 
-Similarly, if the [emphasis indicator string] is both [left-flanking]
-and [right-flanking], the the [emphasis indicator string] is interpreted
-as a _text fragment_.
-
-If the [emphasis indicator string] is [left-flanking] and not
-[right-flanking], then the [emphasis tag strings] in the [emphasis
-indicator string] can potentially become _opening emphasis tags_. In
-this case, the following shall be done:
+If the [emphasis indicator string] is [left-flanking], then the
+[emphasis tag strings] in the [emphasis indicator string] can
+potentially become _opening emphasis tags_. In this case, the following
+shall be done:
 
  1. For each [emphasis tag string] in the [emphasis indicator string]
     \(listed in the order in which the [emphasis tag string] appears in
@@ -1895,10 +1956,10 @@ this case, the following shall be done:
  2. Set [consumed-character-count] to the length of the [emphasis
     indicator string]
 
-If the [emphasis indicator string] is [right-flanking] and not
-[left-flanking], then the [emphasis tag strings] in the [emphasis
-indicator string] can potentially be interpreted as _closing emphasis
-tags_. In this case, the following shall be done:
+If the [emphasis indicator string] is [right-flanking], then the
+[emphasis tag strings] in the [emphasis indicator string] can
+potentially be interpreted as _closing emphasis tags_. In this case, the
+following shall be done:
 
  1. Set _current-tag-string_ to the first [emphasis tag string] in
     the [emphasis indicator string]
