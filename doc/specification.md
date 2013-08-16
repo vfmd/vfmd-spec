@@ -1399,8 +1399,9 @@ satisfied:</span>
      2. The _node type_ of _m_ is equal to _t_, or the _node type_ of
         _m_ is equal to _raw html node_
 
-The _topmost node_ of type _t_ is said to be _null_ if, and only if, any
-of the following conditions is true:
+<span id="topmost-node-of-type-is-null">The _topmost node_ of type _t_
+is said to be _null_ if, and only if, any of the following conditions is
+true:</span>
 
  1. The [stack of potential opening span tags] does not contain any node
     whose _node type_ is equal to _t_
@@ -1523,9 +1524,10 @@ If the character at the [current-position] is a `]` character, it might
 be the start of a _closing link tag_. In this case, the following is
 done:
 
- 1. If the [topmost node of type] _link node_ is not _null_, and the if
-    the [remaining-character-sequence] matches any of the following
-    regular expression patterns:
+ 1. If the [topmost node of type] _link node_ is not
+    [_null_](#topmost-node-of-type-is-null), and the if the
+    [remaining-character-sequence] matches any of the following regular
+    expression patterns:
 
      1. With trailing empty square brackets:
         `/^(\]\s*\[\s*\])/`
@@ -1599,8 +1601,9 @@ done:
      8. Set [consumed-character-count] to the number of characters in
         the _closing link tag_
 
- 2. If the [topmost node of type] _link node_ is not _null_, and
-    if the [remaining-character-sequence] matches the regular expression
+ 2. If the [topmost node of type] _link node_ is not
+    [_null_](#topmost-node-of-type-is-null), and if the
+    [remaining-character-sequence] matches the regular expression
     pattern `/^\]\s*\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
     then the following is done:
 
@@ -1651,8 +1654,9 @@ done:
      9. Set [consumed-character-count] to the number of characters in
         the _closing link tag_
 
- 3. If the [topmost node of type] _link node_ is not _null_, and
-    if both the following conditions are satisfied:
+ 3. If the [topmost node of type] _link node_ is not
+    [_null_](#topmost-node-of-type-is-null), and if both the following
+    conditions are satisfied:
 
      1. The [remaining-character-sequence] matches one of the following
         regular expression patterns:
@@ -1975,17 +1979,19 @@ following shall be done:
     _matching emphasis node_ is the [topmost node of type] _underscore
     emphasis node_</span>
 
- 3. If _matching emphasis node_ is _null_, then the _emphasis tag
+ 3. If _matching emphasis node_ is
+    [_null_](#topmost-node-of-type-is-null), then the _emphasis tag
     string_ is interpreted as a _text fragment_
 
- 4. If the _matching emphasis node_ is not _null_, and if it is not
-    already the [top node], then all nodes above it are popped off and
+ 4. If the _matching emphasis node_ is not
+    [_null_](#topmost-node-of-type-is-null), and if it is not already
+    the [top node], then all nodes above it are popped off and
     interpreted as _text fragments_
  
- 5. If the _matching emphasis node_ is not _null_, then invoke the
-    [procedure for matching emphasis tag strings]. The
-    _current-tag-string_ and/or the [top node] can get modified within
-    that procedure.
+ 5. If the _matching emphasis node_ is not
+    [_null_](#topmost-node-of-type-is-null), then invoke the [procedure
+    for matching emphasis tag strings]. The _current-tag-string_ and/or
+    the [top node] can get modified within that procedure.
 
  6. If the _current-tag-string_ is empty, and if there are any more
     unprocessed [emphasis tag strings] in the [emphasis indicator
@@ -2661,17 +2667,19 @@ time, till one of the following happens:
      2. Let _currently open html node_ be the [topmost node of type]
         _raw html node_
 
-     3. If the _currently open html node_ is not _null_, and the _html
-        tag name_ of the _currently open html node_ is the same as the
-        HTML tag name of the closing HTML tag that was just identified,
-        the [top node] shall be popped off
+     3. If the _currently open html node_ is not
+        [_null_](#topmost-node-of-type-is-null), and the _html tag name_
+        of the _currently open html node_ is the same as the HTML tag
+        name of the closing HTML tag that was just identified, the [top
+        node] shall be popped off
 
-     4. If the _currently open html node_ is null, or if  _html tag
-        name_ of the _currently open html node_ is not the same as the
-        HTML tag name of the closing HTML tag that was just identified,
-        then all nodes in the [stack of potential opening span tags]
-        whose _node type_ is not equal to _raw html node_ shall be
-        removed from the stack and interpreted as _text fragments_
+     4. If the _currently open html node_ is
+        [_null_](#topmost-node-of-type-is-null), or if  _html tag name_
+        of the _currently open html node_ is not the same as the HTML
+        tag name of the closing HTML tag that was just identified, then
+        all nodes in the [stack of potential opening span tags] whose
+        _node type_ is not equal to _raw html node_ shall be removed
+        from the stack and interpreted as _text fragments_
 
      5. For HTML output, the text that represents the closing HTML tag
         shall be included in the output verbatim.
