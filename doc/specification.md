@@ -1651,7 +1651,7 @@ done:
      9. Set [consumed-character-count] to the number of characters in
         the _closing link tag_
 
- 3. If the _topmost node_ of type _other link node_ is not _null_, and
+ 3. If the [topmost node of type] _link node_ is not _null_, and
     if both the following conditions are satisfied:
 
      1. The [remaining-character-sequence] matches one of the following
