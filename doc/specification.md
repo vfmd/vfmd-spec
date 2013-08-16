@@ -1281,29 +1281,35 @@ The resulting sequence of [characters] is called the _paragraph text_.
 The result of interpreting the _paragraph text_ as a [text span
 sequence] shall form the content of the paragraph element.
 
-The _paragraph text_ needs to be run through a HTML parser to determine
-how the content of the paragrah element should be presented.
+<span id="phrasing-html-element"> We define a **phrasing-html-element**
+to be one of the following HTML elements:</span> `a`, `abbr`, `area`,
+`b`, `bdi`, `bdo`, `br`, `button`, `canvas`, `cite`, `code`, `data`,
+`datalist`, `del`, `dfn`, `em`, `embed`, `i`, `iframe`, `img`, `input`,
+`ins`, `kbd`, `keygen`, `label`, `map`, `mark`, `meter`, `noscript`,
+`object`, `output`, `progress`, `q`, `ruby`, `s`, `samp`, `select`,
+`small`, `span`, `strong`, `sub`, `sup`, `textarea`, `time`, `u`, `var`
+or `wbr`. These are the elements that belong to the [phrasing content]
+category in [HTML5].
+
+[HTML5]: http://www.w3.org/TR/html5/ "HTML5 Specification"
+[phrasing content]: http://www.w3.org/TR/html5/dom.html#phrasing-content-1
+[phrasing-html-element]: #phrasing-html-element
+
+For HTML output, the _paragraph text_ needs to be run through a HTML
+parser to determine how the content of the paragraph element should be
+presented.
 
 For HTML output, the content of the paragraph element shall be enclosed
-in `p` tags if all the following conditions are satisfied:
+in `p` tags if, and only if, all the following conditions are satisfied:
 
- 1. The _paragraph text_ does not contain any tag (open or close or
-    self-closing tag) of any of the following HTML elements: `address`,
-    `article`, `aside`, `blockquote`, `div`, `dl`, `fieldset`, `form`,
-    `hr`, `nav`, ` noscript`, `ol`, `pre`, `section`, `table`, `ul`.
-
- 2. There is no unmatched HTML tag (i.e. open tag without a close tag,
+ 1. There is no unmatched HTML tag (i.e. open tag without a close tag,
     or a close tag without an open tag) in the _paragraph text_
 
- 3. At least one of the following conditions is satisfied:
+ 2. There is no misnested HTML tag (i.e. close tag at the wrong
+    position) in the _paragraph text_
 
-     1. The first [non-space] character of the _paragraph text_ is not
-        part of a HTML tag (open or close or self-closing tag)
-
-        (or)
-
-     2. The last [non-space] character of the _paragraph text_ is not
-        part of a HTML tag (open or close or self-closing tag)
+ 3. The _paragraph text_ does not contain any HTML element that is not a
+    [phrasing-html-element]
 
  4. At least one of the following conditions is satisfied:
 
