@@ -542,8 +542,8 @@ of the following regular expression patterns:
 
     The matching substring for the second parenthesized subexpression
     shall be [trimmed] to give a _header text run_. The result of
-    processing the _header text run_ as a [text run] shall form the
-    content of the header element.
+    interpreting the _header text run_ as a [text span sequence] shall
+    form the content of the header element.
 
     For example, the HTML outputs for the above expressions are:
 
@@ -579,8 +579,8 @@ exactly two lines, with the second line beginning with either a `-`
 character or a `=` character.
 
 The first line shall be [trimmed] to give a _header text run_. The
-result of processing the _header text run_ as a [text run] shall form
-the content of the header element.
+result of interpreting the _header text run_ as a [text span sequence]
+shall form the content of the header element.
 
 If the second line starts with the `=` character, the heading level
 shall be 1. If the second line starts with the `-` character, the
@@ -1194,8 +1194,8 @@ one or more [lines].
 The lines in the [block-element line sequence] are joined together into
 a single sequence of [characters], with a [line break] after each line.
 The resulting sequence of [characters] is called the _paragraph text_.
-The result of interpreting the _paragraph text_ as a [text run] shall
-form the content of the paragraph element.
+The result of interpreting the _paragraph text_ as a [text span
+sequence] shall form the content of the paragraph element.
 
 The _paragraph text_ needs to be run through a HTML parser to determine
 how the content of the paragrah element should be presented.
@@ -1316,15 +1316,15 @@ A null block does not result in any output.
 <h2 id="identifying-span-elements">Identifying span-elements</h2>
 
 [Identifying span-elements]: #identifying-span-elements
-[text run]: #identifying-span-elements
+[text span sequence]: #identifying-span-elements
 [input character sequence]: #identifying-span-elements
 
-A **text run** is a sequence of span-level vfmd constructs in a
-paragraph block.
+A **text span sequence** is a sequence of span-level vfmd constructs in
+a paragraph or header block.
 
 To interpret a sequence of characters, called the **input character
-sequence**, as a _text run_, we need to identify the type and extent of
-the span-elements in the input.
+sequence**, as a _text span sequence_, we need to identify the type and
+extent of the span-elements in the input.
 
 Some characters in the _input character sequence_ form the text content,
 and the other characters denote how the text content is to be "marked
