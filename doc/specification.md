@@ -1297,9 +1297,9 @@ The <span id="link-reference-association-map">**link reference
 association map**</span> is an associative array that contains data from
 all the reference-resolution blocks in the document, that helps in
 mapping a _reference id_ to the _link url_ and _link title_ that the
-_reference id_ represents. It is used to resolve link references
-elsewhere in the document (either in a [closing link tag],
-or in an [image tag]).
+_reference id_ represents. It is used in the [procedure for identifying
+link tags] and in the [procedure for identifying image tags] to resolve
+a reference id to a link url and, if available, a link title.
 
 [link reference association map]: #link-reference-association-map
 
