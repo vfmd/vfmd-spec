@@ -244,15 +244,17 @@ start line].  The line at which the block should end (i.e.  the
 corresponding [block-element end line]) is determined based on the
 [block-element start line] and subsequent lines.
 
-**Definitions:**
-<span id="unordered-list-starter-pattern">
-The regular expression pattern `/^( *[\*\-\+] +)[^ ]/` is called the
-**unordered list starter pattern**.
-</span>
-<span id="ordered-list-starter-pattern">
-The regular expression pattern `/^( *([0-9]+)\. +)[^ ]/` is called the
-**ordered list starter pattern**.
-</span>
+We define the following regular expression patterns:
+
+ * <span id="unordered-list-starter-pattern">
+   **unordered list starter pattern**</span>: `/^( *[\*\-\+] +)[^ ]/`
+
+   Example: <code style="white-space: pre;">  * </code>
+
+ * <span id="ordered-list-starter-pattern">
+   **ordered list starter pattern**</span>: `/^( *([0-9]+)\. +)[^ ]/`
+
+   Example: <code style="white-space: pre;"> 1. </code>
 
 [unordered list starter pattern]: #unordered-list-starter-pattern
 [ordered list starter pattern]: #ordered-list-starter-pattern
