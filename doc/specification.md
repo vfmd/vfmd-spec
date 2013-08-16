@@ -1322,9 +1322,9 @@ A null block does not result in any output.
 A **text span sequence** is a sequence of span-level vfmd constructs in
 a paragraph or header block.
 
-To interpret a sequence of characters, called the **input character
-sequence**, as a _text span sequence_, we need to identify the type and
-extent of the span-elements in the input.
+To interpret a non-empty sequence of characters, called the **input
+character sequence**, as a _text span sequence_, we need to identify the
+type and extent of the span-elements in the input.
 
 Some characters in the _input character sequence_ form the text content,
 and the other characters denote how the text content is to be "marked
