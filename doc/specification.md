@@ -450,46 +450,36 @@ block-element and the [block-element end line]:
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
 
-10. If none of the above conditions apply, then the block-element is of
-    type [**paragraph**].
+ <!-- Redcarpet doesn't like double-digit line numbers at this point,
+      so using 0 instead of 10 -->
+
+ 0. If none of the above conditions apply, then the [block-element start
+    line] marks the start of a block-element of type [**paragraph**].
 
     In order to find the [block-element end line], we need to make use
     of a HTML parser. To the HTML parser, we feed the characters of each
     line, starting from the [block-element start line]. After feeding
-    all characters of every line, we feed a `#x0A (LF)` character (i.e.
-    a [line break]) to the HTML parser, and observe the state of the
-    HTML parser.
+    all characters of every line, we feed a [line break] character to
+    the HTML parser, and observe the state of the HTML parser. Of the
+    the many possible states of a HTML parser, we are only interested in
+    the [HTML parser states relevant to finding the end of a paragraph].
 
-    Of the the many possible states of a HTML parser, the following is
-    the list of states that we are interested in:
-
-     1. Within a HTML tag (open / close / self-closing tag)
-     2. Within the contents of a HTML element, but not within a HTML
-        open or close tag
-     3. Within a HTML comment
-     4. Outside of any HTML element or comment
- 
     The [block-element end line] is the next subsequent [line] in the
     [input line sequence], starting from and inclusive of the
     [block-element start line], that satisfies all the following
     conditions:
 
-    <!-- For some reason, Redcarpet requires a comment here to
-         correctly display the following list -->
-
-     1. At the end of feeding the [line] and a [line break] to the HTML
+     1. At the end of feeding the line and a [line break] to the HTML
         parser, all the following conditions are satisfied:
 
          1. The HTML parser state is not "within a HTML tag"
 
          2. The HTML parser state is not "within a HTML comment"
 
-         3. If the HTML parser state is "within the contents of a HTML
-            element", then the containing HTML element or any of its
-            ancestor elements is not one of the following HTML elements:
-            `pre`, `script`, `style`
+         3. The HTML parser state is not "within the contents of a
+            well-formed [verbatim HTML element]"
 
-     2. The [line] is a [blank line], or is immediately succeeded by a
+     2. The line is a [blank line], or is immediately succeeded by a
         succeeding line that satisfies at least one of the following
         conditions:
 
@@ -503,10 +493,100 @@ block-element and the [block-element end line]:
             and optional [space] characters (or similarly with `-` or
             `[` characters)
 
+    If no such [block-element end line] is found, the last line in the
+    [input line sequence] is the [block-element end line].
 
 Using the above rules, the [input line sequence] is broken down into a
 series of [block-element line sequences], and the block-element type of
 each [block-element line sequence] is identified.
+
+[verbatim HTML element]: #verbatim-html-element
+
+<h4 id="html-parser-states-relevant-to-end-of-paragraph">
+HTML parser states relevant to finding the end of a paragraph</h4>
+
+[HTML parser states relevant to finding the end of a paragraph]: #html-parser-states-relevant-to-end-of-paragraph
+
+When looking for the [block-element end line] for a block-element of
+type [paragraph], we make use of a HTML parser. Of the the many possible
+states of a HTML parser, we are interested in only some of the states.
+This section enumerates and describes the parser states that are of
+interest in this context.
+
+<span id="verbatim-html-element">We define a **verbatim HTML element**
+to be one of these HTML elements: `pre`, `script`, `tag`. We define a
+**non-verbatim HTML element** to be any HTML element other than a
+_verbatim HTML element_.</span>
+
+[verbatim HTML element]: #verbatim-html-element
+[non-verbatim HTML element]: #verbatim-html-element
+
+The relevant states of the HTML parser when looking for the
+[block-element end line] for a block-element of type [paragraph] are:
+
+ 1. Within a HTML tag (open / close / self-closing tag)
+
+    For example, this is the state at the end of the first line below:
+
+        <div id="div1"
+        >
+
+ 2. Within a HTML comment
+
+    For example, this is the state at the end of the first line below:
+
+        <!-- Insert illuminating comment here
+        -->
+
+ 3. Within the contents of a well-formed [verbatim HTML element]
+
+    For example, this is the state at the end of the first line below:
+
+        This open <pre> tag has a
+        corresponding close </pre> tag
+
+ 4. Within the contents of a not-well-formed [verbatim HTML element]
+    \(i.e. after the open tag of an unclosed or not-properly-closed
+    [verbatim HTML element]\)
+
+    For example, this is the state at the end of the first line below:
+
+        This open <pre> tag does not have a
+        corresponding close tag in the document
+
+
+ 5. Within the contents of a [non-verbatim HTML element] \(well-formed
+    or not\)
+
+    For example, this is the state at the end of the first line below:
+
+        Outside <div> Inside
+        Inside </div> Outside
+
+
+ 6. Outside of any HTML element or comment
+
+    For example, this is the state at the end of the first line below:
+
+        Outside <div> Inside </div> Outside
+        Outside
+
+Note that a HTML parser can know whether a HTML element is well-formed
+or not, only after encountering an end tag. So, after consuming only
+part of the input, the HTML parser might not know whether it's in the
+"within the contents of a well-formed [verbatim HTML element]" state, or
+it's in the "within the contents of a not-well-formed [verbatim HTML
+element]" state. So, in order to find the end of the paragraph without
+backtracking, it is suggested that an implementation employ the
+following design:
+
+  * When an opening tag of a [verbatim HTML element] is encountered,
+    keep in mind that it could turn out to be either a well-formed HTML
+    element, or a not-well-formed HTML element
+  * Keep track of what the [block-element end line] for the paragraph
+    would have been in either case
+  * When it becomes clear whether the HTML element is well-formed or
+    not, pick the appropriate choice for the [block-element end line]
 
 <h2 id="interpreting-block-elements">Interpreting block-elements</h2>
 
