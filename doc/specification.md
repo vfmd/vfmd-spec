@@ -98,7 +98,7 @@ A **string** is a sequence of zero or more characters.
 **Trimming** a [string] means removing any leading or trailing
 [whitespace] characters from the [string].
 </span>
-For example, trimming 
+For example, trimming
 <code style="white-space: pre;">   yellow  </code> yields `yellow`;
 trimming <code style="white-space: pre;">green  </code>
 yields `green`. Trimming a [string] that does  not have any leading
@@ -111,9 +111,9 @@ an empty (zero-length) [string].
 addition, replacing each sequence of internal [whitespace] characters in
 the [string] with a single [space] character.
 </span>
-For example, simplifying 
+For example, simplifying
 <code style="white-space: pre;">     Amazing   Maurice  </code>
-yields `Amazing Maurice`; simplifying 
+yields `Amazing Maurice`; simplifying
 <code style="white-space: pre;">educated   rodents   </code>
 yields `educated rodents`.
 
@@ -181,7 +181,7 @@ If a [line] contains no [characters], or if all [characters] in the
 The [document] can be seen as a sequence of block-elements, where each
 block-element consists of a sequence of one or more [lines].
 
-There are different types of block-elements: 
+There are different types of block-elements:
 
 - Paragraph
 - Header (atx-style, or setext-style)
@@ -267,7 +267,7 @@ block-element and the [block-element end line]:
  1. If the [block-element start line] is a [blank line], then the body
     element is of type [**null block**]. The same line is the
     [block-element end line].
- 
+
  2. If the [block-element start line] does not begin with four or more
     consecutive [space] characters, and if the [block-element start
     line] matches the regular expression pattern
@@ -292,7 +292,7 @@ block-element and the [block-element end line]:
 
      1. The succeeding line is not a [blank line], and it does not
         begin with four or more consecutive [space] characters
-        
+
         (or)
 
      2. The succeeding line is a [blank line], and is immediately
@@ -315,17 +315,17 @@ block-element and the [block-element end line]:
     by a succeeding line that satisfies one of the following conditions:
 
      1. The succeeding line is a [blank line]
-     
+
         (or)
 
      2. The succeeding line begins with four or more consecutive [space]
         characters
-        
+
         (or)
 
      3. The first [non-space] character in the succeeding line is not
         a `>` character
-    
+
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
 
@@ -356,13 +356,13 @@ block-element and the [block-element end line]:
     \(which has three [space] characters, followed by an asterisk,
     followed by two [space] characters, followed by the word
     "Peanuts"\):
-  
+
            *  Peanuts
 
     The _unordered list starter string_ in the above example consists of
     the first 6 characters of the line, i.e. the entire part before the
     word "Peanuts". The _unordered-list-starter-string-length_ is 6.
-   
+
     The [block-element end line] is the next subsequent line in the
     [input line sequence], starting from and inclusive of the
     [block-element start line], that satisfies one of the following
@@ -404,16 +404,16 @@ block-element and the [block-element end line]:
     the matching substring for the first (i.e. outer) parenthesized
     subexpression in the pattern is called the
     _ordered-list-starter-string-length_.
-    
+
     For example, consider the following [block-element start line]
     \(which has three [space] characters, followed by the number '1',
     followed by a dot, followed by two [space] characters, followed by
     the word "Peanuts"\):
-  
+
            1.  Peanuts
 
     The _ordered-list-starter-string-length_ in the above example is 7.
-   
+
     The [block-element end line] is the next subsequent line in the
     [input line sequence], starting from and inclusive of the
     [block-element start line], that satisfies one of the following
@@ -529,7 +529,7 @@ of the following regular expression patterns:
 
  1. With header text: `/^(#+)(.*[^#])#*$/`
 
-    Examples:  
+    Examples:
 
         ## Subheading 1
         ### Third-level *heading*
@@ -659,7 +659,7 @@ sequence_. The following processing is to be done for each [line]:
 
  1. If the [line] matches the regular expression `/^ *> /`, then the
 part of the [line] that matches the said regular expression shall be removed
-from the line  
+from the line
  2. If the pattern in (1) above is not satisfied, and if the [line] matches
 the regular expression `/^ *>/`, then the part of the [line] that
 matches the said regular expression shall be removed from the line
@@ -672,7 +672,7 @@ blockquote element.
 
 For example, consider the following [block-element line sequence]:
 
-      > In Perl, a Hello World is 
+      > In Perl, a Hello World is
       > written as follows:
       >
       >     print "Hello World!\n";
@@ -680,9 +680,9 @@ For example, consider the following [block-element line sequence]:
 After processing each line in the above [block-element line sequence],
 the _blockquote-processed line sequence_ obtained is as follows:
 
-    In Perl, a Hello World is 
+    In Perl, a Hello World is
     written as follows:
-    
+
         print "Hello World!\n";
 
 When we treat the _blockquote-processed line sequence_ as an [input line
@@ -690,9 +690,9 @@ sequence], we can recognize nested block elements in it of type
 paragraph and code block. The HTML equivalent for the [lines] in the
 _blockquote-processed line sequence_ is as follows:
 
-    <p>In Perl, a Hello World is 
+    <p>In Perl, a Hello World is
     written as follows:</p>
-    
+
     <pre><code>print "Hello World!\n";
     </code></pre>
 
@@ -700,9 +700,9 @@ Therefore, the HTML equivalent for the given  [block-element line
 sequence] is:
 
     <blockquote>
-    <p>In Perl, a Hello World is 
+    <p>In Perl, a Hello World is
     written as follows:</p>
-    
+
     <pre><code>print "Hello World!\n";
     </code></pre>
     </blockquote>
@@ -777,14 +777,14 @@ is to be done for each [line]:
 
  1. If the [line] is the first line of the _unordered list item line
     sequence_:
-    
+
     The [line] would start with the _unordered list starter string_.
     The _unordered list starter string_ shall be removed from the
     beginning of the [line].
 
  2. If the [line] is not the first line of the _unordered list item line
     sequence_:
-    
+
     The [line] would start with zero or more [space] characters. The
     leading [space] characters, if any, should be removed as given
     below:
@@ -801,7 +801,7 @@ The _unordered-list-item-processed line sequence_ obtained this way can
 be considered as the [input line sequence] for a sequence of
 block-elements nested within the list item. The result of interpreting
 that [input line sequence] further into block-elements shall form the
-content of the list element. 
+content of the list element.
 
 The list elements so obtained are combined into a sequence to form the
 complete unordered list in the output.
@@ -992,14 +992,14 @@ to be done for each [line]:
 
  1. If the [line] is the first line of the _ordered list item line
     sequence_:
-    
+
     The [line] would match the [ordered list starter pattern]. The
     matching substring for the first (i.e. outer) parenthesized
     subexpression in the pattern shall be removed from the beginning of
     the [line].
  2. If the [line] is not the first line of the _ordered list item line
     sequence_:
-    
+
     The [line] would start with zero or more [space] characters. The
     leading [space] characters, if any, should be removed as given
     below:
@@ -1019,7 +1019,7 @@ sequence] further into block-elements shall form the content of the list
 element.
 
 The list elements so obtained are combined into a sequence to form the
-complete ordered list in the output. 
+complete ordered list in the output.
 
 The numbering for the ordered list should start from the _ordered list
 starting number_. For HTML output, if the _ordered list starting number_
@@ -1357,7 +1357,7 @@ following:
     "."          : text fragment
 
 To identify and interpret the _span tags_ in the _input character
-sequence_, we make use of a 
+sequence_, we make use of a
 <span id="stack-of-potential-opening-span-tags">
 **stack of potential opening span tags**</span>.
 Each node in the _stack of potential opening span tags_ eventually might
@@ -1369,7 +1369,7 @@ _text fragment_.
 Initially, the _stack of potential opening span tags_ is empty. The
 stack grows upwards: the bottommost node in the stack is the first one
 added to the stack, and pushing a node onto the stack places it on top
-of the stack. 
+of the stack.
 
 <span id="stack-node-properties">
 Each node in the stack contains the following properties:</span>
@@ -1409,7 +1409,7 @@ true:</span>
     whose _node type_ is equal to _t_
 
     (or)
- 
+
  2. All nodes whose _node type_ is equal to _t_ in the [stack of
     potential opening span tags] have a _html node_ above them (where
     _html node_ means a node whose _node type_ is _raw html node_)
@@ -1495,7 +1495,7 @@ The procedure to identify and interpret the _span tags_ is as follows:
     at the [current-position] to be part of a _text fragment_, and set
     _consumed-character-count_ as 1
  7. Increment [current-position] by _consumed-character-count_
- 8. If [current-position] is less than the length of the 
+ 8. If [current-position] is less than the length of the
      [input character sequence], go to [Step 3](#span-proc-step-3)
 
 The _text fragments_ identified in the above procedure should be
@@ -1521,7 +1521,7 @@ tag_ in the future. In this case, the following is done:
      2. The _node type_ of the node is set as _link node_
      3. The _linked content start position_ of the node is set to
         ( [current-position] + 1 )
- 
+
  2. Set [consumed-character-count] to 1
 
 If the character at the [current-position] is a `]` character, it might
@@ -1544,15 +1544,15 @@ done:
 
         Example:  
         `] a`
-    
+
      3. At the very end:
         `/^(\]\s*)$/`
 
         Example:  
         `]`
-     
+
     then the following is done:
-        
+
     <!-- For some reason, Redcarpet requires a comment here to correctly
     display the following list -->
 
@@ -1590,7 +1590,7 @@ done:
         entry for the _reference id string_ in the [link reference
         association map]. For HTML output, the link title should be
         [attribute-value-escaped].
-        
+
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
         _enclosed content_ without being part of a link,
@@ -1633,7 +1633,7 @@ done:
 
      6. The _reference id string_ shall be used to look up the actual
         link url and link title from the [link reference association
-        map]. 
+        map].
 
         If the [link reference association map] contains an entry for
         _reference id string_, then the output shall have the _enclosed
@@ -1641,7 +1641,7 @@ done:
         entry for the _reference id string_ in the [link reference
         association map]. For HTML output, the link title should be
         [attribute-value-escaped].
-        
+
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
         _enclosed content_ without being part of a link,
@@ -1670,7 +1670,7 @@ done:
             Example: `] (http://www.example.net` + _residual-link-attribute-sequence_
 
          2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]*)>([\)].+)$/`
-   
+
             Examples:  
             `](<http://example.net>` + _residual-link-attribute-sequence_  
             `] ( <http://example.net/?q=)>` + _residual-link-attribute-sequence_
@@ -1699,8 +1699,8 @@ done:
 
             If this is the matching pattern, the _title string_ is said
             to be _null_.
-        
-         2. Title and/or appended ignorable text and closing paranthesis: 
+
+         2. Title and/or appended ignorable text and closing paranthesis:
             `/^\s*((("(([^"\\]|\\.)*)")|('(([^'\\]|\\.)*)')|(([^"'\)\\]|\\.)*))+)\)/`
 
             Examples:  
@@ -1991,7 +1991,7 @@ following shall be done:
     [_null_](#topmost-node-of-type-is-null), and if it is not already
     the [top node], then all nodes above it are popped off and
     interpreted as _text fragments_
- 
+
  5. If the _matching emphasis node_ is not
     [_null_](#topmost-node-of-type-is-null), then invoke the [procedure
     for matching emphasis tag strings]. The _current-tag-string_ and/or
@@ -2001,7 +2001,7 @@ following shall be done:
     unprocessed [emphasis tag strings] in the [emphasis indicator
     string], set the _current-tag-string_ to the next
     [emphasis tag string]
- 
+
  7. If the _current-tag-string_ is not empty, go to
     [Step 2](#emphasis-proc-step-2)
 
@@ -2035,7 +2035,7 @@ _current-tag-string_.
      1. The [top node] is interpreted as an **opening emphasis tag**
 
      2. The _current-tag-string_ is interpreted as **closing emphasis tag**
-    
+
      3. The _closing emphasis tag_ is said to correspond to the _opening
         emphasis tag_, and any _span tags_ or _text fragments_ occuring
         between the _opening emphasis tag_ and the _closing emphasis
@@ -2048,10 +2048,10 @@ _current-tag-string_.
  2. If the _top node tag string_ and the _current-tag-string_ are not
     exactly the same strings, and if the _current-tag-string_ is a
     substring of the _top node tag string_, then:
-            
+
      1. Let the length of the _current-tag-string_ be called the
         _current-tag-string-length_.
-        
+
         The last _current-tag-string-length_ characters of the _top node
         tag string_ are interpreted as an **opening emphasis tag**.
 
@@ -2073,7 +2073,7 @@ _current-tag-string_.
  3. If the _top node tag string_ and the _current-tag-string_ are
     not exactly the same strings, and if the _top node tag string_
     is a substring of the _current-tag-string_, then:
-    
+
      1. The [top node] is interpreted as an _opening span tag_, or more
         specifically, as an **opening emphasis tag**
 
@@ -2090,8 +2090,8 @@ _current-tag-string_.
         tag_ are considered to constitute the emphasized content
 
      4. The characters of the _current-tag-string_ that were interpreted as
-        the _closing emphasis tag_ are removed from the  _current-tag-string_ 
-        
+        the _closing emphasis tag_ are removed from the  _current-tag-string_
+
      5. The [top node] is popped off
 
  4. If any of the above conditions are satisfied, then we would have
@@ -2127,14 +2127,14 @@ an unescaped `` ` `` character.
 
  1. The [remaining-character-sequence] shall match one of the following
     regular expression patterns:
-    
+
      1. Backticks followed by a non-backtick: ``/^(`+)([^`].*)$/``
-        
+
         Example: ```` ```p ````
 
      1. Backticks at the end of the _input character sequence_:
         ``/^(`+)$/``
-        
+
         Example: ```` ``` ````
 
     In case of either pattern, the matching substring for the first
@@ -2147,12 +2147,12 @@ an unescaped `` ` `` character.
     pattern shall be called the _residual-code-span-sequence_. In case
     the match is with the second regular expression pattern, the
     _residual-code-span-sequence_ is said to be _null_.
-    
+
  2. Set _code-content-length_ to 0
 
  3. <span id="code-proc-step-3">If the _residual-code-span-sequence_
     matches one of the following regular expression patterns:</span>
-    
+
      1. Non-backticks followed by backticks followed by a non-backtick:
         ``/^([^`]+)(`+)([^`].*)$/``
 
@@ -2176,12 +2176,12 @@ an unescaped `` ` `` character.
 
      2. The _code-content-length_ is incremented by the length of the
         _code-fragment-string_
-        
+
      3. In case the match is with the first regular expression pattern,
         the _residual-code-span-sequence_ is set to the matching
         substring for the third parenthesized subexpression in the
         pattern. In case the match is with the second regular expression
-        pattern, the _residual-code-span-sequence_ is set to _null_. 
+        pattern, the _residual-code-span-sequence_ is set to _null_.
 
      4. If the length of the _backticks-fragment-string_ is equal to the
         length of the _opening-backticks-count_, then the
@@ -2200,11 +2200,11 @@ an unescaped `` ` `` character.
     _opening-backticks-string_ is identified as a _text fragment_, and
     [consumed-character-count] is set to the length of the
     _opening-backticks-string_
- 
+
  6. If a _closing-code-string_ has been identified, the following is
     done:
 
-     1. Let _code-span-length_ be equal to 
+     1. Let _code-span-length_ be equal to
         ( ( _opening-backticks-count_ * 2 ) + _code-content-length_ )
      2. The first _code-span-length_ characters of the
         [remaining-character-sequence] is identified as a **code span
@@ -2311,7 +2311,7 @@ If the [remaining-character-sequence] matches the
         the image. For HTML output, the title of the image and the
         alternate text for the image should be
         [attribute-value-escaped].
-        
+
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall not
         include an image for this _image tag_. Instead, the first
@@ -2352,7 +2352,7 @@ If the [remaining-character-sequence] matches the
         the image. For HTML output, the title of the image and the
         alternate text for the image should be
         [attribute-value-escaped].
-        
+
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall not
         include an image for this _image tag_. Instead, the first
@@ -2374,7 +2374,7 @@ If the [remaining-character-sequence] matches the
             Example: `] (http://www.example.net/image.jpg` + _residual-image-attribute-sequence_
 
          2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]*)>([\)].+)$/`
-   
+
             Examples:  
             `](<http://example.net/image.jpg>` + _residual-image-attribute-sequence_  
             `] ( <http://example.net/image(1).jpg>` + _residual-image-attribute-sequence_
@@ -2403,8 +2403,8 @@ If the [remaining-character-sequence] matches the
 
             If this is the matching pattern, the _title string_ is said
             to be _null_.
-        
-         2. Title and/or appended ignorable text and closing paranthesis: 
+
+         2. Title and/or appended ignorable text and closing paranthesis:
             `/^\s*((("(([^"\\]|\\.)*)")|('(([^'\\]|\\.)*)')|(([^"'\)\\]|\\.)*))+)\)/`
 
             Examples:  
@@ -2449,7 +2449,7 @@ If the [remaining-character-sequence] matches the
         used as the alternate text for the image. For HTML output, the
         title of the image and the alternate text for the image should
         be [attribute-value-escaped].
- 
+
      3. Set [consumed-character-count] to _image-src-tag-length_
 
  4. If none of the above 3 conditions are satisfied, then the first 2
@@ -2619,7 +2619,7 @@ time, till one of the following happens:
     src="picture.jpg">`, for example)
 
     If this happens first, the following is done:
-    
+
      1. The text that represents the self-closing HTML tag is identified
         as a **self-closing HTML tag**
 
@@ -2640,7 +2640,7 @@ time, till one of the following happens:
 
      1. The text that represents the opening HTML tag is identified as
         an **opening HTML tag**
-    
+
      2. A new node is pushed onto the [stack of potential opening span
         tags] with the following [properties][stack-node-properties]:
 
@@ -2667,7 +2667,7 @@ time, till one of the following happens:
 
      1. The text that represents the closing HTML tag is identified as a
         **closing HTML tag**
-    
+
      2. Let _currently open html node_ be the [topmost node of type]
         _raw html node_
 
