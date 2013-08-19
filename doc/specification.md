@@ -33,6 +33,8 @@ This document is organized as follows:
     * [Procedure for identifying image tags]
     * [Procedure for detecting automatic links]
     * [Procedure for identifying HTML tags]
+  * [Additional processing]
+    * [Processing text fragments]
 
 <h2 id="definitions">Definitions</h2>
 
@@ -1496,6 +1498,8 @@ The procedure to identify and interpret the _span tags_ is as follows:
  8. If [current-position] is less than the length of the 
      [input character sequence], go to [Step 3](#span-proc-step-3)
 
+The _text fragments_ identified in the above procedure should be
+handled as specified in [processing text fragments].
 
 <h3 id="procedure-for-identifying-link-tags">Procedure for identifying link tags</h3>
 
@@ -2711,4 +2715,62 @@ time, till one of the following happens:
     If this happens first, the `<` at the [current-position] is
     identified as a _text fragment_, and [consumed-character-count] is
     set to 1.
+
+<h2 id="additional-processing">Additional processing</h2>
+
+[Additional processing]: #additional-processing
+
+Some additional processing is required for certain parts before they can
+be written to the output.
+
+<h3 id="processing-text-fragments">Processing text fragments</h3>
+
+[Processing text fragments]: #processing-text-fragments
+[processing text fragments]: #processing-text-fragments
+
+<span id="punctuation">We define a **punctuation** [character] to
+be a unicode code point whose 'General\_Category' unicode property has
+one of the following values: Pc, Pd, Ps, Pe, Pi, Pf, Po.</span>
+
+[punctuation]: #punctuation
+
+The _text fragments_ identified in the [procedure for identifying span
+tags] are subject to the following processing:
+
+ 1. The _text fragments_ that occur adjacent to one another in the
+    [input character sequence] are collated to form a single _collated
+    text fragment_
+ 2. Every _collated text fragment_ is processed to produce a _processed
+    text fragment_. The following processing is done:
+
+     1. **Removing escaping backslashes:** Every backslash in the
+        _collated text fragment_ that is immediately followed by a
+        [punctuation] character, shall be removed.
+
+       For example, for the _collated text fragment_ `With
+       \(esca\ped\) \\brackets`, the corresponding _processed text
+       fragment_ will be `With (esca\ped) \brackets`.
+
+     2. **Introducing hard-breaks:** Every sequence of two [space]
+        characters followed by a [line break] character shall be
+        replaced by a hard line break as appropriate for the output
+        format. For HTML output format, a `<br />` element is used to
+        indicate a hard line break.
+
+        For example, for the following _collated text fragment_:
+
+            There are two spaces at the end of this line  
+            So we introduce a hard break there
+
+        the corresponding _processed text fragment_ for HTML output will
+        be:
+
+            There are two spaces at the end of this line<br />
+            So we introduce a hard break there
+
+     3. **HTML escaping:** For HTML output, the _collated text fragment_
+        shall be [HTML escaped].
+
+ 3. The _processed text fragment_ is output
+
 
