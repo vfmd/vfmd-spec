@@ -35,6 +35,7 @@ This document is organized as follows:
     * [Procedure for identifying HTML tags]
   * [Additional processing]
     * [Processing text fragments]
+    * [Processing for HTML output]
 
 <h2 id="definitions">Definitions</h2>
 
@@ -1647,8 +1648,8 @@ done:
         _enclosed content_ without being part of a link,
         enclosed within the text forming the _opening link tag_ and the
         text forming the _closing link tag_. For HTML output, the text
-        forming the _closing link tag_ should be [html-escaped] before
-        being output.
+        forming the _closing link tag_ should be [html-text-escaped]
+        before being output.
 
      7. The [top node] is popped off
 
@@ -2214,7 +2215,7 @@ an unescaped `` ` `` character.
         _opening-backticks-count_ characters are considered to be
         markup. The middle _code-content-length_ characters shall form
         the content of the code span. For HTML output, the content of
-        the code-span should be _html-escaped_.
+        the code-span should be [html-text-escaped].
      4.  Set [consumed-character-count] to _code-span-length_
 
 <h3 id="procedure-for-identifying-image-tags">Procedure for identifying image tags</h3>
@@ -2317,7 +2318,7 @@ If the [remaining-character-sequence] matches the
         include an image for this _image tag_. Instead, the first
         _image-ref-tag-length_ characters of the
         [remaining-character-sequence] are output as text. For HTML
-        output, this text should be [html-escaped].
+        output, this text should be [html-text-escaped].
 
      4. Set [consumed-character-count] to _image-ref-tag-length_
 
@@ -2358,7 +2359,7 @@ If the [remaining-character-sequence] matches the
         include an image for this _image tag_. Instead, the first
         _image-ref-tag-length_ characters of the
         [remaining-character-sequence] are output as text. For HTML
-        output, this text should be [html-escaped].
+        output, this text should be [html-text-escaped].
 
      4. Set [consumed-character-count] to _image-ref-tag-length_
 
@@ -2769,8 +2770,43 @@ tags] are subject to the following processing:
             So we introduce a hard break there
 
      3. **HTML escaping:** For HTML output, the _collated text fragment_
-        shall be [HTML escaped].
+        shall be [html-text-escaped].
 
  3. The _processed text fragment_ is output
+
+
+<h3 id="processing-for-html-output">Processing for HTML output</h3>
+
+[Processing for HTML output]: #processing-for-html-output
+
+For HTML output, the text that shall be output as part of text content
+of a HTML element, or the text that shall be output as part of a HTML
+tag's attribute value, needs to be escaped as described in this section.
+
+<h4 id="html-text-escaping">HTML text escaping</h4>
+
+[HTML text escaping]: #html-text-escaping
+[html-text-escaped]: #html-text-escaping
+
+**HTML text escaping** involves the following replacements:
+
+ 1. Replace the `<` character with `&lt;`
+ 2. Replace the `>` character with `&gt;`
+ 3. Replace the `&` character with `&amp;`
+
+<h4 id="attribute-value-escaping">Attribute value escaping</h4>
+
+[Attribute value escaping]: #attribute-value-escaping
+[attribute-value-escaped]: #attribute-value-escaping
+
+**Attribute value escaping** involves the following replacements:
+
+ 1. Replace the `<` character with `&lt;`
+ 2. Replace the `>` character with `&gt;`
+ 3. Replace the `&` character with `&amp;`
+ 4. Replace the `"` character with `&quot;`
+
+The `'` character is to be used as the enclosing quote character for
+attribute values.
 
 
