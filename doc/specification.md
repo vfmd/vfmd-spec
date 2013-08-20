@@ -64,22 +64,23 @@ point and encoded in UTF-8 encoding.
 The [document] consists of a sequence of [characters], where the
 [characters] may represent either markup or character data.
 
-A `#x09 (TAB)` character in the input shall be treated as four
-consecutive `#x20 (SPACE)` characters.
+A U+0009 (TAB) character in the input shall be treated as four
+consecutive U+0020 (SPACE) characters.
 
 <span id="space">
-A `#x20 (SPACE)` character is henceforth called a **space** character.
+A U+0020 (SPACE) character is henceforth called a **space** character.
 </span>
 <span id="non-space">
-Any character that is not a `#x20 (SPACE)` character is henceforth
+Any character that is not a U+0020 (SPACE) character is henceforth
 called a **non-space** character.
 </span>
 
-The character sequence `#x0D #x0A (CRLF)` in the input shall be treated
-as a single `#x0A (LF)` character.
+The character sequence of a U+000D (CR) character followed by a U+000A
+(LF) character in the input shall be treated as a single U+000A (LF)
+character.
 
 <span id="line-break">
-A `#x0A (LF)` character is called a **line break** character.
+A U+000A (LF) character is called a **line break** character.
 </span>
 <span id="non-line-break">
 Any [character] that is not a _line break_ character is called a
@@ -87,8 +88,8 @@ Any [character] that is not a _line break_ character is called a
 </span>
 
 <span id="whitespace">
-A **whitespace** character is one of the following characters: `#x09
-(TAB)`, `#x0A (LF)`, `#x0C (FF)`, `#x0D (CR)` or `#x20 (SPACE)`.
+A **whitespace** character is one of the following characters:
+U+0009 (TAB), U+000A (LF), U+000C (FF), U+000D (CR) or U+0020 (SPACE)
 </span>
 
 <span id="string">
