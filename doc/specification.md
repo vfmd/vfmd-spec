@@ -235,8 +235,14 @@ _block-element line sequences_. Each _block-element line sequence_ shall
 consist of only the [lines] that correspond to a particular
 block-element.
 
+<span id="parent-line-sequence">When a _block-element line sequence_ is
+obtained by breaking up an [input line sequence], the [input line
+sequence] is said to be the _parent line sequence_ of the _block-element
+line sequence_.</span>
+
 [block-element start line]: #block-element-line-sequence
 [block-element end line]: #block-element-line-sequence
+[parent line sequence]: #parent-line-sequence
 
 <h3 id="type-and-extent-block-element">Type and extent of a block-element</h3>
 
@@ -831,10 +837,11 @@ parenthesized subexpression in that pattern is called the _unordered
 list starter string_. The number of characters in the _unordered list
 starter string_ is called the _unordered-list-starter-string-length_.
 
+<span id="unordered-list-item-line-sequence">
 We first divide the [block-element line sequence] into a series of
-_unordered list item line sequences_. The [lines] in a particular
+_unordered list item line sequences_. The lines in a particular
 _unordered list item line sequence_ correspond to one list item in the
-list.
+list.</span>
 
 Every [line] in the [block-element line sequence] that starts with the
 _unordered list starter string_ is called an _unordered list item start
@@ -852,10 +859,11 @@ _unordered list item line sequences_. The first [line] of each
 _unordered list item line sequence_ starts with the _unordered list
 starter string_.
 
-Each [line] in the _unordered list item line sequence_ is processed to
+<span id="unordered-list-item-processed-line-sequence">
+Each [line] in the [unordered list item line sequence] is processed to
 produce a modified sequence of [lines], called the
 _unordered-list-item-processed line sequence_. The following processing
-is to be done for each [line]:
+is to be done for each [line]:</span>
 
  1. If the [line] is the first line of the _unordered list item line
     sequence_:
@@ -879,14 +887,24 @@ is to be done for each [line]:
         equal to the _unordered-list-starter-string-length_, all the
         leading [space] characters should be removed.
 
-The _unordered-list-item-processed line sequence_ obtained this way can
+Each [unordered-list-item-processed line sequence] obtained this way can
 be considered as the [input line sequence] for a sequence of
 block-elements nested within the list item. The result of interpreting
 that [input line sequence] further into block-elements shall form the
 content of the list element.
 
+An [unordered-list-item-processed line sequence] has certain
+[properties](#properties-of-list-item-line-sequences) that are useful in
+determining how the [paragraph] block-elements (if any) contained within
+the [unordered-list-item-processed line sequence] should be handled.
+
 The list elements so obtained are combined into a sequence to form the
 complete unordered list in the output.
+
+[unordered list item line sequence]: #unordered-list-item-line-sequence
+[unordered list item line sequences]: #unordered-list-item-line-sequence
+[unordered-list-item-processed line sequence]: #unordered-list-item-processed-line-sequence
+[unordered-list-item-processed line sequences]: #unordered-list-item-processed-line-sequence
 
 For example, consider the following [block-element line sequence]:
 
@@ -1043,10 +1061,11 @@ the _ordered-list-starter-string-length_. The matching substring for the
 second (i.e. inner) parenthesized subexpression in the pattern is called
 the _ordered list starting number_.
 
+<span id="ordered-list-item-line-sequence">
 We first divide the [block-element line sequence] into a series of
 _ordered list item line sequences_. The lines in a particular
 _ordered list item line sequence_ correspond to one list item in the
-list.
+list.</span>
 
 Every [line] in the [block-element line sequence] that satisfies all the
 following conditions is called an _ordered list item start line_:
@@ -1067,10 +1086,11 @@ We have now divided the [block-element line sequence] into a series of
 _ordered list item line sequences_. The first line of each _ordered list
 item line sequence_ matches the [ordered list starter pattern].
 
-Each [line] in the _ordered list item line sequence_ is processed to
+<span id="ordered-list-item-processed-line-sequence">
+Each [line] in the [ordered list item line sequence] is processed to
 produce a modified sequence of [lines], called the
 _ordered-list-item-processed line sequence_. The following processing is
-to be done for each [line]:
+to be done for each [line]:</span>
 
  1. If the [line] is the first line of the _ordered list item line
     sequence_:
@@ -1094,11 +1114,16 @@ to be done for each [line]:
         equal to the _ordered-list-starter-string-length_, all the
         leading [space] characters should be removed.
 
-The _ordered-list-item-processed line sequence_ obtained this way can be
+Each [ordered-list-item-processed line sequence] obtained this way can be
 considered as the [input line sequence] for a sequence of block-elements
 nested within the list item. The result of interpreting that [input line
 sequence] further into block-elements shall form the content of the list
 element.
+
+An [ordered-list-item-processed line sequence] has certain
+[properties](#properties-of-list-item-line-sequences) that are useful in
+determining how the [paragraph] block-elements (if any) contained within
+the [ordered-list-item-processed line sequence] should be handled.
 
 The list elements so obtained are combined into a sequence to form the
 complete ordered list in the output.
@@ -1110,6 +1135,11 @@ not have the `start` attribute; if the _ordered list starting number_ is
 not the number '1', the corresponding `ol` start tag in the output shall
 include the `start` attribute with the the _ordered list starting
 number_ as the attribute value.
+
+[ordered list item line sequence]: #ordered-list-item-line-sequence
+[ordered list item line sequences]: #ordered-list-item-line-sequence
+[ordered-list-item-processed line sequence]: #ordered-list-item-processed-line-sequence
+[ordered-list-item-processed line sequences]: #ordered-list-item-processed-line-sequence
 
 For example, consider the following [block-element line sequence]:
 
@@ -1300,30 +1330,29 @@ parser to determine how the content of the paragraph element should be
 presented.
 
 For HTML output, the content of the paragraph element shall be enclosed
-in `p` tags if, and only if, all the following conditions are satisfied:
+in `p` tags, unless any of the following conditions is satisfied:
 
- 1. There is no unmatched HTML tag (i.e. open tag without a close tag,
-    or a close tag without an open tag) in the _paragraph text_
+ 1. The _paragraph text_ contains an unmatched HTML tag (i.e. open tag
+    without a close tag, or a close tag without an open tag)
 
- 2. There is no misnested HTML tag (i.e. close tag at the wrong
-    position) in the _paragraph text_
+ 2. The _paragraph text_ contains a misnested HTML tag (i.e. close tag
+    at the wrong position)
 
- 3. The _paragraph text_ does not contain any HTML element that is not a
+ 3. The _paragraph text_ contains a HTML element that is not a
     [phrasing-html-element]
 
- 4. At least one of the following conditions is satisfied:
+ 4. The [block-element line sequence] for the paragraph block is the
+    first [block-element line sequence] of its [parent line sequence],
+    and the [parent line sequence] is a
+    [top-packed list-item-processed line sequence]
 
-     1. The containing HTML element (i.e. the direct parent element
-        under which this paragraph will be placed in the output HTML) is
-        not an `li` element
+ 5. The [block-element line sequence] for the paragraph block is the
+    last [block-element line sequence] of its [parent line sequence],
+    and the [parent line sequence] is a
+    [bottom-packed list-item-processed line sequence]
 
-        (or)
-
-     2. The last line in the [block-element line sequence] is a [blank
-        line]
-
-If any of the above 4 conditions is not satisfied, the HTML output of
-the paragraph shall be the same as the content of the paragraph, without
+If any of the above 5 conditions is satisfied, the HTML output of the
+paragraph shall be the same as the content of the paragraph, without
 wrapping it in `p` tags.
 
 <h3 id="reference-resolution-block">reference-resolution block</h3>
@@ -1402,6 +1431,79 @@ The  [block-element line sequence] for a null block element shall have a
 single [blank line].
 
 A null block does not result in any output.
+
+<h3 id="properties-of-list-item-line-sequences">Properties of list item line sequences</h3>
+
+[Properties of list item line sequences]: #properties-of-list-item-line-sequences
+
+<span id="list-item-line-sequence">
+A _list item line sequence_ denotes either an [unordered list item line
+sequence] or an [ordered list item line sequence].</span>
+
+<span id="list-item-processed-line-sequence"> A _list-item-processed
+line sequence_ denotes either an [unordered-list-item-processed line
+sequence] or an [ordered-list-item-processed line sequence].</span>
+
+[list item line sequence]: #list-item-line-sequence
+[list-item-processed line sequence]: #list-item-processed-line-sequence
+
+<h4 id="top-packed-list-item-line-sequence">
+Top-packed list item line sequences</h4>
+
+[Top-packed list item line sequence]: #top-packed-list-item-line-sequence
+[top-packed list item line sequence]: #top-packed-list-item-line-sequence
+[top-packed list-item-processed line sequence]: #top-packed-list-item-line-sequence
+
+A [list item line sequence], _S_, is said to be _top-packed_ if, and
+only if, _S_ satisfies any of the following conditions:
+
+ 1. _S_ is the only [list item line sequence] in the
+    [block-element line sequence]
+
+    (or)
+
+ 2. _S_ is the first [list item line sequence] in the
+    [block-element line sequence], and the last line of _S_ is
+    not a [blank line]
+
+    (or)
+
+ 3. _S_ is not the first [list item line sequence] in the [block-element
+    line sequence], and the line immediately before the first line of
+    _S_ in the [block-element line sequence] is not a [blank line]
+
+If a [list item line sequence] is _top-packed_, the
+[list-item-processed line sequence] obtained from it is also said to be
+_top-packed_. Otherwise, the [list-item-processed line sequence] is not
+said to be _top-packed_.
+
+<h4 id="bottom-packed-list-item-line-sequence">
+Bottom-packed list item line sequences</h4>
+
+[Bottom-packed list item line sequence]: #bottom-packed-list-item-line-sequence
+[bottom-packed list item line sequence]: #bottom-packed-list-item-line-sequence
+[bottom-packed list-item-processed line sequence]: #bottom-packed-list-item-line-sequence
+
+A [list item line sequence], _S_, is said to be _bottom-packed_ if, and
+only if, _S_ satisfies any of the following conditions:
+
+ 1. _S_ is the only [list item line sequence] in the [block-element line
+    sequence]
+
+    (or)
+
+ 2. The last line of _S_ is not a [blank line]
+
+    (or)
+
+ 3. _S_ is the last [list item line sequence] in the [block-element line
+    sequence], and the line immediately before the first line of _S_ in
+    the [block-element line sequence] is not a [blank line]
+
+If a [list item line sequence] is _bottom-packed_, the
+[list-item-processed line sequence] obtained from it is also said to be
+_bottom-packed_. Otherwise, the [list-item-processed line sequence] is
+not said to be _bottom-packed_.
 
 <h2 id="identifying-span-elements">Identifying span-elements</h2>
 
