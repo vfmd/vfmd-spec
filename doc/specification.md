@@ -3025,6 +3025,11 @@ tag's attribute value, needs to be escaped as described in this section.
 The `'` character is to be used as the enclosing quote character for
 attribute values.
 
+Note that the above rules for attribute values only apply for the
+attributes of HTML elements output as a result of a non-raw-HTML vfmd
+construct. While outputting
+[verbatim HTML](#procedure-for-identifying-html-tags), the attribute
+values should be written exactly as present in the source vfmd document.
 
 <h2 id="extending-the-syntax">Extending the syntax</h2>
 
