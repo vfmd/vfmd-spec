@@ -1,11 +1,16 @@
 <h1 id="vfmd-specification">vfmd specification</h1>
 
-This spec describes the [vfmd Markdown syntax] in formal terms, and
-is intended to be read by someone implementing this spec to parse or
-otherwise programmatically interpret vfmd input. If you only intend
-to write a document using vfmd, see the [userguide].
+[vfmd] is a variant of [Markdown] with a formal specification of its
+syntax.
 
-[vfmd Markdown syntax]: introduction.md
+This document describes the formal specification for the vfmd syntax.
+It is intended to be read by someone implementing this specification to
+parse or otherwise programmatically interpret vfmd input. If you only
+intend to write a document using vfmd, please read the [userguide]
+instead.
+
+[Markdown]: http://daringfireball.net/projects/markdown/
+[vfmd]: introduction.md
 [userguide]: userguide.md
 
 This document is organized as follows:
