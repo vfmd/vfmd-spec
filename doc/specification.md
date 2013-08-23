@@ -209,28 +209,11 @@ If a [line] contains no [characters], or if all [characters] in the
 [line] are [space] characters, that line is called a **blank line**.
 </span>
 
-[blank line]: #blank-line
-[blank lines]: #blank-line
-
-<h4 id="block-elements">Block-elements</h4>
-
-[block-elements]: #block-elements
-
-The [document] can be seen as a sequence of block-elements, where each
-block-element consists of a sequence of one or more [lines].
-
-There are different types of block-elements:
-
-- Paragraph
-- Header (atx-style, or setext-style)
-- Blockquote
-- List
-- Code block
-- Horizontal rule
-- Null block
-
 To [identify the block-elements] in the [document], the [document] is seen
 as a sequence of [lines].
+
+[blank line]: #blank-line
+[blank lines]: #blank-line
 
 [identify the block-elements]: #identifying-block-elements
 
