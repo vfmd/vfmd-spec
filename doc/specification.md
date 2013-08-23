@@ -36,6 +36,7 @@ This document is organized as follows:
   * [Additional processing]
     * [Processing text fragments]
     * [Processing for HTML output]
+  * [Extending the syntax]
 
 <h2 id="definitions">Definitions</h2>
 
@@ -506,7 +507,21 @@ Using the above rules, the [input line sequence] is broken down into a
 series of [block-element line sequences], and the block-element type of
 each [block-element line sequence] is identified.
 
+<span id="block-level-extensions">An implementation can extend the core
+vfmd syntax to support additional syntax elements. For every additional
+block-level syntax element, the implementation shall insert a rule in
+the above rule list, at a position at which it makes sense to recognize
+the particular construct. Given a [block-element start line], the rule
+shall identify whether the line is the beginning of the said block-level
+construct, and shall determine till what line in the [input line
+sequence] the block-level construct extends. Doing so will identify the
+[block-element line sequence] for the block-level construct. The
+implementation can decide how the [block-element line sequence] should
+be interpreted and output.</span>
+
 [verbatim HTML element]: #verbatim-html-element
+[block-level extensions]: #block-level-extensions
+[block-level extension]: #block-level-extension
 
 <h4 id="html-parser-states-relevant-to-end-of-paragraph">
 HTML parser states relevant to finding the end of a paragraph</h4>
@@ -1690,6 +1705,18 @@ The procedure to identify and interpret the _span tags_ is as follows:
 
 The _text fragments_ identified in the above procedure should be
 handled as specified in [processing text fragments].
+
+<span id="span-level-extensions">An implementation can extend the core
+vfmd syntax to support additional syntax elements. For every additional
+span-level syntax element, the implementation shall insert a rule in
+the above rule list, at a position at which it makes sense to recognize
+the particular construct. The rule shall determine whether a span-level
+construct begins at a particular position in the [input character
+sequence] or not, and if it does, how it should be interpreted and
+output.</span>
+
+[span-level extensions]: #span-level-extensions
+[span-level extension]: #span-level-extensions
 
 <h3 id="procedure-for-identifying-link-tags">Procedure for identifying link tags</h3>
 
@@ -2998,4 +3025,24 @@ tag's attribute value, needs to be escaped as described in this section.
 The `'` character is to be used as the enclosing quote character for
 attribute values.
 
+
+<h2 id="extending-the-syntax">Extending the syntax</h2>
+
+[Extending the syntax]: #extending-the-syntax
+
+An implementation can extend the core vfmd syntax to support additional
+syntax elements. The additional syntax elements can involve [block-level
+extensions], or [span-level extensions], or both.
+
+For example, to support [GitHub-style fenced code blocks], an
+implementation would need to add a [block-level extension]; to support
+[GitHub-style strikethroughs], an implementation would need to add a
+[span-level extension]; to support [MultiMarkdown-style footnotes], an
+implementation would need to add both a [block-level extension] \(for
+handling footnote definitions\) and a [span-level extension] \(for
+handling footnote references\).
+
+[GitHub-style fenced code blocks]: https://help.github.com/articles/github-flavored-markdown#fenced-code-blocks
+[GitHub-style strikethroughs]: https://help.github.com/articles/github-flavored-markdown#strikethrough
+[MultiMarkdown-style footnotes]: http://fletcher.github.io/peg-multimarkdown/#footnotes
 
