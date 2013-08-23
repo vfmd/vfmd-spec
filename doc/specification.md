@@ -13,9 +13,11 @@ instead.
 [vfmd]: introduction.md
 [userguide]: userguide.md
 
-This document is organized as follows:
+<h2>Table of contents</h2>
 
-  * [Definitions]
+  * [About this specification]
+    * [Structure of this specification]
+    * [Definitions]
   * [Identifying block-elements]
     * [The block-element line sequence]
     * [Type and extent of a block-element]
@@ -43,11 +45,39 @@ This document is organized as follows:
     * [Processing for HTML output]
   * [Extending the syntax]
 
-<h2 id="definitions">Definitions</h2>
+<h2 id="about-this-spec">About this specification</h2>
+
+[About this specification]: #about-this-spec
+
+<h3 id="structure-of-this-specification">Structure of this specification</h3>
+
+[Structure of this specification]: #structure-of-this-specification
+
+The specification is divided into the following major sections:
+
+  * [About this specification]: Defines terminologies and conventions
+    used in this specification.
+
+  * [Identifying block-elements]: Defines how block-level syntax
+    elements should be recognized.
+
+  * [Interpreting block-elements]: Defines how the block-level
+    constructs, after being recognized, should be handled.
+
+  * [Identifying span-elements]: Defines how span-level syntax elements
+    should be recognized and handled.
+
+  * [Additional processing]: Describes the processing that needs to be
+    done on the non-markup parts of the document.
+
+  * [Extending the syntax]: Shows how this specification can be extended
+    to support extensions to the core vfmd syntax.
+
+<h3 id="definitions">Definitions</h3>
 
 [Definitions]: #definitions
 
-<h3 id="document">Document</h3>
+<h4 id="document">Document</h4>
 
 [document]: #document
 
@@ -59,7 +89,7 @@ invalid in UTF-8 encoding are filtered off and are ignored. Therefore,
 for the following discussion, the [document] is considered to not have
 any invalid byte sequences.
 
-<h3 id="characters">Characters</h3>
+<h4 id="characters">Characters</h4>
 
 [character]: #characters
 [characters]: #characters
@@ -163,7 +193,7 @@ called the **enclosed string** of the [quoted string].</span>
 [quoted string]: #quoted-string
 [enclosed string]: #enclosed-string
 
-<h3 id="lines">Lines</h3>
+<h4 id="lines">Lines</h4>
 
 [line]: #lines
 [lines]: #lines
@@ -182,7 +212,7 @@ If a [line] contains no [characters], or if all [characters] in the
 [blank line]: #blank-line
 [blank lines]: #blank-line
 
-<h3 id="block-elements">Block-elements</h3>
+<h4 id="block-elements">Block-elements</h4>
 
 [block-elements]: #block-elements
 
