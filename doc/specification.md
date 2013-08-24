@@ -16,6 +16,7 @@ instead.
 <h2>Table of contents</h2>
 
   * [About this specification]
+    * [Scope of this specification]
     * [Structure of this specification]
     * [Conventions]
     * [Definitions]
@@ -49,6 +50,17 @@ instead.
 <h2 id="about-this-spec">About this specification</h2>
 
 [About this specification]: #about-this-spec
+
+<h3 id="scope-of-this-specification">Scope of this specification</h3>
+
+[Scope of this specification]: #scope-of-this-specification
+
+This specification defines how a vfmd source document should be
+interpreted. Wherever special consideration is required in creating a
+HTML representation of the document, this specification also specifies
+the required HTML output. Special considerations that may be required
+for other output formats is not explicitly defined in this
+specification.
 
 <h3 id="structure-of-this-specification">Structure of this specification</h3>
 
