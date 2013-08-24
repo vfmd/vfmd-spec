@@ -17,6 +17,7 @@ instead.
 
   * [About this specification]
     * [Structure of this specification]
+    * [Conventions]
     * [Definitions]
   * [Identifying block-elements]
     * [The block-element line sequence]
@@ -72,6 +73,39 @@ The specification is divided into the following major sections:
 
   * [Extending the syntax]: Shows how this specification can be extended
     to support extensions to the core vfmd syntax.
+
+<h3 id="conventions">Conventions</h3>
+
+[Conventions]: #conventions
+
+<h4 id="regular-expression-conventions">Regular expression conventions</h4>
+
+[Regular expression conventions]: #regular-expression-cpnventions
+
+This specification makes use of regular expressions to define the
+syntax. A regular expression appears as `/regularexpression/` in this
+specification - i.e. it appears in a code-span, enclosed between two
+forward slashes (like in Perl code).
+
+The regular expressions follow the [PCRE syntax] in UTF mode.
+Specifically, the following should be considered when reading the
+regular expressions in this document:
+
+ 1. A `\` character is used to escape any special character within a
+    regular expression, irrespective of whether it has a special meaning
+    at that position or not
+ 2. A <code style="white-space: pre;"> </code> within a regular
+    expression indicates a [space] character
+ 3. A `\s` within a regular expression indicates a [whitespace]
+    character
+
+The regular expressions used in this specification do not use any
+extended regular expression syntax (e.g. min/max quantifiers,
+backreferences, etc.), and confirm to a regular grammar. This means that
+these regular expressions can be adapted to any other regular expression
+syntax as may be required for an implementation of this specification.
+
+[PCRE syntax]: http://man.he.net/man3/pcrepattern
 
 <h3 id="definitions">Definitions</h3>
 
