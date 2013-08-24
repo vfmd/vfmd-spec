@@ -273,12 +273,12 @@ are seen as belonging to one of the following four groups:
  1. <span id="phrasing-html-elements">**Phrasing HTML elements** are
     HTML elements that belong to the [phrasing content] category in
     [HTML5].</span> The elements in this group are: `a`, `abbr`, `area`,
-    `b`, `bdi`, `bdo`, `br`, `button`, `canvas`, `cite`, `code`, `data`,
-    `datalist`, `del`, `dfn`, `em`, `embed`, `i`, `iframe`, `img`,
-    `input`, `ins`, `kbd`, `keygen`, `label`, `map`, `mark`, `meter`,
-    `noscript`, `object`, `output`, `progress`, `q`, `ruby`, `s`,
-    `samp`, `select`, `small`, `span`, `strong`, `sub`, `sup`,
-    `textarea`, `time`, `u`, `var` and `wbr`.
+    `audio`, `b`, `bdi`, `bdo`, `br`, `button`, `canvas`, `cite`,
+    `code`, `data`, `datalist`, `del`, `dfn`, `em`, `embed`, `i`,
+    `iframe`, `img`, `input`, `ins`, `kbd`, `keygen`, `label`, `map`,
+    `mark`, `meter`, `noscript`, `object`, `output`, `progress`, `q`,
+    `ruby`, `s`, `samp`, `select`, `small`, `span`, `strong`, `sub`,
+    `sup`, `textarea`, `time`, `u`, `var`, `video` and `wbr`.
 
  2. <span id="verbatim-html-starter-elements">**Verbatim HTML starter
     elements** are HTML elements that are [flow content], but not
