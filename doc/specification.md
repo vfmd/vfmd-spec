@@ -3099,9 +3099,11 @@ values should be written exactly as present in the source vfmd document.
 
 [Extending the syntax]: #extending-the-syntax
 
-An implementation can extend the core vfmd syntax to support additional
+An implementation can extend the [core syntax] to support additional
 syntax elements. The additional syntax elements can involve [block-level
 extensions], or [span-level extensions], or both.
+
+[core syntax]: introduction.md#core-syntax
 
 For example, to support [GitHub-style fenced code blocks], an
 implementation would need to add a [block-level extension]; to support
