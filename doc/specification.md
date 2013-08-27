@@ -1427,7 +1427,8 @@ in `p` tags, unless any of the following conditions is satisfied:
 
  5. The [block-element line sequence] for the paragraph block is the
     last [block-element line sequence] of its [parent line sequence],
-    and the [parent line sequence] is a
+    but not the second [block-element line sequence] of its
+    [parent line sequence], and the [parent line sequence] is a
     [bottom-packed list-item-processed line sequence]
 
 If any of the above 5 conditions is satisfied, the HTML output of the
