@@ -562,7 +562,7 @@ block-element and the [block-element end line]:
          2. The succeeding line contains three or more `*` characters,
             and is composed entirely of instances of the `*` character
             and optional [space] characters (or similarly with `-` or
-            `[` characters)
+            `_` characters)
 
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
