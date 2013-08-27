@@ -331,8 +331,21 @@ We define the following regular expression patterns:
 
    Example: <code style="white-space: pre;"> 1. </code>
 
+ * <span id="horizontal-rule-pattern">
+   **horizontal rule pattern**</span>: `/^ *((\* *\* *\* *[\* ]*)|(\- *\- *\- *[\- ]*)|(_ *_ *_ *[_ ]*))$/`
+
+   Any line that matches the _horizontal rule pattern_ would be
+   composed of just asterisks (minimum three) and [space] characters, or
+   just underscores (minimum three) and [space] characters, or just
+   dashes (minimum three) and [space] characters.
+
+   Examples:  
+   `*****`  
+   `   -- -- --   `
+
 [unordered list starter pattern]: #unordered-list-starter-pattern
 [ordered list starter pattern]: #ordered-list-starter-pattern
+[horizontal rule pattern]: #horizontal-rule-pattern
 
 The following rules are to be followed in determining the type of the
 block-element and the [block-element end line]:
@@ -403,15 +416,8 @@ block-element and the [block-element end line]:
     [input line sequence] is the [block-element end line].
 
  7. If none of the above conditions apply, and if the [block-element
-    start line] contains three or more `*` characters, and is composed
-    entirely of instances of the `*` character and optional [space]
-    characters, then the line forms a block-element of type
-    [**horizontal rule**].
-
-    Similarly, if the [block-element start line] contains either three
-    or more `-` characters, or three or more `_` characters, and is
-    composed entirely of the same character and optional [space]
-    characters, then the block-element is of type [horizontal rule].
+    start line] matches the [horizontal rule pattern], then the line
+    forms a block-element of type [**horizontal rule**].
 
     The [block-element end line] is the same as the [block-element start
     line].
@@ -559,10 +565,7 @@ block-element and the [block-element end line]:
 
             (or)
 
-         2. The succeeding line contains three or more `*` characters,
-            and is composed entirely of instances of the `*` character
-            and optional [space] characters (or similarly with `-` or
-            `_` characters)
+         2. The succeeding line matches the [horizontal rule pattern]
 
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
