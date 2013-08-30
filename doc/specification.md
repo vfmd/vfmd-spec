@@ -568,6 +568,18 @@ block-element and the [block-element end line]:
             a `>` character, and the [input line sequence] is a
             [blockquote-processed line sequence]
 
+            (or)
+
+         3. The succeeding line matches the [ordered list starter
+            pattern], and the [input line sequence] is a
+            [list-item-processed line sequence]
+
+            (or)
+
+         4. The succeeding line matches the [unordered list starter
+            pattern], and the [input line sequence] is a
+            [list-item-processed line sequence]
+
 
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
