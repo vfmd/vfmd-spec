@@ -560,12 +560,14 @@ block-element and the [block-element end line]:
         succeeding line that satisfies at least one of the following
         conditions:
 
-         1. The leftmost [non-space] character in the succeeding line is
-            a `>` character
+         1. The succeeding line matches the [horizontal rule pattern]
 
             (or)
 
-         2. The succeeding line matches the [horizontal rule pattern]
+         2. The leftmost [non-space] character in the succeeding line is
+            a `>` character, and the [input line sequence] is a
+            [blockquote-processed line sequence]
+
 
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
