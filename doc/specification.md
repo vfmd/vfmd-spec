@@ -823,9 +823,11 @@ the first [non-space] character in the [line].
 If the last [line] in the [block-element line sequence] is a [blank
 line], the last [line] is ignored.
 
+<span id="blockquote-processed-line-sequence">
 Each [line] in the [block-element line sequence] is processed to produce
 a modified sequence of [lines], called the _blockquote-processed line
 sequence_. The following processing is to be done for each [line]:
+</span>
 
  1. If the [line] matches the regular expression `/^ *> /`, then the
 part of the [line] that matches the said regular expression shall be removed
@@ -834,11 +836,13 @@ from the line
 the regular expression `/^ *>/`, then the part of the [line] that
 matches the said regular expression shall be removed from the line
 
-The _blockquote-processed line sequence_ obtained this way can be
+The [blockquote-processed line sequence] obtained this way can be
 considered as the [input line sequence] for a sequence of block-elements
 nested within the blockquote. The result of interpreting that [input
 line sequence] further into block-elements shall form the content of the
 blockquote element.
+
+[blockquote-processed line sequence]: #blockquote-processed-line-sequence
 
 For example, consider the following [block-element line sequence]:
 
@@ -848,17 +852,17 @@ For example, consider the following [block-element line sequence]:
       >     print "Hello World!\n";
 
 After processing each line in the above [block-element line sequence],
-the _blockquote-processed line sequence_ obtained is as follows:
+the [blockquote-processed line sequence] obtained is as follows:
 
     In Perl, a Hello World is
     written as follows:
 
         print "Hello World!\n";
 
-When we treat the _blockquote-processed line sequence_ as an [input line
+When we treat the [blockquote-processed line sequence] as an [input line
 sequence], we can recognize nested block elements in it of type
 paragraph and code block. The HTML equivalent for the [lines] in the
-_blockquote-processed line sequence_ is as follows:
+[blockquote-processed line sequence] is as follows:
 
     <p>In Perl, a Hello World is
     written as follows:</p>
