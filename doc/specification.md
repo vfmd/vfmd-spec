@@ -395,22 +395,26 @@ block-element and the [block-element end line]:
 
  6. If none of the above conditions apply, and if the first
     [non-space] character in the [block-element start line] is a `>`
-    character, then the block-element is of type [**blockquote**]. The
-    [block-element end line] is the next subsequent line in the [input
-    line sequence] that is a [blank line] and is immediately succeeded
-    by a succeeding line that satisfies one of the following conditions:
+    character, then the block-element is of type [**blockquote**].
+    The [block-element end line] is the next subsequent line in the
+    [input line sequence], starting from and inclusive of the
+    [block-element start line], that satisfies one of the following
+    conditions:
 
-     1. The succeeding line is a [blank line]
+     1. The line is a [blank line] and is immediately succeeded by
+        another [blank line]
 
         (or)
 
-     2. The succeeding line begins with four or more consecutive [space]
+     2. The line is a [blank line] and is immediately succeeded by a
+        succeeding line that begins with four or more consecutive [space]
         characters
 
         (or)
 
-     3. The first [non-space] character in the succeeding line is not
-        a `>` character
+     3. The line is a [blank line] that is immediately succeeded by a
+        succeeding line, and the first [non-space] character in the
+        succeeding line is not a `>` character
 
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
