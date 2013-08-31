@@ -416,6 +416,14 @@ block-element and the [block-element end line]:
         succeeding line, and the first [non-space] character in the
         succeeding line is not a `>` character
 
+        (or)
+
+     4. The line is not a [blank line] and is immediately succeeded by a
+        succeeding line that statisfies all of the following conditions:
+         1. The succeeding line does not begin with four or more
+            consecutive [space] characters
+         2. The succeeding line matches the [horizontal rule pattern]
+
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
 
@@ -474,8 +482,11 @@ block-element and the [block-element end line]:
             starter string_ seen in the [block-element start line]
          2. The first _unordered-list-starter-string-length_ characters
             of the succeeding line include [non-space] characters
-         3. The succeeding line matches either the [unordered list
-            starter pattern] or the [ordered list starter pattern]
+         3. The succeeding line does not begin with four or more
+            consecutive [space] characters
+         4. The succeeding line matches the [unordered list
+            starter pattern], or matches the [ordered list starter
+            pattern], or matches the [horizontal rule pattern]
 
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
@@ -525,8 +536,10 @@ block-element and the [block-element end line]:
             pattern]
          2. The first _ordered-list-starter-string-length_ characters of
             the succeeding line include [non-space] characters
-         3. The succeeding line matches the [unordered list starter
-            pattern]
+         3. The succeeding line does not begin with four or more
+            consecutive [space] characters
+         4. The succeeding line either matches the [unordered list
+            starter pattern], or matches the [horizontal rule pattern]
 
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
