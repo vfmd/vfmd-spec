@@ -557,8 +557,9 @@ block-element and the [block-element end line]:
             well-formed [verbatim HTML element]"
 
      2. The line is a [blank line], or is immediately succeeded by a
-        succeeding line that satisfies at least one of the following
-        conditions:
+        succeeding line that does not begin with four or more
+        consecutive [space] characters, and satisfies at least one of
+        the following conditions:
 
          1. The succeeding line matches the [horizontal rule pattern]
 
