@@ -213,7 +213,6 @@ For example:
     >
     > > This is a nested blockquote.
     > > The second line of the nested blockquote.
-    > >
     > > > This is the third level of nesting.
     >
     > Some code that gives the ultimate answer of
@@ -222,6 +221,21 @@ For example:
     >     int main() {
     >         return 42;
     >     }
+
+Blockquotes should be separated from other block-level elements with a
+blank line. However, a preceding blank line is not necessary for nested
+blockquotes.
+
+For example:
+
+    This text should be followed by a blank line
+    before the blockquote can begin.
+
+    > But within the blockquote, nested blockquotes
+    > can start without being separated by a blank
+    > line.
+    > > This is a nested blockquote
+    > > that starts without a preceding blank line
 
 <h3 id="horizontal-rule">Horizontal rule</h3>
 
