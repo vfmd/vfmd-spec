@@ -170,6 +170,9 @@ becomes, in HTML output:
     This is &lt;del&gt;normal text&lt;/del&gt; an intro.
     </pre></code>
 
+If you'd like to have two code blocks one after the other, please use
+two blank lines to separate them.
+
 <h3 id="blockquotes">Blockquotes</h3>
 
 [Blockquotes]: #blockquotes
@@ -201,6 +204,9 @@ blockquoted paragraphs, they form a single blockquote, like this:
     
     > 'Right, as usual,' said the Duchess: 'what a clear way you
     have of putting things!'
+
+If you'd like to have two blockquotes one after the other, please use
+two blank lines to separate them.
 
 Blockquotes can contain other elements, like headers, code blocks and
 nested blockquotes.
