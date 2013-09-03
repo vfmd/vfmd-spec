@@ -1,0 +1,8 @@
+name: vfmd
+tagline: Markdown with a spec
+
+url: /
+rooturl: http://vfmd.github.io
+githuburl: https://github.com/vfmd
+
+markdown: redcarpet
