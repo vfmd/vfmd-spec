@@ -1,3 +1,11 @@
+---
+
+layout: doc  
+title: "Introducing vfmd"  
+permalink: introduction/  
+
+---
+
 # Introducing vfmd
 
 **vfmd** is a variant of [Markdown] with a formal specification of its

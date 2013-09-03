@@ -1,3 +1,11 @@
+---
+
+layout: doc  
+title: "The vfmd userguide"  
+permalink: userguide/  
+
+---
+
 # vfmd userguide
 
 This document describes the [vfmd] syntax in simple terms, and

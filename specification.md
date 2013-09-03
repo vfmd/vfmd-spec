@@ -1,3 +1,11 @@
+---
+
+layout: doc  
+title: "The vfmd specification"  
+permalink: specification/  
+
+---
+
 <h1 id="vfmd-specification">vfmd specification</h1>
 
 [vfmd] is a variant of [Markdown] with a formal specification of its
