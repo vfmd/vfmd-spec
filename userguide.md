@@ -6,10 +6,13 @@ permalink: userguide/
 
 ---
 
-# vfmd userguide
+# The vfmd userguide
 
-This document describes the [vfmd] syntax in simple terms, and
-is intended to be of help for people writing in vfmd.
+**vfmd** is a variant of [Markdown] with an unambiguous specification of
+its syntax.
+
+This document describes the vfmd syntax in simple terms, and is intended
+to be of help for people writing in vfmd.
 
 The vfmd syntax is pretty much the same as the [original Markdown
 syntax], with a few minor changes and added clarifications.
@@ -18,10 +21,10 @@ vfmd enables you to represent rich-text markup in plain-text files. It
 supports block-level markup like lists, blockquotes and code-blocks, and
 also supports span-level markup like emphasis, links and inline-code.
 
-[vfmd]: introduction.md
 [original Markdown syntax]: http://daringfireball.net/projects/markdown/syntax
+[Markdown]: http://daringfireball.net/projects/markdown/
 
-This document is organized as follows:
+## Table of contents
 
   * [Encoding]
   * [Block-level elements]
