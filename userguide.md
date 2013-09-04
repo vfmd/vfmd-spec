@@ -3,6 +3,8 @@
 layout: doc  
 title: "The vfmd userguide"  
 permalink: userguide/  
+license: http://vfmd.github.io/vfmd-spec/LICENSE.txt  
+license-link-text: "the BSD license"  
 
 ---
 

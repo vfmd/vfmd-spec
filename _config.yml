@@ -4,5 +4,6 @@ tagline: Markdown with a spec
 url: /
 rooturl: http://vfmd.github.io
 githuburl: https://github.com/vfmd
+licenseurl: http://vfmd.github.io/vfmd-spec/LICENSE.txt
 
 markdown: redcarpet

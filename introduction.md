@@ -3,6 +3,8 @@
 layout: doc  
 title: "Introducing vfmd"  
 permalink: introduction/  
+license: http://vfmd.github.io/vfmd-spec/LICENSE.txt  
+license-link-text: "an MIT-style license"  
 
 ---
 
