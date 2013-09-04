@@ -8,14 +8,13 @@ permalink: specification/
 
 <h1 id="vfmd-specification">vfmd specification</h1>
 
-[vfmd] is a variant of [Markdown] with a formal specification of its
-syntax.
+[vfmd] is a variant of [Markdown] with an unambiguous specification of
+its syntax.
 
-This document describes the formal specification for the vfmd syntax.
-It is intended to be read by someone implementing this specification to
-parse or otherwise programmatically interpret vfmd input. If you only
-intend to write a document using vfmd, please read the [userguide]
-instead.
+This document describes the specification for the vfmd syntax. It is
+intended to be read by someone implementing this specification to parse
+or otherwise programmatically interpret vfmd input. If you only intend
+to write a document using vfmd, please read the [userguide] instead.
 
 [Markdown]: http://daringfireball.net/projects/markdown/
 [vfmd]: introduction.md

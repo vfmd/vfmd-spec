@@ -8,8 +8,8 @@ permalink: introduction/
 
 # Introducing vfmd
 
-**vfmd** is a variant of [Markdown] with a formal specification of its
-syntax.
+**vfmd** is a variant of [Markdown] with an unambiguous specification of
+its syntax.
 
 vfmd stands for _vanilla-flavoured markdown_. It formalises the
 [original Markdown syntax] as a fully-defined specification, adding a
