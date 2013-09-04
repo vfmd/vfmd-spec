@@ -6,9 +6,9 @@ permalink: specification/
 
 ---
 
-<h1 id="vfmd-specification">vfmd specification</h1>
+# The vfmd specification
 
-[vfmd] is a variant of [Markdown] with an unambiguous specification of
+**vfmd** is a variant of [Markdown] with an unambiguous specification of
 its syntax.
 
 This document describes the specification for the vfmd syntax. It is
@@ -18,7 +18,7 @@ to write a document using vfmd, please read the [userguide] instead.
 
 [Markdown]: http://daringfireball.net/projects/markdown/
 [vfmd]: introduction.md
-[userguide]: userguide.md
+[userguide]: http://vfmd.github.io/vfmd-spec/userguide/
 
 <h2>Table of contents</h2>
 
