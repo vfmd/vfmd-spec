@@ -700,14 +700,23 @@ The relevant states of the HTML parser when looking for the
         Outside <div> Inside </div> Outside
         Outside
 
-Note that a HTML parser can know whether a HTML element is well-formed
-or not, only after encountering an end tag. So, after consuming only
-part of the input, the HTML parser might not know whether it's in the
-"within the contents of a well-formed [verbatim HTML element]" state, or
-it's in the "within the contents of a not-well-formed [verbatim HTML
-element]" state. So, in order to find the end of the paragraph without
-backtracking, it is suggested that an implementation employ the
-following design:
+Note that a HTML parser can know whether a `<` marks the start of a HTML
+construct or not only after it has seen the rest of the text. For
+example, if a matching `>` is not found, the first `<` does not indicate
+the start of a HTML construct at all. As another example, if the `<` is
+immediately followed by a `!--` and later followed by a `-->`, the `<`
+marks the start of a HTML comment. Consequently, the HTML parser should
+lookahead as many character as may be necessary and return the
+appropriate state considering all these possibilities.
+
+Also note that a HTML parser can know whether a HTML element is
+well-formed or not, only after encountering an end tag. So, after
+consuming only part of the input, the HTML parser might not know whether
+it's in the "within the contents of a well-formed [verbatim HTML
+element]" state, or it's in the "within the contents of a
+not-well-formed [verbatim HTML element]" state. So, in order to find the
+end of the paragraph without backtracking, it is suggested that an
+implementation employ the following design:
 
   * When an opening tag of a [verbatim HTML element] is encountered,
     keep in mind that it could turn out to be either a well-formed HTML
