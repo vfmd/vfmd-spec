@@ -1477,20 +1477,22 @@ in `p` tags, unless any of the following conditions is satisfied:
  3. The _paragraph text_ contains a HTML element that is not a
     [phrasing-html-element]
 
- 4. The [block-element line sequence] for the paragraph block is the
+ 4. The _paragraph text_ contains a HTML comment
+
+ 5. The [block-element line sequence] for the paragraph block is the
     first [block-element line sequence] of its [parent line sequence],
     and the [parent line sequence] is a
     [top-packed list-item-processed line sequence]
 
- 5. The [block-element line sequence] for the paragraph block is the
+ 6. The [block-element line sequence] for the paragraph block is the
     last [block-element line sequence] of its [parent line sequence],
     but not the second [block-element line sequence] of its
     [parent line sequence], and the [parent line sequence] is a
     [bottom-packed list-item-processed line sequence]
 
-If any of the above 5 conditions is satisfied, the HTML output of the
-paragraph shall be the same as the content of the paragraph, without
-wrapping it in `p` tags.
+If one or more of the above 6 conditions is satisfied, the HTML output
+of the paragraph shall be the same as the content of the paragraph,
+without wrapping it in `p` tags.
 
 <h3 id="reference-resolution-block">reference-resolution block</h3>
 
