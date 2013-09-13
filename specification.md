@@ -2597,66 +2597,7 @@ If the [remaining-character-sequence] matches the
 If the [remaining-character-sequence] matches the
 [image-tag-starter-pattern], then the following is done:
 
- 1. If the [residual-image-sequence] matches any of the following
-    regular expression patterns:
-
-     1. With trailing empty square brackets: `/^(\]\s*\[\s*\])/`
-
-        Example: `][]`
-
-     2. With no trailing opening bracket: `/^(\])\s*[^\[\(]/`
-
-        Example: `] a`
-
-     3. At the very end: `/^(\]\s*)$/`
-
-        Example: `]`
-
-    then the following is done:
-
-    <!-- For some reason, Redcarpet requires a comment here to correctly
-    display the following list -->
-
-     1. The matching substring for the first and only
-        parenthesized subexpression in the matching pattern shall be
-        called the _image-ref-close-sequence_. The number of characters
-        in the _image-ref-close-sequence_ is called the
-        _image-ref-close-sequence-length_.
-
-     2. Let _image-ref-tag-length_ be equal to the sum of the
-        [alt-text-pattern-match-length] and the
-        _image-ref-close-sequence-length_. The first
-        _image-ref-tag-length_ characters of the
-        [remaining-character-sequence] are collectively identified as an
-        **image tag**.
-
-     3. Let _reference id string_ be the string obtained on
-        [simplifying] the [image-alt-text-string].
-
-        The _reference id string_ shall be used to look up the actual
-        image url and image title from the [link reference association
-        map].
-
-        If the [link reference association map] contains an entry for
-        _reference id string_, then the output shall have the source of
-        the image as the link url and the title of the image as the link
-        title (if available) specified in the entry for the _reference
-        id string_ in the [link reference association map]. The
-        [image-alt-text-string] shall be used as the alternate text for
-        the image. For HTML output, the title of the image and the
-        alternate text for the image should be
-        [attribute-value-escaped].
-
-        If the [link reference association map] does not contain an
-        entry for _reference id string_, then the output shall not
-        include an image for this _image tag_. Instead, the first
-        _image-ref-tag-length_ characters of the
-        [remaining-character-sequence] are output as text. For HTML
-        output, this text should be [html-text-escaped].
-
-     4. Set [consumed-character-count] to _image-ref-tag-length_
-
- 2. If the [residual-image-sequence] matches the regular expression
+ 1. If the [residual-image-sequence] matches the regular expression
     pattern `/^\]\s*\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
     then the following is done:
 
@@ -2697,7 +2638,7 @@ If the [remaining-character-sequence] matches the
 
      4. Set [consumed-character-count] to _image-ref-tag-length_
 
- 3. If the [residual-image-sequence] matches the regular expression
+ 2. If the [residual-image-sequence] matches the regular expression
     pattern `/^\]\s*\(/` and if both the following conditions are
     satisfied:
 
@@ -2739,26 +2680,20 @@ If the [remaining-character-sequence] matches the
             If this is the matching pattern, the _title string_ is said
             to be _null_.
 
-         2. Title and/or appended ignorable text and closing paranthesis:
-            `/^\s*((("(([^"\\]|\\.)*)")|('(([^'\\]|\\.)*)')|(([^"'\)\\]|\\.)*))+)\)/`
+         2. Title and closing paranthesis:  
+            `/^\s*("(([^"\\]|\\.)*)"|'(([^'\\]|\\.)*)')\s*\)/`
 
             Examples:  
             `"Title")`  
             `'Title')`  
-            `"A (nice) \"title\" for the image")`  
-            `'Title' followed by random ignored text)`  
-            `"Title" followed by random "(ignored)" text)`  
-            `just random ignored text)`  
-            `just ignored text with \(escaped parentheses\))`
+            `"A (nice) \"title\" for the 'image'")`
 
             If this is the matching pattern, the matching substring for
-            the first parenthesized subexpression in the pattern is
-            [trimmed] to give the _attributes-string_. If the
-            _attributes-string_ begins with a [quoted string], then the
-            [enclosed string] of the [quoted string] is called the
-            _title string_. If the _attributes-string_ does not begin
-            with a [quoted string], then the _title string_ is said to
-            be _null_.
+            the first (i.e. outer) parenthesized subexpression in the
+            pattern is called the _attributes-string_. The
+            _attributes-string_ will be a [quoted string], and the
+            [enclosed string] of the [quoted string] is said to form the
+            _title string_.
 
         The number of characters in the
         _residual-image-attribute-sequence_ that were consumed in
@@ -2773,7 +2708,7 @@ If the [remaining-character-sequence] matches the
      1. Let _image-src-tag-length_ be equal to the sum of
         [alt-text-pattern-match-length] and
         _image-source-pattern-match-length_ and
-        _image-attributes-pattern-match-length_.  The first
+        _image-attributes-pattern-match-length_. The first
         _image-src-tag-length_ characters of the
         [remaining-character-sequence] are collectively identified as an
         **image tag**.
@@ -2787,10 +2722,53 @@ If the [remaining-character-sequence] matches the
 
      3. Set [consumed-character-count] to _image-src-tag-length_
 
- 4. If none of the above 3 conditions are satisfied, then the first 2
-    characters of the [remaining-character-sequence] \(which should form
-    the string `![`\) are interpreted as a _text fragment_, and
-    [consumed-character-count] is set to 2
+ 3. If neither of the above conditions are satisfied, then the following
+    is done:
+
+     1. Let _empty-ref-pattern_ be the regular expression pattern
+        `/^(\]\s*\[\s*\])/` (Example: `][]`)
+
+        If the remaining-character-sequence matches the
+        _empty-ref-pattern_, then the length of the matching substring
+        for the whole pattern is said to be the
+        _image-ref-close-sequence-length_.
+
+        If the remaining-character-sequence does not match the
+        _empty-ref-pattern_, then the _image-ref-close-sequence-length_
+        is said to be 1.
+
+     2. Let _image-ref-tag-length_ be equal to the sum of
+        [alt-text-pattern-match-length] and
+        _image-ref-close-sequence-length_. The first
+        _image-ref-tag-length_ characters of the
+        [remaining-character-sequence] are collectively identified as an
+        **image tag**.
+
+     3. Let _reference id string_ be the string obtained on simplifying
+        the [image-alt-text-string].
+
+        The _reference id string_ shall be used to look up the actual
+        image url and image title from the [link reference association
+        map].
+
+        If the [link reference association map] contains an entry for
+        _reference id string_, then the output shall have the source of
+        the image as the link url and the title of the image as the link
+        title (if available) specified in the entry for the _reference
+        id string_ in the [link reference association map]. The
+        [image-alt-text-string] shall be used as the alternate text for
+        the image. For HTML output, the title of the image and the
+        alternate text for the image should be
+        [attribute-value-escaped].
+
+        If the [link reference association map] does not contain an
+        entry for _reference id string_, then the output shall not
+        include an image for this _image tag_. Instead, the first
+        _image-ref-tag-length_ characters of the
+        [remaining-character-sequence] are output as text. For HTML
+        output, this text should be [html-text-escaped].
+
+     4. Set [consumed-character-count] to _image-ref-tag-length_
 
 
 <h3 id="procedure-for-detecting-automatic-links">Procedure for detecting automatic links</h3>
