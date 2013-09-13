@@ -1870,36 +1870,179 @@ be the start of a _closing link tag_. In this case, the following is
 done:
 
  1. If the [topmost node of type] _link node_ is not
-    [_null_](#topmost-node-of-type-is-null), and the if the
-    [remaining-character-sequence] matches any of the following regular
-    expression patterns:
-
-     1. With trailing empty square brackets:
-        `/^(\]\s*\[\s*\])/`
-
-        Example:  
-        `][]`
-
-     2. With no trailing opening bracket:
-        `/^(\])\s*[^\[\(]/`
-
-        Example:  
-        `] a`
-
-     3. At the very end:
-        `/^(\]\s*)$/`
-
-        Example:  
-        `]`
-
+    [_null_](#topmost-node-of-type-is-null), and if the
+    [remaining-character-sequence] matches the regular expression
+    pattern `/^\]\s*\[(([^\\\[\]]|\\.)+)\]/` (Example: `] [ref id]`),
     then the following is done:
+
+     1. The matching substring for the whole of the pattern is
+        identified as a **closing link tag**.
+
+     2. The matching substring for the first (i.e. outer) parenthesized
+        subexpression in the pattern is [simplified] to obtain the
+        _reference id string_
+
+     3. If the [topmost node of type] _link node_ is not already
+        the [top node], all nodes above it are popped off and
+        interpreted as _text fragments_
+
+     4. The [top node] (which should have its _node type_ equal to
+        _link node_) is interpreted as an _opening span tag_, or
+        more specifically, as an **opening link tag**
+
+     5. The _closing link tag_ is said to correspond to the _opening
+        link tag_, and any _span tags_ or _text fragments_ occuring
+        between the _opening link tag_ and the _closing link tag_ are
+        considered to form the _enclosed content_ of the link
+
+     6. The _reference id string_ shall be used to look up the actual
+        link url and link title from the [link reference association
+        map].
+
+        If the [link reference association map] contains an entry for
+        _reference id string_, then the output shall have the _enclosed
+        content_ linked to the link url and link title specified in the
+        entry for the _reference id string_ in the [link reference
+        association map]. For HTML output, the link title should be
+        [attribute-value-escaped].
+
+        If the [link reference association map] does not contain an
+        entry for _reference id string_, then the output shall have the
+        _enclosed content_ without being part of a link,
+        enclosed within the text forming the _opening link tag_ and the
+        text forming the _closing link tag_. For HTML output, the text
+        forming the _closing link tag_ should be [html-text-escaped]
+        before being output.
+
+     7. The [top node] is popped off
+
+     8. All nodes with _node type_ equal to _link node_ are removed from
+        the [stack of potential opening span tags]
+
+     9. Set [consumed-character-count] to the number of characters in
+        the _closing link tag_
+
+ 2. If the [topmost node of type] _link node_ is not
+    [_null_](#topmost-node-of-type-is-null), and if both the following
+    conditions are satisfied:
+
+     1. The [remaining-character-sequence] matches one of the following
+        regular expression patterns:
+
+         1. URL without angle brackets: `/^\]\s*\(\s*([^\(\)<>\s]+)([\)\s].*)$/`
+
+            Example: `] (http://www.example.net` + _residual-link-attribute-sequence_
+
+         2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]*)>([\)].+)$/`
+
+            Examples:  
+            `](<http://example.net>` + _residual-link-attribute-sequence_  
+            `] ( <http://example.net/?q=)>` + _residual-link-attribute-sequence_
+
+        In case of either pattern, the matching substring for the first
+        parenthesised subexpression shall be called the _unprocessed url
+        string_, and the matching substring for the second parenthesized
+        subexpression shall be called the
+        _residual-link-attribute-sequence_.  Any [whitespace] characters
+        in the _unprocessed url string_ are removed, and the resultant
+        string is called the _link url string_.
+
+        The position at which the _residual-link-attribute-sequence_
+        starts within the [remaining-character-sequence] \(i.e. the
+        number of characters present in the
+        [remaining-character-sequence] before the start of the
+        _residual-link-attribute-sequence_\) shall be called the
+        _url-pattern-match-length_.
+
+     2. The _residual-link-attribute-sequence_ matches one of the
+        following regular expression patterns:
+
+         1. Just the closing paranthesis: `/^\s*\)/`
+
+            Example: `)`
+
+            If this is the matching pattern, the _title string_ is said
+            to be _null_.
+
+         2. Title and closing paranthesis:  
+            `/^\s*("(([^"\\]|\\.)*)"|'(([^'\\]|\\.)*)')\s*\)/`
+
+            Examples:  
+            `"Title")`  
+            `'Title')`  
+            `"A (nice) \"title\" for the 'link'")`
+
+            If this is the matching pattern, the matching substring for
+            the first (i.e. outer) parenthesized subexpression in the
+            pattern is called the _attributes-string_. The
+            _attributes-string_ will be a [quoted string], and the
+            [enclosed string] of the [quoted string] is said to form the
+            _title string_.
+
+        The number of characters in the
+        _residual-link-attribute-sequence_ that were consumed in
+        matching the whole of the matching pattern is called the
+        _attributes-pattern-match-length_.
+
+    then, the following is done:
 
     <!-- For some reason, Redcarpet requires a comment here to correctly
     display the following list -->
 
-     1. The matching substring for the first and only parenthesized
-        subexpression in the matching pattern is identified as a
-        **closing link tag**.
+     1. Let _close-link-tag-length_ be equal to the sum of the
+        _url-pattern-match-length_ and the
+        _attributes-pattern-match-length_. The first
+        _close-link-tag-length_ characters of the
+        [remaining-character-sequence] are collectively identified as a
+        **closing link tag**
+
+     2. If the [topmost node of type] _link node_ is not already the
+        [top node], all nodes above it are popped off and interpreted as
+        _text fragments_
+
+     3. The [top node] \(which should have its _node type_ equal to _link
+        node_\) is interpreted as an _opening span tag_, or more
+        specifically, as an **opening link tag**
+
+     4. The _closing link tag_ is said to correspond to the _opening
+        link tag_, and any _span tags_ or _text fragments_ occuring
+        between the _opening link tag_ and the _closing link tag_ are
+        considered to form the _enclosed content_ of the link
+
+     5. The _link url string_ shall be used as the link url for the
+        link.  If the _title string_ is not _null_, the _title string_
+        shall be used as the title for the link. The output shall have
+        the _enclosed content_ linked to the link url and link title.
+        For HTML output, the link title should be
+        [attribute-value-escaped].
+
+     6. The [top node] is popped off
+
+     7. All nodes with _node type_ equal to _link node_ are removed from
+        the [stack of potential opening span tags]
+
+     8. Set [consumed-character-count] to _close-link-tag-length_
+
+ 3. If neither of the above conditions are satisfied, and if the
+    [topmost node of type] _link node_ is not
+    [_null_](#topmost-node-of-type-is-null), and if the
+    character at the [current-position] is a `]` character, then the
+    following is done:
+
+     1. Let _empty-ref-pattern_ be the regular expression pattern
+        `/^(\]\s*\[\s*\])/` (Example: `][]`)
+
+        If the [remaining-character-sequence] matches the
+        _empty-ref-pattern_, then the length of the matching substring
+        for the whole pattern is said to be the _close-link-tag-length_.
+
+        If the [remaining-character-sequence] does not match the
+        _empty-ref-pattern_, then the _close-link-tag-length_ is said to
+        be 1.
+
+        The first _close-link-tag-length_ characters of the
+        [remaining-character-sequence] are collectively identified as a
+        **closing link tag**
 
      2. If the [topmost node of type] _link node_ is not already the
         [top node], all nodes above it are popped off and interpreted as
@@ -1946,167 +2089,9 @@ done:
      8. Set [consumed-character-count] to the number of characters in
         the _closing link tag_
 
- 2. If the [topmost node of type] _link node_ is not
-    [_null_](#topmost-node-of-type-is-null), and if the
-    [remaining-character-sequence] matches the regular expression
-    pattern `/^\]\s*\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
-    then the following is done:
-
-     1. The matching substring for the whole of the pattern is
-        identified as a **closing link tag**
-
-     2. The matching substring for the first (i.e. outer) parenthesized
-        subexpression in the pattern is [simplified] to obtain the
-        _reference id string_
-
-     3. If the [topmost node of type] _link node_ is not already
-        the [top node], all nodes above it are popped off and
-        interpreted as _text fragments_
-
-     4. The [top node] (which should have its _node type_ equal to
-        _link node_) is interpreted as an _opening span tag_, or
-        more specifically, as an **opening link tag**
-
-     5. The _closing link tag_ is said to correspond to the _opening
-        link tag_, and any _span tags_ or _text fragments_ occuring
-        between the _opening link tag_ and the _closing link tag_ are
-        considered to form the _enclosed content_ of the link
-
-     6. The _reference id string_ shall be used to look up the actual
-        link url and link title from the [link reference association
-        map].
-
-        If the [link reference association map] contains an entry for
-        _reference id string_, then the output shall have the _enclosed
-        content_ linked to the link url and link title specified in the
-        entry for the _reference id string_ in the [link reference
-        association map]. For HTML output, the link title should be
-        [attribute-value-escaped].
-
-        If the [link reference association map] does not contain an
-        entry for _reference id string_, then the output shall have the
-        _enclosed content_ without being part of a link,
-        enclosed within the text forming the _opening link tag_ and the
-        text forming the _closing link tag_. For HTML output, the text
-        forming the _closing link tag_ should be [html-text-escaped]
-        before being output.
-
-     7. The [top node] is popped off
-
-     8. All nodes with _node type_ equal to _link node_ are removed from
-        the [stack of potential opening span tags]
-
-     9. Set [consumed-character-count] to the number of characters in
-        the _closing link tag_
-
- 3. If the [topmost node of type] _link node_ is not
-    [_null_](#topmost-node-of-type-is-null), and if both the following
-    conditions are satisfied:
-
-     1. The [remaining-character-sequence] matches one of the following
-        regular expression patterns:
-
-         1. URL without angle brackets: `/^\]\s*\(\s*([^\(\)<>\s]+)([\)\s].*)$/`
-
-            Example: `] (http://www.example.net` + _residual-link-attribute-sequence_
-
-         2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]*)>([\)].+)$/`
-
-            Examples:  
-            `](<http://example.net>` + _residual-link-attribute-sequence_  
-            `] ( <http://example.net/?q=)>` + _residual-link-attribute-sequence_
-
-        In case of either pattern, the matching substring for the first
-        parenthesised subexpression shall be called the _unprocessed url
-        string_, and the matching substring for the second parenthesized
-        subexpression shall be called the
-        _residual-link-attribute-sequence_.  Any [whitespace] characters
-        in the _unprocessed url string_ are removed, and the resultant
-        string is called the _link url string_.
-
-        The position at which the _residual-link-attribute-sequence_
-        starts within the [remaining-character-sequence] \(i.e. the
-        number of characters present in the
-        [remaining-character-sequence] before the start of the
-        _residual-link-attribute-sequence_\) shall be called the
-        _url-pattern-match-length_.
-
-     2. The _residual-link-attribute-sequence_ matches one of the
-        following regular expression patterns:
-
-         1. Just the closing paranthesis: `/^\s*\)/`
-
-            Example: `)`
-
-            If this is the matching pattern, the _title string_ is said
-            to be _null_.
-
-         2. Title and/or appended ignorable text and closing paranthesis:
-            `/^\s*((("(([^"\\]|\\.)*)")|('(([^'\\]|\\.)*)')|(([^"'\)\\]|\\.)*))+)\)/`
-
-            Examples:  
-            `"Title")`  
-            `'Title')`  
-            `"A (nice) \"title\" for the link")`  
-            `'Title' followed by random ignored text)`  
-            `"Title" followed by random "(ignored)" text)`  
-            `just random ignored text)`  
-            `just ignored text with \(escaped parentheses\))`
-
-            If this is the matching pattern, the matching substring for
-            the first parenthesized subexpression in the pattern is
-            [trimmed] to give the _attributes-string_. If the
-            _attributes-string_ begins with a [quoted string], then the
-            [enclosed string] of the [quoted string] is called the
-            _title string_. If the _attributes-string_ does not begin
-            with a [quoted string], then the _title string_ is said to
-            be _null_.
-
-        The number of characters in the
-        _residual-link-attribute-sequence_ that were consumed in
-        matching the whole of the matching pattern is called the
-        _attributes-pattern-match-length_.
-
-    then, the following is done:
-
-    <!-- For some reason, Redcarpet requires a comment here to correctly
-    display the following list -->
-
-     1. Let _close-link-tag-length_ be equal to the sum of the
-        _url-pattern-match-length_ and the
-        _attributes-pattern-match-length_. The first
-        _close-link-tag-length_ characters of the
-        [remaining-character-sequence] are collectively identified as a
-        **closing link tag**
-
-     2. If the [topmost node of type] _link node_ is not already the
-        [top node], all nodes above it are popped off and interpreted as
-        _text fragments_
-
-     3. The [top node] (which should have its _node type_ equal to _link
-        node_) is interpreted as an _opening span tag_, or more
-        specifically, as an **opening link tag**
-
-     4. The _closing link tag_ is said to correspond to the _opening
-        link tag_, and any _span tags_ or _text fragments_ occuring
-        between the _opening link tag_ and the _closing link tag_ are
-        considered to form the _enclosed content_ of the link
-
-     5. The _link url string_ shall be used as the link url for the
-        link.  If the _title string_ is not _null_, the _title string_
-        shall be used as the title for the link. The output shall have
-        the _enclosed content_ linked to the link url and link title.
-        For HTML output, the link title should be
-        [attribute-value-escaped].
-
-     6. The [top node] is popped off
-
-     7. All nodes with _node type_ equal to _link node_ are removed from
-        the [stack of potential opening span tags]
-
-     8. Set [consumed-character-count] to _close-link-tag-length_
-
- 4. If none of the above 3 conditions are satisfied, then the `]` at the
+ 4. If the [topmost node of type] _link node_ is
+    [_null_](#topmost-node-of-type-is-null), and if the character at the
+    [current-position] is a `]` character, then the `]` at the
     [current-position] is interpreted as a _text fragment_, and
     [consumed-character-count] is set to 1
 
