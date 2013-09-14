@@ -3071,8 +3071,8 @@ one of the following values: Pc, Pd, Ps, Pe, Pi, Pf, Po.</span>
 
 [punctuation]: #punctuation
 
-To de-escape a [string], every `\` character in the string that is
-immediately followed by a [punctuation] character, shall be removed.
+To de-escape a [string], every `\` (backslash) character in the string
+that is used for [escaping] a [punctuation] character, shall be removed.
 
 For example, for the string `With \(esca\ped\) \\brackets`, the
 de-escaped string will be `With (esca\ped) \brackets`.
