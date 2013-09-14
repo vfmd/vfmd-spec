@@ -127,6 +127,13 @@ backreferences, etc.), and confirm to a regular grammar. This means that
 these regular expressions can be adapted to any other regular expression
 syntax as may be required for an implementation of this specification.
 
+In this specification, when it is said that a string matches a regular
+expression, it is used in the meaning that a part or whole of the string
+matches the whole of the regular expression. Whenever the whole of the
+string needs to match the whole of the regular expression, that
+requirement is made explicit in the regular expression by starting it in
+`^` and ending it in `$`.
+
 [PCRE syntax]: http://man.he.net/man3/pcrepattern
 
 <h3 id="definitions">Definitions</h3>
