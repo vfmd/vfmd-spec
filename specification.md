@@ -52,6 +52,7 @@ to write a document using vfmd, please read the [userguide] instead.
     * [Procedure for detecting automatic links]
     * [Procedure for identifying HTML tags]
   * [Additional processing]
+    * [De-escaping]
     * [Processing text fragments]
     * [Processing for HTML output]
   * [Extending the syntax]
@@ -1904,15 +1905,15 @@ done:
         content_ linked to the link url and link title specified in the
         entry for the _reference id string_ in the [link reference
         association map]. For HTML output, the link title should be
-        [attribute-value-escaped].
+        [de-escaped] and then [attribute-value-escaped].
 
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
         _enclosed content_ without being part of a link,
         enclosed within the text forming the _opening link tag_ and the
         text forming the _closing link tag_. For HTML output, the text
-        forming the _closing link tag_ should be [html-text-escaped]
-        before being output.
+        forming the _closing link tag_ should be [de-escaped] and then
+        [html-text-escaped] before being output.
 
      7. The [top node] is popped off
 
@@ -2013,7 +2014,7 @@ done:
         link.  If the _title string_ is not _null_, the _title string_
         shall be used as the title for the link. The output shall have
         the _enclosed content_ linked to the link url and link title.
-        For HTML output, the link title should be
+        For HTML output, the link title should be [de-escaped] and then
         [attribute-value-escaped].
 
      6. The [top node] is popped off
@@ -2073,7 +2074,7 @@ done:
         content_ linked to the link url and link title specified in the
         entry for the _reference id string_ in the [link reference
         association map]. For HTML output, the link title should be
-        [attribute-value-escaped].
+        [de-escaped] and then [attribute-value-escaped].
 
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
@@ -3049,16 +3050,29 @@ time, till one of the following happens:
 Some additional processing is required for certain parts before they can
 be written to the output.
 
-<h3 id="processing-text-fragments">Processing text fragments</h3>
+<h3 id="de-escaping">De-escaping</h3>
 
-[Processing text fragments]: #processing-text-fragments
-[processing text fragments]: #processing-text-fragments
+[De-escaping]: #de-escaping
+[de-escaped]: #de-escaping
+
+Escaping backslashes in the input should not be part of the output.
 
 <span id="punctuation">We define a **punctuation** [character] to
 be a unicode code point whose 'General\_Category' unicode property has
 one of the following values: Pc, Pd, Ps, Pe, Pi, Pf, Po.</span>
 
 [punctuation]: #punctuation
+
+To de-escape a [string], every `\` character in the string that is
+immediately followed by a [punctuation] character, shall be removed.
+
+For example, for the string `With \(esca\ped\) \\brackets`, the
+de-escaped string will be `With (esca\ped) \brackets`.
+
+<h3 id="processing-text-fragments">Processing text fragments</h3>
+
+[Processing text fragments]: #processing-text-fragments
+[processing text fragments]: #processing-text-fragments
 
 The _text fragments_ identified in the [procedure for identifying span
 tags] are subject to the following processing:
@@ -3069,13 +3083,8 @@ tags] are subject to the following processing:
  2. Every _collated text fragment_ is processed to produce a _processed
     text fragment_. The following processing is done:
 
-     1. **Removing escaping backslashes:** Every backslash in the
-        _collated text fragment_ that is immediately followed by a
-        [punctuation] character, shall be removed.
-
-       For example, for the _collated text fragment_ `With
-       \(esca\ped\) \\brackets`, the corresponding _processed text
-       fragment_ will be `With (esca\ped) \brackets`.
+     1. **Removing escaping backslashes:** The _collated text fragment_
+        shall be [de-escaped].
 
      2. **Introducing hard-breaks:** Every sequence of two [space]
         characters followed by a [line break] character shall be
