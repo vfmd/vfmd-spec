@@ -35,6 +35,7 @@ also supports span-level markup like emphasis, links and inline-code.
           * [atx-style headers]
       * [Code blocks]
       * [Blockquotes]
+      * [Lists]
       * [Horizontal rule]
   * [Mixing HTML with vfmd]
       * [Using vfmd along with HTML markup]
@@ -255,6 +256,191 @@ For example:
     > line.
     > > This is a nested blockquote
     > > that starts without a preceding blank line
+
+
+<h3 id="lists">Lists</h3>
+
+[lists]: #lists
+
+A numbered list is created by numbering each item in the list, like
+this:
+
+     1. Donuts
+     2. Chocolate
+     3. Cupcakes
+
+The numbers used in the list need not necessarily be ordered - the
+output will have them in the right order anyway. However, the number
+used for the first item will be used as the starting number for the
+list.
+
+A bulleted list is created by using asterisks(`*`) or pluses (`+`) or
+hyphens (`-`) as list marker characters, like this:
+
+      * Donuts
+      * Chocolate
+      * Cupcakes
+
+The list marker character can be placed at the left margin, or may be
+indented by up to three spaces, and must be followed by one or more
+spaces.
+
+When you change the list marker character, or change the number of
+spaces before/after the list marker, each set of uniform list markers
+form a separate list. For example, the following forms four top-level
+lists placed one after the other:
+
+     *  Donuts
+     *  Chocolate
+     *  Cupcakes
+     +    Banana
+     +    Apple
+     +    Kiwi
+       + The Fellowship of the Ring
+       + The Two Towers
+       + The Return of the King
+     -   Tomato
+     -   Cucumber
+
+If a list item is separated by blank lines on both sides, the HTML
+output shall wrap that item with `<p>` tags.
+
+For example, this input:
+
+    * Bird
+    * Plane
+    * Superman
+    * UFO
+    * Paper plane
+    * Dragonfly
+    * Helicopter
+
+will turn into:
+
+    <ul>
+    <li>Bird</li>
+    <li>Plane</li>
+    <li>Superman</li>
+    <li>UFO</li>
+    <li>Paper plane</li>
+    <li>Dragonfly</li>
+    <li>Helicopter</li>
+    </ul>
+
+But this:
+
+    * Bird
+    * Plane
+
+    * Superman
+
+    * UFO
+
+    * Paper plane
+    * Dragonfly
+    * Helicopter
+
+will turn into:
+
+    <ul>
+    <li>Bird</li>
+    <li>Plane</li>
+    <li><p>Superman</p></li>
+    <li><p>UFO</p></li>
+    <li>Paper plane</li>
+    <li>Dragonfly</li>
+    <li>Helicopter</li>
+    </ul>
+
+If every list item is separated by blank lines, then each of them will
+get wrapped in `<p>` tags in the HTML output.
+
+Each list item can contain multiple paragraphs. To make lists look
+nice, you can indent all lines within each list item to vertically align
+with the starting paragraph of the list item, like this:
+
+    *   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+        Ut pulvinar, odio a luctus molestie, sapien libero
+        hendrerit risus, a mollis quam ipsum non purus.
+
+        Integer dignissim faucibus metus a aliquet. Nulla vitae
+        neque mattis, cursus ipsum a, bibendum lorem. Phasellus
+        dignissim neque nec libero sollicitudin, nec tempor orci
+        vehicula.
+
+    *   Vivamus non mauris massa. Aliquam hendrerit feugiat
+        vulputate. Ut quis justo dapibus, tempor sem ut,
+        ullamcorper sem.
+
+But if you want to be lazy, you don’t have to, as long as the first
+lines of the paragraphs are indented to align vertically:
+
+
+    *   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+        Ut pulvinar, odio a luctus molestie, sapien libero
+    hendrerit risus, a mollis quam ipsum non purus.
+
+        Integer dignissim faucibus metus a aliquet. Nulla vitae
+    neque mattis, cursus ipsum a, bibendum lorem. Phasellus
+    dignissim neque nec libero sollicitudin, nec tempor orci
+    vehicula.
+
+    *   Vivamus non mauris massa. Aliquam hendrerit feugiat
+    vulputate. Ut quis justo dapibus, tempor sem ut, ullamcorper
+    sem.
+
+A list item can contain other block-level elements, like blockquotes,
+headers, code blocks and nested lists. Any nested element should be
+indented to align vertically with the starting paragraph of the list
+item.
+
+    -   List item with a blockquote. The blockquote should be indented
+        to align with the starting position of this paragraph.
+
+        > This is a blockquote
+        > inside a list item
+
+    -   List item with a code-block. The code-block should be indented
+        by 4 spaces from the starting position of this paragraph.
+
+            int main() {
+                return 42;
+            }
+
+    -   List item with two nested lists. The lists can be indented
+        by 0 to 3 spaces from the starting position of this paragraph.
+
+         - First
+         - Second
+         - Third
+
+         1. One
+         2. Two
+         3. Three
+
+You can force-end a list with two consecutive blank lines. You can use
+this technique to write two numbered lists one after the other, or to
+have a code-block immediately after a list.
+
+Lists should be separated from other block-level elements with a blank
+line. However, a preceding blank line is not necessary for nested lists.
+
+For example:
+
+    This text should be followed by a blank line
+    before the list can begin.
+
+     *  But within the list, nested lists can
+        start without being separated by a
+        blank line.
+         * Item 1 of nested list
+           1. Second level of nesting
+           2. Still second level of nesting
+         * Item 2 of nested list
+         * Item 3 of nested list
+
 
 <h3 id="horizontal-rule">Horizontal rule</h3>
 
