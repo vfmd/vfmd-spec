@@ -213,9 +213,9 @@ blockquoted paragraphs, they form a single blockquote, like this:
     > 'Very true,' said the Duchess: 'flamingoes and mustard both
     bite.  And the moral of that is - "Birds of a feather flock
     together."'
-    
+
     > 'Only mustard isn't a bird,' Alice remarked.
-    
+
     > 'Right, as usual,' said the Duchess: 'what a clear way you
     have of putting things!'
 
@@ -714,7 +714,7 @@ input. The best way to be clear about your intent is to provide
 correctly matching HTML tags in the vfmd source document.
 
 In addition, span-level vfmd markup will not be recognized
-across mismatching or misnested HTML tags. 
+across mismatching or misnested HTML tags.
 
 For example, the asterisks in the following vfmd input are not
 interpreted to mean strong emphasis:
