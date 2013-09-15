@@ -3147,9 +3147,10 @@ tag's attribute value, needs to be escaped as described in this section.
  2. Replace the `>` character with `&gt;`
  3. Replace the `&` character with `&amp;`
  4. Replace the `"` character with `&quot;`
+ 4. Replace the `'` character with `&#39;`
 
-The `'` character is to be used as the enclosing quote character for
-attribute values.
+It is recommended that the `"` character be used as the enclosing
+quote character for attribute values.
 
 Note that the above rules for attribute values only apply for the
 attributes of HTML elements output as a result of a non-raw-HTML vfmd
