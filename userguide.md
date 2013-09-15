@@ -30,6 +30,7 @@ also supports span-level markup like emphasis, links and inline-code.
 
   * [Encoding]
   * [Block-level elements]
+      * [Paragraphs]
       * [Headers]
           * [setext-style headers]
           * [atx-style headers]
@@ -54,6 +55,18 @@ document, ensure that it saves the document in UTF-8 encoding).
 <h2 id="block-level-elements">Block-level elements</h2>
 
 [Block-level elements]: #block-level-elements
+
+<h3 id="paragraphs">Paragraphs</h3>
+
+[Paragraphs]: #paragraphs
+
+A paragraph is one or more consecutive lines of text, separated by one
+or more blank lines. (A blank line is any line that looks like a blank
+line — a line containing nothing but spaces or tabs is considered
+blank.) Normal paragraphs should not be indented with spaces or tabs.
+
+To introduce a hard line-break in the middle of a paragraph, you end a
+line with two or more spaces, then type return.
 
 <h3 id="headers">Headers</h3>
 
