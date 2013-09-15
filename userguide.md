@@ -32,8 +32,6 @@ also supports span-level markup like emphasis, links and inline-code.
   * [Block-level elements]
       * [Paragraphs]
       * [Headers]
-          * [setext-style headers]
-          * [atx-style headers]
       * [Code blocks]
       * [Blockquotes]
       * [Lists]
