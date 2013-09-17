@@ -38,6 +38,7 @@ also supports span-level markup like emphasis, links and inline-code.
       * [Horizontal rule]
   * [Span-level elements]
       * [Links]
+      * [Emphasis]
   * [Mixing HTML with vfmd]
       * [Using vfmd along with HTML markup]
       * [Verbatim HTML]
@@ -650,6 +651,53 @@ you should escape them with backslashes, like this:
 
     Go to [step \[1\]](#foo-step-1 "Step 1 of the \"foo\" routine")
 
+
+<h3 id="emphasis">Emphasis</h3>
+
+[Emphasis]: #emphasis
+
+To emphasize text, you use asterisks (`*`) or underscores (`_`). Text
+wrapped with one `*` or `_` will be given _emphatic stress_ (using
+`<em>` tags in HTML output); text wrapped in double `*`s or double `_`s
+will be output as _strong text_ (using `<strong>` tags in HTML
+output).
+
+For example, this input:
+
+    *single asterisks*
+
+    _single underscores_
+
+    **double asterisks**
+
+    __double underscores__
+
+will produce the HTML output:
+
+    <em>single asterisks</em>
+
+    <em>single underscores</em>
+
+    <strong>double asterisks</strong>
+
+    <strong>double underscores</strong>
+
+You can use whichever style you prefer; the lone restriction is that the
+same character must be used to open and close an emphasis span.
+
+Emphasis cannot be used in the middle of a word; `*` or `_` characters
+appearing in the middle of a word will be treated as literal asterisks
+or underscores. Similarly, `*` or `_` characters surrounded by spaces
+will be treated as literal asterisks or underscores.
+
+For example:
+
+    There is no ** emphasis ** in_this_sentence.
+
+To produce a literal asterisk or underscore at a position where it would
+otherwise be used as an emphasis delimiter, you can backslash escape it:
+
+    \*this text is surrounded by literal asterisks\*
 
 <h2 id="mixing-html-with-vfmd">Mixing HTML with vfmd</h2>
 
