@@ -40,6 +40,7 @@ also supports span-level markup like emphasis, links and inline-code.
       * [Links]
       * [Emphasis]
       * [Code]
+      * [Images]
   * [Mixing HTML with vfmd]
       * [Using vfmd along with HTML markup]
       * [Verbatim HTML]
@@ -763,6 +764,83 @@ literal backslash and not as an escaping character. This is so that when
 you cut-and-paste code, you wouldn't have to edit inside the pasted code
 to escape any backslashes in it.
 
+
+<h3 id="images">Images</h3>
+
+[Images]: #images
+
+The syntax for images is very similar to the syntax for links - the only
+addition is an exclamation mark. Like links, there are two styles in
+which you can include images: _referenced_ and _inline_.
+
+<h4 id="referenced-images">Referenced images</h4>
+
+[Referenced images]: #referenced-images
+
+In the referenced-image syntax, you type an exclamation mark followed by
+an identifying label for the image enclosed in [square brackets]. For
+each such label, the image URL is specified elsewhere in the document
+(very much like how link URLs are specified in link definitions). The
+image definition can optionally include a title, enclosed in quotes.
+
+For example:
+
+    ![sleeping kitten]
+
+    Above: A kitten taking a nap
+
+    [sleeping kitten]: path/to/sleeping_kitten.jpg "Optional title"
+
+The identifying label for the image will be used as the `alt` text in
+HTML output. For the above example, the HTML output would be:
+
+    <p><img src="path/to/sleeping_kitten.jpg" alt="sleeping kitten" title="Optional title"></p>
+
+    <p>Above: A kitten taking a nap</p>
+
+If you want the same `alt` text for different images in the document,
+you can specify a different label for referencing the image:
+
+    ![sleeping kitten][kitten-1]
+    ![sleeping kitten][kitten-2]
+
+    Above: Kittens taking a nap
+
+    [kitten-1]: path/to/sleeping_kitten_1.jpg
+    [kitten-2]: path/to/sleeping_kitten_2.jpg
+
+You can also make the image point to a URL by placing it as the link
+content of a link, like this:
+
+    [![sleeping kitten]]
+
+    (Click to see a larger version of the image)
+
+    [sleeping kitten]: /thumbnails/sleeping_kitten.jpg
+    [![sleeping kitten]]: /images/sleeping_kitten.jpg
+
+<h4 id="inline-images">Inline images</h4>
+
+[Inline images]: #inline-images
+
+The inline-image syntax looks like this:
+
+    ![Alt text](/path/to/img.jpg)
+
+    ![Alt text](/path/to/img.jpg "Optional title")
+
+That is:
+
+  * An exclamation mark: `!`;
+  * followed by a set of square brackets, containing the `alt` attribute
+    text for the image;
+  * followed by a set of regular parentheses, containing the URL or path
+    to the image, and an optional title attribute enclosed in double or
+    single quotes.
+
+Like in the case of inline link syntax, if your image URL contains the
+`(` or `)` characters, or if you want to break the URL across multiple
+lines, you should enclose the URL in \<angle brackets\>.
 
 <h2 id="mixing-html-with-vfmd">Mixing HTML with vfmd</h2>
 
