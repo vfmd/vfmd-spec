@@ -39,6 +39,7 @@ also supports span-level markup like emphasis, links and inline-code.
   * [Span-level elements]
       * [Links]
       * [Emphasis]
+      * [Code]
   * [Mixing HTML with vfmd]
       * [Using vfmd along with HTML markup]
       * [Verbatim HTML]
@@ -698,6 +699,70 @@ To produce a literal asterisk or underscore at a position where it would
 otherwise be used as an emphasis delimiter, you can backslash escape it:
 
     \*this text is surrounded by literal asterisks\*
+
+
+<h3 id="code">Code</h3>
+
+[Code]: #code
+
+To indicate a span of code, wrap it with backtick quotes (`` ` ``).
+Unlike a pre-formatted code block, a code span indicates code within a
+normal paragraph. For example:
+
+    Use the `printf()` function.
+
+will produce the HTML output:
+
+    <p>Use the <code>printf()</code> function.</p>
+
+To include a literal backtick character within a code span, you can use
+multiple backticks as opening and closing delimiters. For example:
+
+    ``There is a literal backtick (`) here.``
+
+will become, in HTML:
+
+    <p><code>There is a literal backtick (`) here.</code></p>
+
+More generally, to include multiple backticks in the code span, you
+should use a different number of backticks as opening and closing
+delimiters. For example, if you want a code span containing both a
+single-backtick sequence and a double-backtick sequence, you can use
+three (or four, if you prefer) backticks as delimiters:
+
+    ```One (`) and two (``) backticks```
+
+To start or end a code span with a literal backtick, include one or more
+spaces between the code span and the delimiting backticks. For example:
+
+    A single backtick in a code span: `` ` ``
+
+    A backtick-delimited string in a code span: `` `foo` ``
+
+will produce:
+
+    <p>A single backtick in a code span: <code>`</code></p>
+
+    <p>A backtick-delimited string in a code span: <code>`foo`</code></p>
+
+Within a code span, ampersands and angle brackets are encoded as HTML
+entities automatically, which makes it easy to include HTML tags in a
+code span. For example:
+
+    Please don't use any `<blink>` tags
+    or `&nbsp;` spaces.
+
+will become, in HTML output:
+
+    <p>Please don't use any <code>&lt;blink&gt;</code> tags
+    or <code>&amp;nbsp;</code> spaces.</p>
+
+You can use a backslash to escape a backtick to prevent it from starting
+a code span. However, within a code span, a backslash is treated as a
+literal backslash and not as an escaping character. This is so that when
+you cut-and-paste code, you wouldn't have to edit inside the pasted code
+to escape any backslashes in it.
+
 
 <h2 id="mixing-html-with-vfmd">Mixing HTML with vfmd</h2>
 
