@@ -36,6 +36,8 @@ also supports span-level markup like emphasis, links and inline-code.
       * [Blockquotes]
       * [Lists]
       * [Horizontal rule]
+  * [Span-level elements]
+      * [Links]
   * [Mixing HTML with vfmd]
       * [Using vfmd along with HTML markup]
       * [Verbatim HTML]
@@ -486,6 +488,167 @@ But the following lines don't result in a horizontal rule:
     *-*-*
 
     _-_-_-_
+
+
+<h2 id="span-level-elements">Span-level elements</h2>
+
+[Span-level elements]: #span-level-elements
+
+<h3 id="links">Links</h3>
+
+[Links]: #links
+
+vfmd supports two styles of links: _referenced links_ and _inline links_.
+
+<h4 id="referenced-links">Referenced links</h4>
+
+[Referenced links]: #referenced-links
+
+In referenced links, the link text is delimited by [square brackets].
+For each such link text, the URL is specified in a link definition at
+the end of the paragraph or section (or actually, anywhere in the
+document), like this:
+
+    Nowadays, you can [Google] for pretty
+    much anything and get answers super quick.
+    There are even [math engines] and
+    [language translators] available
+    for anyone to use.
+
+    [Google]: http://www.google.com/
+    [math engines]: http://www.wolframalpha.com/
+    [language translators]: http://www.bing.com/translator
+
+The link text in the paragraph will become a link pointing to the URL
+specified at the end of the paragraph. For the above input, the HTML
+output will be:
+
+    <p>Nowadays, you can <a href="http://www.google.com/">Google</a> for pretty
+    much anything and get answers super quick.
+    There are even <a href="http://www.wolframalpha.com/">math engines</a> and
+    <a href="http://www.bing.com/translator">language translators</a> available
+    for anyone to use.</p>
+
+You can also specify an alternate label for referencing the link, by
+specifying it immediately after the link text, within [square brackets].
+This is especially useful if you want to have the same link text linking
+to different URLs at different points in the document.
+
+For example:
+
+    You can [search for it][goog-search] in Google,
+    or [search for it][bing-search] in Bing.
+
+    [goog-search]: http://www.google.com/search?q=something
+    [bing-search]: http://www.bing.com/search?q=something
+
+becomes, in HTML output:
+
+    <p>You can <a href="http://www.google.com/search?q=something">search for it</a> in Google,
+    or <a href="http://www.bing.com/search?q=something">search for it</a> in Bing.</p>
+
+You can also specify a link title in the link definition. The title
+should be placed immediately after the URL, surrounded by quotes or
+parentheses. The title can also be moved to the next line, but it
+should then be indented with spaces or tabs (which is especially useful
+when the URL is too long).
+
+The following four link definitions are equivalent:
+
+    [foo]: http://example.com/  "Optional Title Here"
+    [foo]: http://example.com/  'Optional Title Here'
+    [foo]: http://example.com/  (Optional Title Here)
+    [foo]: http://example.com/
+           "Optional Title Here"
+
+You can use a backslash escapes within a title to include instances of
+the enclosing character in the title. For example:
+
+    [foo]: http://example.com/  "Title \"with quotes\" Here"
+
+To summarize, a link definition consists of:
+
+ * The link identifier enclosed in square brackets (optionally indented
+   from the left margin by up to three spaces);
+ * followed by a colon;
+ * followed by one or more spaces (or tabs);
+ * followed by the URL for the link;
+ * optionally followed by a title attribute for the link, enclosed in
+   double quotes or single quotes or parentheses (either in the same
+   line as the link identifier and the URL, or indented and present in
+   full in the next line).
+
+The link identifier is not case-sensitive, so the following is valid:
+
+    Just ask [Google].
+
+    [google]: http://google.com/
+
+The URL specified in the link can be an absolute URL or a relative URL.
+The URL can optionally be enclosed in \<angle brackets\>.
+
+vfmd also supports the _implicit link name_ syntax from the original
+Markdown for backward-compatibility. For example, both the sentences in the
+following paragraph translate to the same output:
+
+    Just ask [Google].
+    Just ask [Google][].
+
+    [Google]: http://google.com/
+
+Link definitions are only used for defining the links, and don't appear
+in the output.
+
+If you want to include literal `[` or `]` characters in the link text or
+in the link identifier, you should escape each such `[` or `]` character
+with a backslash, like this:
+
+    "Off with his head", [she \[the Queen\] said].
+
+    [she \[the Queen\] said]: http://example.net/queen_of_hearts_said/
+
+<h4 id="inline-links">Inline links</h4>
+
+[Inline links]: #inline-links
+
+In inline links, the link text is delimited by [square brackets], and is
+immediately followed by a set of (regular parentheses). Inside the
+parentheses, you put the URL where you want the link to point, along
+with an optional title for the link, surrounded in quotes. For example:
+
+    This is [an example](http://example.com/ "Title") inline link.
+
+    [This link](http://example.net/) has no title attribute.
+
+will produce the HTML output:
+
+    <p>This is <a href="http://example.com/" title="Title"> an example</a> inline link.</p>
+
+    <p><a href="http://example.net/">This link</a> has no title attribute.</p>
+
+The link URL can also be a relative URL. For example:
+
+    See my [About](/about/) page for details, or [contact me](#contact).
+
+You can optionally enclose the URL in \<angle brackets\>. However, in
+case your URL contains the `(` or `)` characters, the angle brackets are
+mandatory. For example:
+
+    Time-travel is hard to get right and Pratchett does a great job of
+    it in [Nightwatch](<http://en.wikipedia.org/wiki/Night_Watch_(Discworld)>).
+
+If your URL is too long and you'd like to break it up across multiple
+lines, then again the angle brackets are mandatory. For example:
+
+    There are even [children's books](<http://en.wikipedia.org/wiki/The_
+    Amazing_Maurice_and_his_Educated_Rodents> "Amazing Maurice book")
+    set in the Discworld.
+
+Like in referenced links, if you want to include any `[` or `]`
+characters in the link text, or any quote characters in the title text,
+you should escape them with backslashes, like this:
+
+    Go to [step \[1\]](#foo-step-1 "Step 1 of the \"foo\" routine")
 
 
 <h2 id="mixing-html-with-vfmd">Mixing HTML with vfmd</h2>
