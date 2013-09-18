@@ -41,6 +41,8 @@ also supports span-level markup like emphasis, links and inline-code.
       * [Emphasis]
       * [Code]
       * [Images]
+  * [Miscellaneous]
+      * [Automatic links]
   * [Mixing HTML with vfmd]
       * [Using vfmd along with HTML markup]
       * [Verbatim HTML]
@@ -841,6 +843,44 @@ That is:
 Like in the case of inline link syntax, if your image URL contains the
 `(` or `)` characters, or if you want to break the URL across multiple
 lines, you should enclose the URL in \<angle brackets\>.
+
+<h2 id="misc">Miscellaneous</h2>
+
+[Miscellaneous]: #misc
+
+<h3 id="automatic-links">Automatic links</h3>
+
+[Automatic links]: #automatic-links
+
+Complete URLs of the form `scheme://path` are automatically converted to
+links. For example:
+
+    See http://example.net/page.html for more details.
+
+becomes, in HTML output:
+
+    See <a href="http://example.net/page.html">http://example.net/page.html</a> for more details.
+
+Any trailing punctuation at the end of URLs are not considered as part
+of the URL. This helps in correctly recognizing URLs immediately
+followed by punctuation, like:
+
+    When you go to http://example.net/, keep the other
+    website (http://example.com/) in mind.
+
+However, if you want to include any trailing punctuation in the URL, you
+should enclose the URL in \<angle brackets\>, like this:
+
+     _Hot Shots!_ (<http://en.wikipedia.org/wiki/Hot_Shots!>) was hilarious.
+
+In addition, email addresses enclosed in \<angle brackets\> will be
+converted to `mailto:` links. For example:
+
+    Mail me at <me@example.net>.
+
+becomes, in HTML output:
+
+    Mail me at <a href="mailto:me@example.net">me@example.net</a>.
 
 <h2 id="mixing-html-with-vfmd">Mixing HTML with vfmd</h2>
 
