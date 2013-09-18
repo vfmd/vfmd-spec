@@ -43,6 +43,7 @@ also supports span-level markup like emphasis, links and inline-code.
       * [Images]
   * [Miscellaneous]
       * [Automatic links]
+      * [Automatic escaping for HTML output]
   * [Mixing HTML with vfmd]
       * [Using vfmd along with HTML markup]
       * [Verbatim HTML]
@@ -881,6 +882,29 @@ converted to `mailto:` links. For example:
 becomes, in HTML output:
 
     Mail me at <a href="mailto:me@example.net">me@example.net</a>.
+
+<h3 id="automatic-escaping-for-html-output">Automatic escaping for HTML output</h3>
+
+[Automatic escaping for HTML output]: #automatic-escaping-for-html-output
+
+The HTML syntax requires that `<`, `>` and `&` characters be escaped as
+character entities. vfmd takes this requirement into consideration when
+converting a vfmd text to HTML.
+
+Any `&` characters in the input text will appear as `&amp;` in the HTML
+output. For example, if the vfmd talks about `AT&T`, the HTML output
+will have it as `AT&amp;T`.
+
+However, if you use a `&` to specify a character reference in vfmd, it
+would be left intact. For example, if you write `Copyright &copy; 2013`,
+the `&` in that text will be left intact in the output HTML.
+
+Any `<` or `>` in the input text will be similarly converted to `&lt;`
+and `&gt;`, unless they form the beginning and end of a HTML tag. For
+example, if you write `4 < 5`, it will be converted to `4 &lt; 5`.
+
+However, inside vfmd's code spans and code blocks, the `<` and `>`s are
+coverted to named entities even if they are part of a HTML tag.
 
 <h2 id="mixing-html-with-vfmd">Mixing HTML with vfmd</h2>
 
