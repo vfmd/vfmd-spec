@@ -19,9 +19,14 @@ to be of help for people writing in vfmd.
 The vfmd syntax is pretty much the same as the [original Markdown
 syntax], with a few minor changes and added clarifications.
 
-vfmd enables you to represent rich-text markup in plain-text files. It
-supports block-level markup like lists, blockquotes and code-blocks, and
-also supports span-level markup like emphasis, links and inline-code.
+vfmd enables you to represent rich-text markup in plain-text files, with
+an obsessive emphasis on readability. The intention is to keep the plain
+text representation publishable as-is, without looking like it’s been
+marked up with tags or formatting instructions.
+
+vfmd supports block-level markup like lists, blockquotes and
+code-blocks, and also supports span-level markup like emphasis, links
+and inline-code.
 
 [original Markdown syntax]: http://daringfireball.net/projects/markdown/syntax
 [Markdown]: http://daringfireball.net/projects/markdown/
