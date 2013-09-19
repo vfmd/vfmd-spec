@@ -1879,18 +1879,27 @@ The procedure to identify and interpret the _span tags_ is as follows:
         image tags]
      5. If _consumed-character-count_ is equal to 0, then invoke the
         [procedure for detecting automatic links]
- 5. If _consumed-character-count_ is equal to 0, and if the character at
-    the [current-position] is an unescaped `<` (left angle bracket)
-    character, then invoke the [procedure for identifying HTML tags]
- 6. If _consumed-character-count_ is equal to 0, interpret the character
-    at the [current-position] to be part of a _text fragment_, and set
-    _consumed-character-count_ as 1
- 7. Increment [current-position] by _consumed-character-count_
- 8. If [current-position] is less than the length of the
-     [input character sequence], go to [Step 3](#span-proc-step-3)
+     6. If _consumed-character-count_ is equal to 0, and if the
+        character at the [current-position] is an unescaped `<` (left
+        angle bracket) character, then invoke the [procedure for
+        identifying HTML tags]
+     7. If _consumed-character-count_ is equal to 0, interpret the
+        character at the [current-position] to be part of a _text
+        fragment_, and set _consumed-character-count_ as 1
+ 5. If _is-verbatim-html-mode_ is equal to _true_, interpret the
+    [remaining-character-sequence] as _verbatim-html_, and set
+    _consumed-character-count_ to the length of the
+    [remaining-character-sequence]
+ 6. Increment [current-position] by _consumed-character-count_
+ 7. If [current-position] is less than the length of the
+    [input character sequence], go to [Step 3](#span-proc-step-3)
 
 The _text fragments_ identified in the above procedure should be
 handled as specified in [processing text fragments].
+
+Any _verbatim-html_ identified in the above procedure should be output
+verbatim, without subjecting it to the
+[processing for text fragments][processing text fragments].
 
 <span id="span-level-extensions">An implementation can extend the core
 vfmd syntax to support additional syntax elements. For every additional
