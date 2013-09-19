@@ -1127,6 +1127,12 @@ Note that `pre`, `script` or `style` elements can have blank lines
 enclosed within, and those blank lines don't cause the
 verbatim-HTML-mode to end.
 
+Please note that the part of the document that is treated as verbatim
+HTML will be truly output verbatim; No
+[automatic escaping][Automatic escaping for HTML output] of `<`, `>` or
+`&` will be done, and any backslashes will be treated as literal
+backslashes - not as escaping backslashes.
+
 <h3 id="html-blocks-within-blockquotes-and-lists">
 HTML blocks within blockquotes and lists</h3>
 
