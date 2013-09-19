@@ -2038,8 +2038,10 @@ done:
             the first (i.e. outer) parenthesized subexpression in the
             pattern is called the _attributes-string_. The
             _attributes-string_ will be a [quoted string], and the
-            [enclosed string] of the [quoted string] is said to form the
-            _title string_.
+            [enclosed string] of the [quoted string] is called the
+            _unprocessed title string_. Any [line break] characters in
+            the _unprocessed title string_ are removed, and the
+            resultant string is called the _title string_.
 
         The number of characters in the
         _residual-link-attribute-sequence_ that were consumed in
@@ -2745,8 +2747,10 @@ If the [remaining-character-sequence] matches the
             the first (i.e. outer) parenthesized subexpression in the
             pattern is called the _attributes-string_. The
             _attributes-string_ will be a [quoted string], and the
-            [enclosed string] of the [quoted string] is said to form the
-            _title string_.
+            [enclosed string] of the [quoted string] is called the
+            _unprocessed title string_. Any [line break] characters in
+            the _unprocessed title string_ are removed, and the
+            resultant string is called the _title string_.
 
         The number of characters in the
         _residual-image-attribute-sequence_ that were consumed in
