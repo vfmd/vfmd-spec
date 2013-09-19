@@ -373,10 +373,45 @@ block-element and the [block-element end line]:
 
  2. If the [block-element start line] does not begin with four or more
     consecutive [space] characters, and if the [block-element start
-    line] matches the regular expression pattern
-    `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ <>]+|<[^<>]*>)/`, then the
-    block-element is of type [**reference-resolution block**]. The same
-    line is the [block-element end line].
+    line] matches one of the following regular expression patterns:
+
+     1. Label and URL without angle brackets:  
+        `/^ *\[([^\\\[\]]|\\.)*\] *: *[^ <>]+( .*)?$/`
+
+        Example: `[ref id]: url` + _ref-definition-trailing-sequence_
+
+     2. Label and URL within angle brackets:  
+        `/^ *\[([^\\\[\]]|\\.)*\] *: *<[^<>]*>(.*)$/`
+
+        Example: `[ref id]: <url>` + _ref-definition-trailing-sequence_
+
+    then the block-element is of type [**reference-resolution block**].
+    The matching substring for the last parenthesized subexpression in
+    the matching pattern shall be called the
+    _ref-definition-trailing-sequence_.
+
+    If all the following conditions are satisfied:
+
+    <!-- For some reason, Redcarpet requires a comment here to correctly
+    display the following list -->
+
+     1. The _ref-definition-trailing-sequence_ does not contain any
+        [non-space] characters
+     2. The [block-element start line] is not the last line in the
+        [input line sequence]
+     3. The [block-element start line] is immediately followed by a
+        succeeding line that matches the regular expression pattern
+        `/^ +("(([^"\\]|\\.)*)"|'(([^'\\]|\\.)*)'|\(([^\\\(\)]|\\.)*\)) *$/`
+
+        Examples:  
+        <code style="white-space: pre;"> "Title"</code>   
+        <code style="white-space: pre;"> (Title)</code>  
+        <code style="white-space: pre;">   'A "title" in single quotes'</code>  
+        <code style="white-space: pre;"> "Title with \"quotes\""</code>
+
+    then the [block-element end line] is the line that immediately
+    follows the [block-element start line]; else, the [block-element end
+    line] is the same line as the [block-element start line].
 
  3. If none of the above conditions apply, and if the [block-element
     start line] is not the last line in the [input line sequence], and
@@ -1508,14 +1543,24 @@ without wrapping it in `p` tags.
 [**reference-resolution block**]: #reference-resolution-block
 
 The [block-element line sequence] for a reference-resolution block shall
-have a single [line].
+have either a single [line] or two [lines].
 
 The reference-resolution block does not result in any output by itself.
 It is used to resolve the URLs of reference-style links and images in
 the rest of the document.
 
-The single [line] in the [block-element line sequence] shall match one
-of the following regular expression patterns:
+In case the [block-element line sequence] contains a single [line], that
+[line] is called the _link-definition-line_.
+
+In case the [block-element line sequence] contains two [lines], the
+second [line] is appended to the first [line] to produce the
+_link-definition-line_.
+
+The _link-definition-line_ shall not contain any [line break]
+characters.
+
+The _link-definition-line_ shall match one of the following regular
+expression patterns:
 
  1. Just the URL:
     `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ <>]+|<[^<>]*>) *$/`
@@ -1531,6 +1576,7 @@ of the following regular expression patterns:
     Examples:  
     `[ref id]: http://example.net/ "Title"`  
     `[ref \[ id]: http://example.net/ 'Title'`  
+    `[ref    id]: http://example.net/ (Title)`  
     `[ref \] id]: http://example.net/ "Title with \"escaped\" quotes"`  
     `[ref id]: http://example.net/ "Title" followed by random "(ignored)" text`  
     `[ref id]: http://example.net/ just random ignored text`  
@@ -1545,19 +1591,24 @@ are removed, and the resultant string is called the _link url string_.
 
 In case the match is with the second regular expression pattern, the
 matching substring for the third parenthesized subexpression in the
-pattern is called the _trailing string_. If the _trailing string_ begins
-with a [quoted string], the [enclosed string] of the [quoted string] is
-called the _link title string_, and the rest of the _trailing string_ is
-ignored. If the _trailing string_ does not begin with a [quoted string],
-the whole of the _trailing string_ is ignored, and the _link title
-string_ is said to be _null_.
+pattern is called the _title container string_.
+
+If the _title-container-string_ matches the regular expression pattern
+`/^\((([^\\\(\)]|\\.)*)\)/`, then the matching substring for the first
+(i.e. outer) parenthesized subexpression in the pattern is called the
+_link title string_.
+
+If the _title-container-string_ begins with a [quoted string], the
+[enclosed string] of the [quoted string] is called the _link title
+string_ and the rest of the _title-container-string_ is ignored.
 
 The _reference id string_ is said to be associated with the _link url
-string_ and the _link title string_. A new entry is added to the [link
-reference association map] with the _reference id string_ as the key,
-and the _link url string_ and the _link title string_ as values, unless
-the [link reference association map] already has an entry with the
-_reference id string_ as the key.
+string_ and the _link title string_ (if a _link title string_ was
+found). A new entry is added to the [link reference association map]
+with the _reference id string_ as the key, and the _link url string_ and
+the _link title string_ as values, unless the [link reference
+association map] already has an entry with the _reference id string_ as
+the key.
 
 The <span id="link-reference-association-map">**link reference
 association map**</span> is an associative array that contains data from
