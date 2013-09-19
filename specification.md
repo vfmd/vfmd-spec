@@ -2602,7 +2602,9 @@ an unescaped `` ` `` character.
      3. Among the characters that form the _code span tag_, the first
         _opening-backticks-count_ characters and the last
         _opening-backticks-count_ characters are considered to be
-        markup. The middle _code-content-length_ characters shall form
+        markup. The middle _code-content-length_ characters constitute
+        the _unprocessed-code-content-string_. The
+        _unprocessed-code-content-string_ is [trimmed] to form
         the content of the code span. For HTML output, the content of
         the code-span should be [html-text-escaped].
      4.  Set [consumed-character-count] to _code-span-length_
