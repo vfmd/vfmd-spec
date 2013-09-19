@@ -212,6 +212,9 @@ becomes, in HTML output:
 If you'd like to have two code blocks one after the other, please use
 two blank lines to separate them.
 
+Code blocks should be separated from other block-level elements with a
+blank line.
+
 <h3 id="blockquotes">Blockquotes</h3>
 
 [Blockquotes]: #blockquotes
