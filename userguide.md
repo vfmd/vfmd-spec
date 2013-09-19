@@ -1009,9 +1009,9 @@ are seen as belonging to one of the following four groups:
 [Phrasing HTML elements]: #phrasing-html-elements
 [phrasing HTML elements]: #phrasing-html-elements
 [Verbatim HTML starter elements]: #verbatim-html-starter-elements
-[verbatim HTML starter elements]: #verbatim-html-starter-elements
+[verbatim HTML starter element]: #verbatim-html-starter-elements
 [Verbatim HTML container elements]: #verbatim-html-container-elements
-[verbatim HTML container elements]: #verbatim-html-container-elements
+[verbatim HTML container element]: #verbatim-html-container-elements
 [Other HTML elements]: #other-html-elements
 [other HTML elements]: #other-html-elements
 
