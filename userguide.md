@@ -44,6 +44,7 @@ also supports span-level markup like emphasis, links and inline-code.
   * [Miscellaneous]
       * [Automatic links]
       * [Automatic escaping for HTML output]
+      * [Backslash escapes]
   * [Mixing HTML with vfmd]
       * [Using vfmd along with HTML markup]
       * [Verbatim HTML]
@@ -905,6 +906,54 @@ example, if you write `4 < 5`, it will be converted to `4 &lt; 5`.
 
 However, inside vfmd's code spans and code blocks, the `<` and `>`s are
 coverted to named entities even if they are part of a HTML tag.
+
+
+<h3 id="backslash-escapes">Backslash escapes</h3>
+
+[Backslash escapes]: #backslash-escapes
+
+You can use backslash escapes to generate literal characters which would
+otherwise have special meaning in vfmd's formatting syntax.
+
+For example, if you wanted to surround a word with literal asterisks
+(instead of emphasising the text), you can use backslashes before the
+asterisks, like this:
+
+    \*literal asterisks\*
+
+The escaping backslashes will not be part of the output. For the above
+example, the HTML output will be:
+
+    <p>*literal asterisks*</p>
+
+To keep things straightforward, any backslash that appears before a
+punctuation character is considered an escaping backslash, and will not
+be part of the output. This is true even if the punctuation character
+wouldn't otherwise be part of a vfmd construct.
+
+For example:
+
+    God is Real \(unless declared Integer\).
+
+becomes, in HTML output:
+
+    <p>God is Real (unless declared Integer).</p>
+
+Any backslash that appears before a non-punctuation character is not
+counted as an escaping backslash, and is treated literally.
+
+For example:
+
+    Please run C:\system32\regedit.exe
+
+becomes, in HTML output:
+
+    <p>Please run C:\system32\regedit.exe</p>
+
+Any backslashes appearing in code spans, code blocks and link URLs are
+not considered to be escaping backslashes, and are treated as literal
+backslashes.
+
 
 <h2 id="mixing-html-with-vfmd">Mixing HTML with vfmd</h2>
 
