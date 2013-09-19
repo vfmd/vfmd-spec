@@ -1617,7 +1617,9 @@ that occur within blockquotes and lists. It helps in
 mapping a _reference id_ to the _link url_ and _link title_ that the
 _reference id_ represents. It is used in the [procedure for identifying
 link tags] and in the [procedure for identifying image tags] to resolve
-a reference id to a link url and, if available, a link title.
+a reference id to a link url and, if available, a link title. All
+lookups in the _link reference association map_ are made
+case-insensitively.
 
 [link reference association map]: #link-reference-association-map
 
