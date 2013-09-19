@@ -1988,7 +1988,8 @@ done:
      7. The [top node] is popped off
 
      8. All nodes with _node type_ equal to _link node_ are removed from
-        the [stack of potential opening span tags]
+        the [stack of potential opening span tags] and interpreted as
+        _text fragments_
 
      9. Set [consumed-character-count] to the number of characters in
         the _closing link tag_
@@ -2092,7 +2093,8 @@ done:
      6. The [top node] is popped off
 
      7. All nodes with _node type_ equal to _link node_ are removed from
-        the [stack of potential opening span tags]
+        the [stack of potential opening span tags] and interpreted as
+        _text fragments_
 
      8. Set [consumed-character-count] to _close-link-tag-length_
 
