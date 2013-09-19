@@ -1893,6 +1893,9 @@ The procedure to identify and interpret the _span tags_ is as follows:
  6. Increment [current-position] by _consumed-character-count_
  7. If [current-position] is less than the length of the
     [input character sequence], go to [Step 3](#span-proc-step-3)
+ 8. All nodes in the [stack of potential opening span tags] with _node
+    type_ not equal to _raw html node_ should be interpreted as _text
+    fragments_
 
 The _text fragments_ identified in the above procedure should be
 handled as specified in [processing text fragments].
