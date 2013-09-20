@@ -2875,7 +2875,12 @@ one of the following values:</span>
 For example, the [space] character, the [line break] character, `.`,
 `,`, `(`, `)` are all _word-separator_ characters.
 
+<span id="speculative-url-end">We define an **speculative-url-end**
+[character] to be a [word-separator] character that is not a U+002F
+(SLASH) character.
+
 [word-separator]: #word-separator
+[speculative-url-end]: #speculative-url-end
 
 If any one of the following conditions are satisfied:
 
@@ -2966,9 +2971,9 @@ then the following is done:
         string_ is called the _auto-link scheme string length_.
      3. The _unprocessed auto-link tag_ shall be processed to give the
         _auto-link tag candidate_. The processing to be done is to
-        remove any trailing [word-separator] characters, such that the
-        last character of the _auto-link tag candidate_ is not a
-        [word-separator] character.
+        remove any trailing [speculative-url-end] characters, such that
+        the last character of the _auto-link tag candidate_ is not a
+        [speculative-url-end] character.
      4. If the length of the _auto-link tag candidate_ is greater than
         the _auto-link scheme string length_, then the _auto-link tag
         candidate_ is identified as an **auto-link tag**, and the
