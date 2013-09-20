@@ -3,8 +3,6 @@
 layout: doc  
 title: "The vfmd specification"  
 permalink: specification/  
-license: http://vfmd.github.io/vfmd-spec/LICENSE.txt  
-license-link-text: "an MIT-style license"  
 
 ---
 
@@ -3270,4 +3268,36 @@ handling footnote references\).
 [GitHub-style fenced code blocks]: https://help.github.com/articles/github-flavored-markdown#fenced-code-blocks
 [GitHub-style strikethroughs]: https://help.github.com/articles/github-flavored-markdown#strikethrough
 [MultiMarkdown-style footnotes]: http://fletcher.github.io/peg-multimarkdown/#footnotes
+
+---
+
+### License
+
+This document is published under an MIT-style license.
+
+Copyright (C) 2013, Roopesh Chander http://roopc.net/  
+All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this document (the "Specification"), to deal in the
+Specification without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense,
+sell and/or implement copies of the Specification, and to permit persons
+to whom the Specification is furnished to do so, subject to the
+following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Specification.
+
+THESE DOCUMENTS ARE PROVIDED "AS IS," AND COPYRIGHT HOLDERS MAKE NO
+REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, BUT NOT
+LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, NON-INFRINGEMENT, OR TITLE; THAT THE CONTENTS OF THESE
+DOCUMENTS ARE SUITABLE FOR ANY PURPOSE; NOR THAT THE IMPLEMENTATION OF
+SUCH CONTENTS WILL NOT INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS,
+TRADEMARKS OR OTHER RIGHTS.
+
+COPYRIGHT HOLDERS WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES ARISING OUT OF ANY USE OF THESE DOCUMENTS OR
+THE PERFORMANCE OR IMPLEMENTATION OF THE CONTENTS THEREOF.
 
