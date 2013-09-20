@@ -1978,8 +1978,9 @@ done:
         _reference id string_, then the output shall have the _enclosed
         content_ linked to the link url and link title specified in the
         entry for the _reference id string_ in the [link reference
-        association map]. For HTML output, the link title should be
-        [de-escaped] and then [attribute-value-escaped].
+        association map]. For HTML output, the link url should be
+        [attribute-value-escaped]; the link title should be [de-escaped]
+        and then [attribute-value-escaped].
 
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
@@ -2091,8 +2092,9 @@ done:
         link.  If the _title string_ is not _null_, the _title string_
         shall be used as the title for the link. The output shall have
         the _enclosed content_ linked to the link url and link title.
-        For HTML output, the link title should be [de-escaped] and then
-        [attribute-value-escaped].
+        For HTML output, the link url should be
+        [attribute-value-escaped]; the link title should be [de-escaped]
+        and then [attribute-value-escaped].
 
      6. The [top node] is popped off
 
@@ -2151,8 +2153,9 @@ done:
         _reference id string_, then the output shall have the _enclosed
         content_ linked to the link url and link title specified in the
         entry for the _reference id string_ in the [link reference
-        association map]. For HTML output, the link title should be
-        [de-escaped] and then [attribute-value-escaped].
+        association map]. For HTML output, the link url should be
+        [attribute-value-escaped]; the link title should be [de-escaped]
+        and then [attribute-value-escaped].
 
         If the [link reference association map] does not contain an
         entry for _reference id string_, then the output shall have the
@@ -2699,8 +2702,9 @@ If the [remaining-character-sequence] matches the
         title (if available) specified in the entry for the _reference
         id string_ in the [link reference association map]. The
         [image-alt-text-string] shall be used as the alternate text for
-        the image. For HTML output, the title of the image and the
-        alternate text for the image should be
+        the image. For HTML output, the link url of the image should be
+        [attribute-value-escaped]; the title of the image and the
+        alternate text for the image should be [de-escaped] and then
         [attribute-value-escaped].
 
         If the [link reference association map] does not contain an
@@ -2793,8 +2797,9 @@ If the [remaining-character-sequence] matches the
         If _title string_ is not null, the _title string_ shall be used
         as the title of the image. The [image-alt-text-string] shall be
         used as the alternate text for the image. For HTML output, the
+        link url of the image should be [attribute-value-escaped]; the
         title of the image and the alternate text for the image should
-        be [attribute-value-escaped].
+        be [de-escaped] and then [attribute-value-escaped].
 
      3. Set [consumed-character-count] to _image-src-tag-length_
 
@@ -2833,8 +2838,9 @@ If the [remaining-character-sequence] matches the
         title (if available) specified in the entry for the _reference
         id string_ in the [link reference association map]. The
         [image-alt-text-string] shall be used as the alternate text for
-        the image. For HTML output, the title of the image and the
-        alternate text for the image should be
+        the image. For HTML output, the link url of the image should be
+        [attribute-value-escaped]; the title of the image and the
+        alternate text for the image should be [de-escaped] and then
         [attribute-value-escaped].
 
         If the [link reference association map] does not contain an
@@ -2910,7 +2916,9 @@ then the following is done:
      2. The matching substring for the first parenthesized subexpression in
         the matching pattern is called the _auto-link url_
      3. The output shall have a link with the link url set as _auto-link
-        url_ and the link text content also set as _auto-link url_
+        url_ and the link text content also set as _auto-link url_.
+        For HTML output, the link url and the link text should be
+        [attribute-value-escaped].
      4. The [consumed-character-count] is set to the length of the
         _auto-link tag_
 
@@ -2925,7 +2933,9 @@ then the following is done:
         string formed by concatenating the string `mailto:` with the
         _auto-link email_ be called as _auto-link email url_
      3. The output shall have a link with the link url set as _auto-link
-        email url_ and the link text content set as _auto-link email_
+        email url_ and the link text content set as _auto-link email_.
+        For HTML output, the link url and the link text should be
+        [attribute-value-escaped].
      4. The [consumed-character-count] is set to the length of the
         _auto-link tag_
 
@@ -2965,7 +2975,8 @@ then the following is done:
         following is done:
          1. The output shall have a link with the link url set as
             _auto-link tag candidate_ and the link text content also set
-            as _auto-link tag candidate_
+            as _auto-link tag candidate_. For HTML output, the link url
+            and the link text should be [attribute-value-escaped].
          2. The [consumed-character-count] is set to the length of the
             _auto-link tag candidate_
      5. If the length of the _auto-link tag candidate_ is lesser than or
