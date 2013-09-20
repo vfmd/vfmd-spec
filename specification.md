@@ -888,7 +888,8 @@ shall either be a [blank line] or a [line] beginning with four or more
 For each line in the [block-element line sequence], the leading four
 [space] characters are removed, if present, and the resulting sequence
 of [lines], separated by [line breaks], forms the content of the code
-block.
+block. For HTML output, the content of the code block should be
+[html-code-escaped].
 
 For example, if the following sequence of [lines] form the code block
 element:
@@ -2620,7 +2621,7 @@ an unescaped `` ` `` character.
         the _unprocessed-code-content-string_. The
         _unprocessed-code-content-string_ is [trimmed] to form
         the content of the code span. For HTML output, the content of
-        the code-span should be [html-text-escaped].
+        the code-span should be [html-code-escaped].
      4.  Set [consumed-character-count] to _code-span-length_
 
 <h3 id="procedure-for-identifying-image-tags">Procedure for identifying image tags</h3>
@@ -3162,11 +3163,19 @@ tags] are subject to the following processing:
             There are two spaces at the end of this line<br />
             So we introduce a hard break there
 
-     3. **HTML escaping:** For HTML output, the _collated text fragment_
-        shall be [html-text-escaped].
+     3. **HTML-related processing:** For HTML output, the _collated text
+        fragment_ shall be [html-text-escaped].
+
+        For a non-HTML output format, any [character references] in the
+        _collated text fragment_ must be converted to a form appropriate
+        to the output format. For many output formats, it might be
+        appropriate to convert them to Unicode code points (for example,
+        `&copy;` can be converted to U+00A9).
 
  3. The _processed text fragment_ is output
 
+[character references]: http://www.w3.org/TR/html5/syntax.html#character-references
+[character reference]: http://www.w3.org/TR/html5/syntax.html#character-references
 
 <h3 id="processing-for-html-output">Processing for HTML output</h3>
 
@@ -3176,27 +3185,47 @@ For HTML output, the text that shall be output as part of text content
 of a HTML element, or the text that shall be output as part of a HTML
 tag's attribute value, needs to be escaped as described in this section.
 
+<h4 id="html-code-escaping">HTML code escaping</h4>
+
+[HTML code escaping]: #html-code-escaping
+[html-code-escaped]: #html-code-escaping
+
+The content of [code blocks] and [code spans] should be processed as
+follows before being output as HTML:
+
+ 1. Replace the `<` character with `&lt;`
+ 2. Replace the `>` character with `&gt;`
+ 3. Replace the `&` character with `&amp;`
+
+[code blocks]: #code-blocks
+[code spans]: #procedure-for-identifying-code-span-tags
+
 <h4 id="html-text-escaping">HTML text escaping</h4>
 
 [HTML text escaping]: #html-text-escaping
 [html-text-escaped]: #html-text-escaping
 
-**HTML text escaping** involves the following replacements:
+Text that forms the content of vfmd constructs other than [code blocks]
+and [code spans] should be processed as follows before being output as
+HTML:
 
  1. Replace the `<` character with `&lt;`
  2. Replace the `>` character with `&gt;`
- 3. Replace the `&` character with `&amp;`
+ 3. Replace any `&` character with `&amp;`, unless the `&` character
+    forms the start of a [character reference]
 
 <h4 id="attribute-value-escaping">Attribute value escaping</h4>
 
 [Attribute value escaping]: #attribute-value-escaping
 [attribute-value-escaped]: #attribute-value-escaping
 
-**Attribute value escaping** involves the following replacements:
+When writing the HTML output for vfmd constructs, the text to be output
+as the value of a HTML attribute should be be processed as follows:
 
  1. Replace the `<` character with `&lt;`
  2. Replace the `>` character with `&gt;`
- 3. Replace the `&` character with `&amp;`
+ 3. Replace any `&` character with `&amp;`, unless the `&` character
+    forms the start of a [character reference]
  4. Replace the `"` character with `&quot;`
 
 When writing the HTML output for vfmd constructs, the `"` character
