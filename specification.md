@@ -2158,7 +2158,9 @@ done:
         entry for _reference id string_, then the output shall have the
         _enclosed content_ without being part of a link,
         enclosed within the text forming the _opening link tag_ and the
-        text forming the _closing link tag_.
+        text forming the _closing link tag_. For HTML output, the text
+        forming the _closing link tag_ should be [de-escaped] and then
+        [html-text-escaped] before being output.
 
      6. The [top node] is popped off
 
