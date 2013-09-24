@@ -17,7 +17,6 @@ or otherwise programmatically interpret vfmd input. If you only intend
 to write a document using vfmd, please read the [userguide] instead.
 
 [Markdown]: http://daringfireball.net/projects/markdown/
-[vfmd]: introduction.md
 [userguide]: http://vfmd.github.io/vfmd-spec/userguide/
 
 <h2>Table of contents</h2>
