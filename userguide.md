@@ -899,6 +899,12 @@ becomes, in HTML output:
 
     Mail me at <a href="mailto:me@example.net">me@example.net</a>.
 
+If you have some text that would normally get interpreted as a link, but
+you don't want it to, you can use backslash-escaping:
+
+    These shalt not be links: http\://example.net <http\://example.net>
+    Nor this: \<me@example.net>
+
 <h3 id="automatic-escaping-for-html-output">Automatic escaping for HTML output</h3>
 
 [Automatic escaping for HTML output]: #automatic-escaping-for-html-output
