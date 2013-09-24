@@ -185,7 +185,7 @@ Any [character] that is not a _line break_ character is called a
 
 <span id="whitespace">
 A **whitespace** character is one of the following characters:
-U+0009 (TAB), U+000A (LF), U+000C (FF), U+000D (CR) or U+0020 (SPACE)
+U+000A (LF), U+000C (FF), U+000D (CR) or U+0020 (SPACE)
 </span>
 
 <span id="string">
