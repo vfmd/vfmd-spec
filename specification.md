@@ -143,11 +143,13 @@ requirement is made explicit in the regular expression by starting it in
 
 The input Markdown text is called the **document**.
 
-The [document] contains Unicode text in UTF-8 encoding without any
-leading Byte-Order-Mark. Any byte sequences in the input that are
-invalid in UTF-8 encoding are filtered off and are ignored. Therefore,
-for the following discussion, the [document] is considered to not have
-any invalid byte sequences.
+The [document] contains Unicode text in UTF-8 encoding. If the document
+starts with the three bytes: `0xEF` `0xBB` `0xBF`, then those three
+bytes are interpreted as the UTF-8 Byte-Order-Mark and are filtered off
+and ignored. Any byte sequences in the input that are invalid in UTF-8
+encoding are filtered off and are ignored. Therefore, for the following
+discussion, the [document] is considered to not have the Byte-Order-Mark
+and any invalid byte sequences.
 
 <h4 id="characters">Characters</h4>
 
