@@ -881,6 +881,15 @@ should enclose the URL in \<angle brackets\>, like this:
 
      _Hot Shots!_ (<http://en.wikipedia.org/wiki/Hot_Shots!>) was hilarious.
 
+If you have a long URL that you'd like to split across multiple
+lines, then again you should use \<angle brackets\>, like this:
+
+    You can read about the book at <http://en.wikipedia.org/wiki/The_
+    Amazing_Maurice_and_his_Educated_Rodents>.
+
+Otherwise, the \<angle brackets\> are optional for URLs of the form
+`scheme://path`.
+
 In addition, email addresses enclosed in \<angle brackets\> will be
 converted to `mailto:` links. For example:
 

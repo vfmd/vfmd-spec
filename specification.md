@@ -2899,12 +2899,12 @@ then the following is done:
     regular expression patterns (matching shall be case insensitive):
 
      1. URL within angle brackets:
-        `/<([a-z0-9\+\.\-]+:\/\/[^<>\s]+)>/`
+        `/<([a-z0-9\+\.\-]+:\/\/[^<> ]+)>/`
 
         Example: `<http://example.net>`
 
      2. Mailto URL within angle brackets:
-        `/<(mailto:[^<>\s]+)>/`
+        `/<(mailto:[^<> ]+)>/`
 
         Example: `<mailto:someone@example.net?subject=Hi+there>`
 
@@ -2916,8 +2916,11 @@ then the following is done:
 
      1. The matching substring for the whole of the matching pattern is
         identified as an **auto-link tag**
-     2. The matching substring for the first parenthesized subexpression in
-        the matching pattern is called the _auto-link url_
+     2. The matching substring for the first parenthesized subexpression
+        in the matching pattern is called the _unprocessed auto-link
+        url_.  Any [whitespace] characters in the _unprocessed auto-link
+        url_ are removed, and the resultant string is called the
+        _auto-link url_.
      3. The output shall have a link with the link url set as _auto-link
         url_ and the link text content also set as _auto-link url_.
         For HTML output, the link url and the link text should be
