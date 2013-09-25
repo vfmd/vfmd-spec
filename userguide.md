@@ -927,6 +927,9 @@ example, if you write `4 < 5`, it will be converted to `4 &lt; 5`.
 
 However, inside vfmd's code spans and code blocks, the `<` and `>`s are
 coverted to named entities even if they are part of a HTML tag.
+Similarly, any `&` characters within code spans and code blocks are
+converted to `&amp;` even if they are part of a character reference.
+This makes it easy to quote HTML code within code blocks and code spans.
 
 
 <h3 id="backslash-escapes">Backslash escapes</h3>
