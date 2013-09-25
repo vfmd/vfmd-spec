@@ -14,10 +14,10 @@ its syntax.
 This document describes the specification for the vfmd syntax. It is
 intended to be read by someone implementing this specification to parse
 or otherwise programmatically interpret vfmd input. If you only intend
-to write a document using vfmd, please read the [userguide] instead.
+to write a document using vfmd, please read the [syntax guide] instead.
 
 [Markdown]: http://daringfireball.net/projects/markdown/
-[userguide]: http://vfmd.github.io/vfmd-spec/userguide/
+[syntax guide]: http://vfmd.github.io/vfmd-spec/syntax/
 
 <h2>Table of contents</h2>
 

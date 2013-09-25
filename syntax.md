@@ -1,12 +1,12 @@
 ---
 
 layout: doc  
-title: "The vfmd userguide"  
-permalink: userguide/  
+title: "The vfmd syntax guide"  
+permalink: syntax/  
 
 ---
 
-# The vfmd userguide
+# The vfmd syntax guide
 
 **vfmd** is a variant of [Markdown] with an unambiguous specification of
 its syntax.
