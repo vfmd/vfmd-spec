@@ -15,7 +15,7 @@ This document describes the vfmd syntax in simple terms, and is intended
 to be of help for people writing in vfmd.
 
 The vfmd syntax is pretty much the same as the [original Markdown
-syntax], with a few minor changes and added clarifications.
+syntax], with some [differences] and additional details.
 
 vfmd enables you to represent rich-text markup in plain-text files, with
 an obsessive emphasis on readability. The intention is to keep the plain
@@ -28,6 +28,7 @@ and inline-code.
 
 [original Markdown syntax]: http://daringfireball.net/projects/markdown/syntax
 [Markdown]: http://daringfireball.net/projects/markdown/
+[differences]: http://vfmd.github.io/differences/
 
 ## Table of contents
 
