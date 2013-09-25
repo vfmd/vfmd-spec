@@ -22,6 +22,23 @@
   text-decoration: underline;
 }
 
+.nav {
+  float: right;
+  margin: 0 90px 3em 0;
+  padding: 0;
+  list-style: none;
+  height: 1em;
+}
+.nav li {
+  float: right;
+  margin: 0 0 0 1em;
+}
+@media (max-width: 720px) {
+  .nav-container {
+    display: none;
+  }
+}
+
 .content {
     max-width: 822px;
     min-width: 360px;

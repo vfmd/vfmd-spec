@@ -11,7 +11,18 @@
 
       <div id="header">
         <h1><a href="{{ site.rooturl }}">{{ site.name }}</a></h1>
-        <p>{{ site.tagline }}</p>
+        <div style="height: 2em;">
+        <p style="float: left;">{{ site.tagline }}</p>
+        <div class="nav-container" style="float: right; height: 1em;">
+            <ul class="nav">
+              <li><a href="/vfmd-spec/specification/">Specification</a></li>
+              <li>|</li>
+              <li><a href="/vfmd-spec/syntax/">Syntax</a></li>
+              <li>|</li>
+              <li><a href="/introduction/">Introduction</a></li>
+            </ul>
+        </div>
+        </div>
         <hr />
       </div>
 
