@@ -1486,9 +1486,9 @@ one or more [lines].
 
 The lines in the [block-element line sequence] are joined together into
 a single sequence of [characters], with a [line break] after each line.
-The resulting sequence of [characters] is trimmed to give the _paragraph text_.
-The result of interpreting the _paragraph text_ as a [text span
-sequence] shall form the content of the paragraph element.
+The resulting sequence of [characters] is [trimmed] to give the
+_paragraph text_. The result of interpreting the _paragraph text_ as a
+[text span sequence] shall form the content of the paragraph element.
 
 <span id="phrasing-html-element"> We define a **phrasing-html-element**
 to be one of the following HTML elements:</span> `a`, `abbr`, `area`,
