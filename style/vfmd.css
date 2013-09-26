@@ -39,6 +39,20 @@
   }
 }
 
+#github-banner {
+  display: block;
+  position: absolute;
+  top:0;
+  right: 60px;
+  padding: 10px 15px 10px 15px;
+  color: #fff;
+  background: #555;
+  font-weight: 400;
+  font-size: 0.9em;
+  border-radius: 0 0 6px 6px;
+  text-decoration: none;
+}
+
 .content {
     max-width: 822px;
     min-width: 360px;
