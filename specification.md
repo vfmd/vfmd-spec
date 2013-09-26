@@ -366,7 +366,7 @@ We define the following regular expression patterns:
 The following rules are to be followed in determining the type of the
 block-element and the [block-element end line]:
 
- 1. If the [block-element start line] is a [blank line], then the body
+ 1. If the [block-element start line] is a [blank line], then the block
     element is of type [**null block**]. The same line is the
     [block-element end line].
 
