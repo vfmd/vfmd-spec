@@ -1862,17 +1862,17 @@ The procedure to identify and interpret the _span tags_ is as follows:
     </span>
  4. If _is-verbatim-html-mode_ is equal to _false_, do the following:
      1. If the character at the [current-position] is either an
-        unescaped `[` (open square bracket) character, or an unescaped
+        [unescaped] `[` (open square bracket) character, or an [unescaped]
         `]` (close square bracket) character, invoke the [procedure for
         identifying link tags]
      2. If the character at the [current-position] is either an
-        unescaped `*` (asterisk) character, or an unescaped `_`
+        [unescaped] `*` (asterisk) character, or an [unescaped] `_`
         (underscore or low line) character, then invoke the [procedure
         for identifying emphasis tags]
-     3. If the character at the [current-position] is an unescaped `` `
-        `` (backtick) character, then invoke the [procedure for
+     3. If the character at the [current-position] is an [unescaped]
+        `` ` `` (backtick) character, then invoke the [procedure for
         identifying code-span tags]
-     4. If the character at the [current-position] is an unescaped `!`
+     4. If the character at the [current-position] is an [unescaped] `!`
         (exclamation mark) character, and if the
         [remaining-character-sequence] matches the regular expression
         pattern `/!\[/`, then invoke the [procedure for identifying
@@ -1880,7 +1880,7 @@ The procedure to identify and interpret the _span tags_ is as follows:
      5. If _consumed-character-count_ is equal to 0, then invoke the
         [procedure for detecting automatic links]
      6. If _consumed-character-count_ is equal to 0, and if the
-        character at the [current-position] is an unescaped `<` (left
+        character at the [current-position] is an [unescaped] `<` (left
         angle bracket) character, then invoke the [procedure for
         identifying HTML tags]
      7. If _consumed-character-count_ is equal to 0, interpret the
@@ -1922,7 +1922,7 @@ output.</span>
 [procedure for identifying link tags]: #procedure-for-identifying-link-tags
 
 This procedure assumes that the character at the [current-position]
-is either an unescaped `[` character or an unescaped `]` character.
+is either an [unescaped] `[` character or an [unescaped] `]` character.
 
 If the character at the [current-position] is a `[` character, it
 implies that the `[` can potentially get interpreted as an _opening link
@@ -2185,7 +2185,7 @@ Procedure for identifying emphasis tags</h3>
 [procedure for identifying emphasis tags]: #procedure-for-identifying-emphasis-tags
 
 This procedure assumes that the character at the [current-position] is
-either an unescaped `*` character or an unescaped `_` character.
+either an [unescaped] `*` character or an [unescaped] `_` character.
 
 <span id="emphasis-fringe-rank">We define **emphasis-fringe-rank** of a
 [character] based on the 'General\_Category' unicode property as
@@ -2532,7 +2532,7 @@ Procedure for identifying code-span tags</h3>
 [procedure for identifying code-span tags]: #procedure-for-identifying-code-span-tags
 
 This procedure assumes that the character at the [current-position] is
-an unescaped `` ` `` character.
+an [unescaped] `` ` `` character.
 
  1. The [remaining-character-sequence] shall match one of the following
     regular expression patterns:
@@ -2634,7 +2634,7 @@ an unescaped `` ` `` character.
 [procedure for identifying image tags]: #procedure-for-identifying-image-tags
 
 This procedure assumes that the character at the [current-position] is
-an unescaped `!` character, and that the immediate next character is a
+an [unescaped] `!` character, and that the immediate next character is a
 `[` character.
 
 <span id="image-tag-starter-pattern">The regular expression pattern
@@ -2883,7 +2883,7 @@ For example, the [space] character, the [line break] character, `.`,
 
 If any one of the following conditions are satisfied:
 
- 1. The character at the [current-position] is an unescaped `<`
+ 1. The character at the [current-position] is an [unescaped] `<`
     character
 
  2. The [current-position] is equal to 1
@@ -3003,7 +3003,7 @@ then the following is done:
 [procedure for identifying HTML tags]: #procedure-for-identifying-html-tags
 
 This procedure assumes that the character at the [current-position] is
-an unescaped `<` character.
+an [unescaped] `<` character.
 
 <span id="verbatim-html-starter-tag-name"> We define a
 **verbatim-html-starter-tag-name** to be one of the following HTML tag
