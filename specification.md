@@ -2886,11 +2886,11 @@ If any one of the following conditions are satisfied:
  1. The character at the [current-position] is an [unescaped] `<`
     character
 
- 2. The [current-position] is equal to 1
+ 2. The [current-position] is equal to 0
 
  3. All the following conditions are satisfied:
      1. The character at the [current-position] is not `<`, _and_
-     2. The [current-position] is greater than 1, _and_
+     2. The [current-position] is greater than 0, _and_
      3. The character at ([current-position] - 1) is a [word-separator]
         character
 
