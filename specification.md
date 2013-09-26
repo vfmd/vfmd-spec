@@ -1724,7 +1724,7 @@ and the other characters denote how the text content is to be "marked
 up". The characters that denote "mark up" form _span tags_, and the
 other characters form _text fragments_.
 
-There are three categories of _span tags_: _opening span tags_, _closing
+There are three kinds of _span tags_: _opening span tags_, _closing
 span tags_ and _self-contained span tags_.
 
 For example, consider the following _input character sequence_:
