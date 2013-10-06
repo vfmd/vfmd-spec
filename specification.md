@@ -683,6 +683,102 @@ be interpreted and output.</span>
 [block-level extensions]: #block-level-extensions
 [block-level extension]: #block-level-extension
 
+
+<h4 id="code-span-filter">
+Code-span filter</h4>
+
+[code-span filter]: #code-span-filter
+
+The code-span filter replaces any code spans in the input lines with a
+generic code span equivalent string. It generates output lines as it
+receives input lines, so that it can operate in a pipelined
+configuration. It maintains state information as it processes input
+lines.
+
+The following state information is preserved across multiple lines of
+input:
+
+ 1. <span id="open-backticks-count">**open-backticks-count**: The number
+    of `` ` `` characters in the opening tag of the current code
+    span</span>
+
+    If the _open-backticks-count_ is 0, it implies that at present, we
+    are not inside a code span.
+
+The following variables are used in processing one line of input:
+
+ 1. <span id="current-position-in-line">**current-position-in-line**:
+    The current position in the current line</span>
+
+    When _current-position-in-line_ is 0, the first character in the
+    line is said to be the character at the _current-position-in-line_;
+    when _current-position-in-line_ is 1, the second character in the
+    line is said to be the character at the _current-position-in-line_,
+    and so on.
+
+ 2. <span id="remaining-input-line">The substring of the line starting
+    from and including the character at the [current-position-in-line]
+    and ending at the end of the line is called the
+    **remaining-input-line**.</span>
+
+[open-backticks-count]: #open-backticks-count
+[current-position-in-line]: #current-position-in-line
+[remaining-input-line]: #remaining-input-line
+
+When the code-span filter is **reset** or **initialized**, the
+[open-backticks-count] is set to 0.
+
+As the code-span filter receives input lines, for each input line, the
+following is done:
+
+ 1. Set [current-position-in-line] to 0
+ 2. <span id="code span-filter-proc-step-2">
+    Set _consumed-character-count_ to 0</span>
+ 3. If the character at the [current-position-in-line] is an [unescaped]
+    `` ` `` character, do the following:
+
+     1. The [remaining-input-line] shall match the
+        regular expression pattern ``/^(`+)([^`]|$)/``
+
+        The length of the matching substring for the first parenthesized
+        subexpression in the pattern is called the _backticks-count_.
+        The _backticks-count_ will always be greater than 0.
+
+     2. Set _consumed-character-count_ to _backticks-count_
+
+     3. If [open-backticks-count] is greater than 0, then set
+        _is-in-code-span_ to _true_.
+
+        If [open-backticks-count] is equal to 0, then set
+        _is-in-code-span_ to _false_
+
+     4. If _is-in-code-span_ is _false_, then do the following:
+         1. Set [open-backticks-count] to _backticks-count_
+
+     5. If _is-in-code-span_ is _true_, then do the following:
+         1. Output the string: `<code />`
+         2. Set [open-backticks-count] to 0
+
+ 4. If the character at the [current-position-in-line] is not an
+    [unescaped] `` ` `` character, do the following:
+
+     1. If [open-backticks-count] is equal to 0, then do the following:
+         1. Output the character at the [current-position-in-line]
+
+     2. Set _consumed-character-count_ to 1
+
+ 5. Increment [current-position-in-line] by _consumed-character-count_
+ 6. If [current-position-in-line] is not past the end of the line, go to
+    [Step 2](#code-span-filter-proc-step-2)
+
+Note that this procedure intentionally does not take care of unclosed
+code spans. The code span filter is used solely for finding the end of a
+paragraph and it is not necessary to handle unclosed code spans in it.
+
+[current-index]: #current-index
+[remaining-filter-input-string]: #remaining-filter-input-string
+
+
 <h4 id="html-parser-states-relevant-to-end-of-paragraph">
 HTML parser states relevant to finding the end of a paragraph</h4>
 
