@@ -33,6 +33,7 @@ and inline-code.
 ## Table of contents
 
   * [Encoding]
+  * [Tabs]
   * [Block-level elements]
       * [Paragraphs]
       * [Headers]
@@ -62,6 +63,15 @@ document in English, it is most likely in UTF-8. If you are writing in
 another language, please make sure that the document is in UTF-8
 encoding (for example, if you are using a text editor to write the
 document, ensure that it saves the document in UTF-8 encoding).
+
+<h2 id="tabs">Tabs</h2>
+
+[Tabs]: #tabs
+
+vfmd assumes 4-column tab stops when dealing with tab characters in the
+input. If you are using a text editor to write the text, please
+configure your editor to either use 4-column tab stops, or to expand
+tabs to spaces as you type.
 
 <h2 id="block-level-elements">Block-level elements</h2>
 
