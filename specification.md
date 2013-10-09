@@ -162,15 +162,16 @@ point and encoded in UTF-8 encoding.
 The [document] consists of a sequence of [characters], where the
 [characters] may represent either markup or character data.
 
-A U+0009 (TAB) character in the input shall be treated as four
-consecutive U+0020 (SPACE) characters.
-
 <span id="space">
 A U+0020 (SPACE) character is henceforth called a **space** character.
 </span>
 <span id="non-space">
 Any character that is not a U+0020 (SPACE) character is henceforth
 called a **non-space** character.
+</span>
+
+<span id="tab">
+A U+0009 (TAB) character is henceforth called a **tab** character.
 </span>
 
 The character sequence of a U+000D (CR) character followed by a U+000A
@@ -187,7 +188,7 @@ Any [character] that is not a _line break_ character is called a
 
 <span id="whitespace">
 A **whitespace** character is one of the following characters:
-U+000A (LF), U+000C (FF), U+000D (CR) or U+0020 (SPACE)
+U+0009 (TAB), U+000A (LF), U+000C (FF), U+000D (CR) or U+0020 (SPACE)
 </span>
 
 <span id="string">
@@ -241,6 +242,7 @@ called the **enclosed string** of the [quoted string].</span>
 
 [space]: #space
 [non-space]: #non-space
+[tab]: #tab
 [line break]: #line-break
 [line breaks]: #line-break
 [non-line-break]: #non-line-break
@@ -268,8 +270,28 @@ breaks].
 
 <span id="blank-line">
 If a [line] contains no [characters], or if all [characters] in the
-[line] are [space] characters, that line is called a **blank line**.
-</span>
+[line] are [space] or [tab] characters, that line is called a
+**blank line**.</span>
+
+The [lines] in the [document] shall be preprocessed to expand each [tab]
+character in the line to a certain number of [space] characters, as
+specified below:
+
+ 1. Let _p_ be the position of the [tab] character in the [line], after
+    all previous [tab] characters in the [line] have been "expanded".
+
+    For the first character of a [line], the position of the character
+    is considered to be 0; for the second character of the [line], the
+    position of the character is considered to be 1, and so on.
+
+ 2. Compute _n_ as: ( 4 - ( _p_ % 4 ) ), where '%' is the modulo operator
+
+ 3. "Expand" the [tab] character by replacing it with _n_ number of
+    [space] characters
+
+Since all the [lines] in a [document] are tab-expanded as specified
+above, for the following discussion, the [document] is considered not to
+have any [tab] characters.
 
 To [identify the block-elements] in the [document], the [document] is seen
 as a sequence of [lines].
