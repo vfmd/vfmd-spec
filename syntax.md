@@ -184,7 +184,7 @@ not be identified as a header.
 
 Code blocks can be used to quote text verbatim. For example, it can be
 used to quote source code. Every line of the code block should be
-indented by 4 space characters (or 1 tab character).
+indented by 4 space characters.
 
 No Markdown syntax is processed within a code block. In addition, for
 HTML output, ampersands (`&`) and angle brackets (`<` and `>`) within a
@@ -430,8 +430,7 @@ item.
         > inside a list item
 
     -   List item with a code-block. The code-block should be indented
-        by 4 spaces (or 1 tab) from the starting position of this
-        paragraph.
+        by 4 spaces from the starting position of this paragraph.
 
             int main() {
                 return 42;
@@ -1118,7 +1117,7 @@ The corresponding HTML output shall be:
 
 However, please make sure that the starting line of each snippet of HTML
 is not indented by more than 3 spaces (if it's indented by 4 or more
-spaces, or a tab, it would become a [code block]).
+spaces, it would become a [code block]).
 
 On the contrary, if you want the whole block of HTML reproduced verbatim
 in the HTML output, make sure that there are no blank lines in the
