@@ -602,20 +602,30 @@ block-element and the [block-element end line]:
     line] marks the start of a block-element of type [**paragraph**].
 
     In order to find the [block-element end line], we need to make use
-    of a HTML parser. To the HTML parser, we feed the characters of each
-    line, starting from the [block-element start line]. After feeding
-    all characters of every line, we feed a [line break] character to
-    the HTML parser, and observe the state of the HTML parser. Of the
-    the many possible states of a HTML parser, we are only interested in
-    the [HTML parser states relevant to finding the end of a paragraph].
+    of a [code-span filter] and a HTML parser, in a pipelined
+    configuration. The [code-span filter] filters off any code spans in
+    the text and replaces each code-span with a generic code-span
+    equivalent string. The HTML parser handles the general HTML/SGML/XML
+    syntax and shall not be particular about the names of the HTML tags.
+
+    First, we reset the [code-span filter] and the HTML parser to their
+    initial state. Then, starting from (and inclusive of) the
+    [block-element start line], we pass the characters of each line, and
+    a [line break] character, to the [code-span filter], and pass the
+    filtered output to the HTML parser. For each line, after passing the
+    filtered output to the HTML parser, we observe the state of the HTML
+    parser. Of the the many possible states of a HTML parser, we are
+    only interested in the [HTML parser states relevant to finding the
+    end of a paragraph].
 
     The [block-element end line] is the next subsequent [line] in the
     [input line sequence], starting from and inclusive of the
     [block-element start line], that satisfies all the following
     conditions:
 
-     1. At the end of feeding the line and a [line break] to the HTML
-        parser, all the following conditions are satisfied:
+     1. At the end of feeding all filtered lines till (and inclusive of)
+        this line, to the HTML parser, all the following conditions are
+        satisfied:
 
          1. The HTML parser state is not "within a HTML tag"
 
