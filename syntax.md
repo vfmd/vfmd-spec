@@ -32,7 +32,9 @@ and inline-code.
 
 ## Table of contents
 
-  * [Encoding]
+  * [Basics]
+      * [Encoding]
+      * [Tabs]
   * [Block-level elements]
       * [Paragraphs]
       * [Headers]
@@ -53,7 +55,11 @@ and inline-code.
       * [Using vfmd along with HTML markup]
       * [Verbatim HTML]
 
-<h2 id="encoding">Encoding</h2>
+<h2 id="basics">Basics</h2>
+
+[Basics]: #basics
+
+<h3 id="encoding">Encoding</h3>
 
 [Encoding]: #encoding
 
@@ -62,6 +68,15 @@ document in English, it is most likely in UTF-8. If you are writing in
 another language, please make sure that the document is in UTF-8
 encoding (for example, if you are using a text editor to write the
 document, ensure that it saves the document in UTF-8 encoding).
+
+<h3 id="tabs">Tabs</h3>
+
+[Tabs]: #tabs
+
+vfmd assumes 4-column tab stops when dealing with tab characters in the
+input. If you are using a text editor to write the text, please
+configure your editor to either use 4-column tab stops, or to expand
+tabs to spaces as you type.
 
 <h2 id="block-level-elements">Block-level elements</h2>
 
@@ -184,7 +199,7 @@ not be identified as a header.
 
 Code blocks can be used to quote text verbatim. For example, it can be
 used to quote source code. Every line of the code block should be
-indented by 4 space characters (or 1 tab character).
+indented by 4 space characters.
 
 No Markdown syntax is processed within a code block. In addition, for
 HTML output, ampersands (`&`) and angle brackets (`<` and `>`) within a
@@ -430,8 +445,7 @@ item.
         > inside a list item
 
     -   List item with a code-block. The code-block should be indented
-        by 4 spaces (or 1 tab) from the starting position of this
-        paragraph.
+        by 4 spaces from the starting position of this paragraph.
 
             int main() {
                 return 42;
@@ -1129,7 +1143,7 @@ The corresponding HTML output shall be:
 
 However, please make sure that the starting line of each snippet of HTML
 is not indented by more than 3 spaces (if it's indented by 4 or more
-spaces, or a tab, it would become a [code block]).
+spaces, it would become a [code block]).
 
 On the contrary, if you want the whole block of HTML reproduced verbatim
 in the HTML output, make sure that there are no blank lines in the
