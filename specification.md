@@ -602,20 +602,30 @@ block-element and the [block-element end line]:
     line] marks the start of a block-element of type [**paragraph**].
 
     In order to find the [block-element end line], we need to make use
-    of a HTML parser. To the HTML parser, we feed the characters of each
-    line, starting from the [block-element start line]. After feeding
-    all characters of every line, we feed a [line break] character to
-    the HTML parser, and observe the state of the HTML parser. Of the
-    the many possible states of a HTML parser, we are only interested in
-    the [HTML parser states relevant to finding the end of a paragraph].
+    of a [code-span filter] and a HTML parser, in a pipelined
+    configuration. The [code-span filter] filters off any code spans in
+    the text and replaces each code-span with a generic code-span
+    equivalent string. The HTML parser handles the general HTML/SGML/XML
+    syntax and shall not be particular about the names of the HTML tags.
+
+    First, we reset the [code-span filter] and the HTML parser to their
+    initial state. Then, starting from (and inclusive of) the
+    [block-element start line], we pass the characters of each line, and
+    a [line break] character, to the [code-span filter], and pass the
+    filtered output to the HTML parser. For each line, after passing the
+    filtered output to the HTML parser, we observe the state of the HTML
+    parser. Of the the many possible states of a HTML parser, we are
+    only interested in the [HTML parser states relevant to finding the
+    end of a paragraph].
 
     The [block-element end line] is the next subsequent [line] in the
     [input line sequence], starting from and inclusive of the
     [block-element start line], that satisfies all the following
     conditions:
 
-     1. At the end of feeding the line and a [line break] to the HTML
-        parser, all the following conditions are satisfied:
+     1. At the end of feeding all filtered lines till (and inclusive of)
+        this line, to the HTML parser, all the following conditions are
+        satisfied:
 
          1. The HTML parser state is not "within a HTML tag"
 
@@ -672,6 +682,102 @@ be interpreted and output.</span>
 [verbatim HTML element]: #verbatim-html-element
 [block-level extensions]: #block-level-extensions
 [block-level extension]: #block-level-extension
+
+
+<h4 id="code-span-filter">
+Code-span filter</h4>
+
+[code-span filter]: #code-span-filter
+
+The code-span filter replaces any code spans in the input lines with a
+generic code span equivalent string. It generates output lines as it
+receives input lines, so that it can operate in a pipelined
+configuration. It maintains state information as it processes input
+lines.
+
+The following state information is preserved across multiple lines of
+input:
+
+ 1. <span id="open-backticks-count">**open-backticks-count**: The number
+    of `` ` `` characters in the opening tag of the current code
+    span</span>
+
+    If the _open-backticks-count_ is 0, it implies that at present, we
+    are not inside a code span.
+
+The following variables are used in processing one line of input:
+
+ 1. <span id="current-position-in-line">**current-position-in-line**:
+    The current position in the current line</span>
+
+    When _current-position-in-line_ is 0, the first character in the
+    line is said to be the character at the _current-position-in-line_;
+    when _current-position-in-line_ is 1, the second character in the
+    line is said to be the character at the _current-position-in-line_,
+    and so on.
+
+ 2. <span id="remaining-input-line">The substring of the line starting
+    from and including the character at the [current-position-in-line]
+    and ending at the end of the line is called the
+    **remaining-input-line**.</span>
+
+[open-backticks-count]: #open-backticks-count
+[current-position-in-line]: #current-position-in-line
+[remaining-input-line]: #remaining-input-line
+
+When the code-span filter is **reset** or **initialized**, the
+[open-backticks-count] is set to 0.
+
+As the code-span filter receives input lines, for each input line, the
+following is done:
+
+ 1. Set [current-position-in-line] to 0
+ 2. <span id="code span-filter-proc-step-2">
+    Set _consumed-character-count_ to 0</span>
+ 3. If the character at the [current-position-in-line] is an [unescaped]
+    `` ` `` character, do the following:
+
+     1. The [remaining-input-line] shall match the
+        regular expression pattern ``/^(`+)([^`]|$)/``
+
+        The length of the matching substring for the first parenthesized
+        subexpression in the pattern is called the _backticks-count_.
+        The _backticks-count_ will always be greater than 0.
+
+     2. Set _consumed-character-count_ to _backticks-count_
+
+     3. If [open-backticks-count] is greater than 0, then set
+        _is-in-code-span_ to _true_.
+
+        If [open-backticks-count] is equal to 0, then set
+        _is-in-code-span_ to _false_
+
+     4. If _is-in-code-span_ is _false_, then do the following:
+         1. Set [open-backticks-count] to _backticks-count_
+
+     5. If _is-in-code-span_ is _true_, then do the following:
+         1. Output the string: `<code />`
+         2. Set [open-backticks-count] to 0
+
+ 4. If the character at the [current-position-in-line] is not an
+    [unescaped] `` ` `` character, do the following:
+
+     1. If [open-backticks-count] is equal to 0, then do the following:
+         1. Output the character at the [current-position-in-line]
+
+     2. Set _consumed-character-count_ to 1
+
+ 5. Increment [current-position-in-line] by _consumed-character-count_
+ 6. If [current-position-in-line] is not past the end of the line, go to
+    [Step 2](#code-span-filter-proc-step-2)
+
+Note that this procedure intentionally does not take care of unclosed
+code spans. The code span filter is used solely for finding the end of a
+paragraph and it is not necessary to handle unclosed code spans in it.
+
+[current-index]: #current-index
+[remaining-filter-input-string]: #remaining-filter-input-string
+
 
 <h4 id="html-parser-states-relevant-to-end-of-paragraph">
 HTML parser states relevant to finding the end of a paragraph</h4>
@@ -1946,7 +2052,7 @@ done:
  1. If the [topmost node of type] _link node_ is not
     [_null_](#topmost-node-of-type-is-null), and if the
     [remaining-character-sequence] matches the regular expression
-    pattern `/^\]\s*\[(([^\\\[\]]|\\.)+)\]/` (Example: `] [ref id]`),
+    pattern ``/^\]\s*\[(([^\\\[\]\`]|\\.)+)\]/`` (Example: `] [ref id]`),
     then the following is done:
 
      1. The matching substring for the whole of the pattern is
@@ -2005,11 +2111,11 @@ done:
      1. The [remaining-character-sequence] matches one of the following
         regular expression patterns:
 
-         1. URL without angle brackets: `/^\]\s*\(\s*([^\(\)<>\s]+)([\)\s].*)$/`
+         1. URL without angle brackets: ``/^\]\s*\(\s*([^\(\)<>\`\s]+)([\)\s].*)$/``
 
             Example: `] (http://www.example.net` + _residual-link-attribute-sequence_
 
-         2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]*)>([\)].+)$/`
+         2. URL within angle brackets: ``/^\]\s*\(\s*<([^<>\`]*)>([\)].+)$/``
 
             Examples:  
             `](<http://example.net>` + _residual-link-attribute-sequence_  
@@ -2041,7 +2147,7 @@ done:
             to be _null_.
 
          2. Title and closing paranthesis:  
-            `/^\s*("(([^"\\]|\\.)*)"|'(([^'\\]|\\.)*)')\s*\)/`
+            ``/^\s*("(([^\\"\`]|\\.)*)"|'(([^\\'\`]|\\.)*)')\s*\)/``
 
             Examples:  
             `"Title")`  
@@ -2638,7 +2744,7 @@ an [unescaped] `!` character, and that the immediate next character is a
 `[` character.
 
 <span id="image-tag-starter-pattern">The regular expression pattern
-`/^!\[(([^\\\[\]]|\\.)*)(\].*)$/` is called the
+``/^!\[(([^\\\[\]\`]|\\.)*)(\].*)$/`` is called the
 **image-tag-starter-pattern**.</span>
 
 Example: `![alt text` + _residual-image-sequence_
@@ -2674,7 +2780,7 @@ If the [remaining-character-sequence] matches the
 [image-tag-starter-pattern], then the following is done:
 
  1. If the [residual-image-sequence] matches the regular expression
-    pattern `/^\]\s*\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
+    pattern ``/^\]\s*\[(([^\\\[\]\`]|\\.)*)\]/`` (Example: `] [ref id]`),
     then the following is done:
 
      1. The matching substring for the first parenthesized subexpression
@@ -2722,11 +2828,11 @@ If the [remaining-character-sequence] matches the
      1. The [residual-image-sequence] matches one of the following
         regular expression patterns:
 
-         1. URL without angle brackets: `/^\]\s*\(\s*([^\(\)<>\s]+)([\)\s].*)$/`
+         1. URL without angle brackets: ``/^\]\s*\(\s*([^\(\)<>\`\s]+)([\)\s].*)$/``
 
             Example: `] (http://www.example.net/image.jpg` + _residual-image-attribute-sequence_
 
-         2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]*)>([\)].+)$/`
+         2. URL within angle brackets: ``/^\]\s*\(\s*<([^<>\`]*)>([\)].+)$/``
 
             Examples:  
             `](<http://example.net/image.jpg>` + _residual-image-attribute-sequence_  
@@ -2758,7 +2864,7 @@ If the [remaining-character-sequence] matches the
             to be _null_.
 
          2. Title and closing paranthesis:  
-            `/^\s*("(([^"\\]|\\.)*)"|'(([^'\\]|\\.)*)')\s*\)/`
+            ``/^\s*("(([^"\\\`]|\\.)*)"|'(([^'\\\`]|\\.)*)')\s*\)/``
 
             Examples:  
             `"Title")`  
@@ -2904,12 +3010,12 @@ then the following is done:
     regular expression patterns (matching shall be case insensitive):
 
      1. URL within angle brackets:
-        `/<([a-z0-9\+\.\-]+:\/\/[^<> ]+)>/`
+        ``/<([a-z0-9\+\.\-]+:\/\/[^<> \`]+)>/``
 
         Example: `<http://example.net>`
 
      2. Mailto URL within angle brackets:
-        `/<(mailto:[^<> ]+)>/`
+        ``/<(mailto:[^<> \`]+)>/``
 
         Example: `<mailto:someone@example.net?subject=Hi+there>`
 
@@ -2934,7 +3040,7 @@ then the following is done:
         _auto-link tag_
 
  2. If the [remaining-character-sequence] matches the regular expression
-    pattern `/<([^\/\?#@\s]+@[^\/\?#@\s\.]+\.[^\/\?#@\s]+)>/`
+    pattern ``/<([^\/\?#@\`\s]+@[^\/\?#@\`\s\.]+\.[^\/\?#@\`\s]+)>/``
     (Example: `<someone@example.net>`), then the following is done:
 
      1. The matching substring for the whole of the matching pattern is
@@ -2955,12 +3061,12 @@ then the following is done:
     insensitive):
 
      1. URL without angle brackets:
-        `/([a-z0-9\+\.\-]+:\/\/)[^<>\s]+/`
+        ``/([a-z0-9\+\.\-]+:\/\/)[^<>\`\s]+/``
 
         Example: `http://example.net`
 
      3. Mailto URL without angle brackets:
-        `/(mailto:)[^<>\s]+/`
+        ``/(mailto:)[^<>\`\s]+/``
 
         Example: `mailto:someone@example.net`
 

@@ -621,6 +621,13 @@ with a backslash, like this:
 
     [she \[the Queen\] said]: http://example.net/queen_of_hearts_said/
 
+Similarly, if you want to include literal `` ` `` (backtick) characters
+in the link text, link identifier or the link title, you should escape
+each such backtick character with a backslash. Also note that the link
+URL should not have any URL-unsafe characters like `<`, `>` or `` ` `` -
+if required, they should be escaped, for example, to `&lt;`, `&gt;` or
+`&#96` respectively.
+
 <h4 id="inline-links">Inline links</h4>
 
 [Inline links]: #inline-links
@@ -658,11 +665,15 @@ lines, then again the angle brackets are mandatory. For example:
     Amazing_Maurice_and_his_Educated_Rodents> "Amazing Maurice book")
     set in the Discworld.
 
-Like in referenced links, if you want to include any `[` or `]`
-characters in the link text, or any quote characters in the title text,
-you should escape them with backslashes, like this:
+Like in referenced links, if you want to include any `[` or `]` or
+`` ` `` characters in the link text, or any quote characters in the
+title text, you should escape them with backslashes, like this:
 
     Go to [step \[1\]](#foo-step-1 "Step 1 of the \"foo\" routine")
+
+Also, the link URL should not have any URL-unsafe characters like `<`,
+`>` or `` ` `` - if required, they should be escaped, for example, to
+`&lt;`, `&gt;` or `&#96` respectively.
 
 
 <h3 id="emphasis">Emphasis</h3>
