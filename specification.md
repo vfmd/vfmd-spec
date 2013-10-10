@@ -2052,7 +2052,7 @@ done:
  1. If the [topmost node of type] _link node_ is not
     [_null_](#topmost-node-of-type-is-null), and if the
     [remaining-character-sequence] matches the regular expression
-    pattern `/^\]\s*\[(([^\\\[\]]|\\.)+)\]/` (Example: `] [ref id]`),
+    pattern ``/^\]\s*\[(([^\\\[\]\`]|\\.)+)\]/`` (Example: `] [ref id]`),
     then the following is done:
 
      1. The matching substring for the whole of the pattern is
@@ -2111,11 +2111,11 @@ done:
      1. The [remaining-character-sequence] matches one of the following
         regular expression patterns:
 
-         1. URL without angle brackets: `/^\]\s*\(\s*([^\(\)<>\s]+)([\)\s].*)$/`
+         1. URL without angle brackets: ``/^\]\s*\(\s*([^\(\)<>\`\s]+)([\)\s].*)$/``
 
             Example: `] (http://www.example.net` + _residual-link-attribute-sequence_
 
-         2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]*)>([\)].+)$/`
+         2. URL within angle brackets: ``/^\]\s*\(\s*<([^<>\`]*)>([\)].+)$/``
 
             Examples:  
             `](<http://example.net>` + _residual-link-attribute-sequence_  
@@ -2147,7 +2147,7 @@ done:
             to be _null_.
 
          2. Title and closing paranthesis:  
-            `/^\s*("(([^"\\]|\\.)*)"|'(([^'\\]|\\.)*)')\s*\)/`
+            ``/^\s*("(([^\\"\`]|\\.)*)"|'(([^\\'\`]|\\.)*)')\s*\)/``
 
             Examples:  
             `"Title")`  
@@ -2744,7 +2744,7 @@ an [unescaped] `!` character, and that the immediate next character is a
 `[` character.
 
 <span id="image-tag-starter-pattern">The regular expression pattern
-`/^!\[(([^\\\[\]]|\\.)*)(\].*)$/` is called the
+``/^!\[(([^\\\[\]\`]|\\.)*)(\].*)$/`` is called the
 **image-tag-starter-pattern**.</span>
 
 Example: `![alt text` + _residual-image-sequence_
@@ -2780,7 +2780,7 @@ If the [remaining-character-sequence] matches the
 [image-tag-starter-pattern], then the following is done:
 
  1. If the [residual-image-sequence] matches the regular expression
-    pattern `/^\]\s*\[(([^\\\[\]]|\\.)*)\]/` (Example: `] [ref id]`),
+    pattern ``/^\]\s*\[(([^\\\[\]\`]|\\.)*)\]/`` (Example: `] [ref id]`),
     then the following is done:
 
      1. The matching substring for the first parenthesized subexpression
@@ -2828,11 +2828,11 @@ If the [remaining-character-sequence] matches the
      1. The [residual-image-sequence] matches one of the following
         regular expression patterns:
 
-         1. URL without angle brackets: `/^\]\s*\(\s*([^\(\)<>\s]+)([\)\s].*)$/`
+         1. URL without angle brackets: ``/^\]\s*\(\s*([^\(\)<>\`\s]+)([\)\s].*)$/``
 
             Example: `] (http://www.example.net/image.jpg` + _residual-image-attribute-sequence_
 
-         2. URL within angle brackets: `/^\]\s*\(\s*<([^<>]*)>([\)].+)$/`
+         2. URL within angle brackets: ``/^\]\s*\(\s*<([^<>\`]*)>([\)].+)$/``
 
             Examples:  
             `](<http://example.net/image.jpg>` + _residual-image-attribute-sequence_  
@@ -2864,7 +2864,7 @@ If the [remaining-character-sequence] matches the
             to be _null_.
 
          2. Title and closing paranthesis:  
-            `/^\s*("(([^"\\]|\\.)*)"|'(([^'\\]|\\.)*)')\s*\)/`
+            ``/^\s*("(([^"\\\`]|\\.)*)"|'(([^'\\\`]|\\.)*)')\s*\)/``
 
             Examples:  
             `"Title")`  
@@ -3010,12 +3010,12 @@ then the following is done:
     regular expression patterns (matching shall be case insensitive):
 
      1. URL within angle brackets:
-        `/<([a-z0-9\+\.\-]+:\/\/[^<> ]+)>/`
+        ``/<([a-z0-9\+\.\-]+:\/\/[^<> \`]+)>/``
 
         Example: `<http://example.net>`
 
      2. Mailto URL within angle brackets:
-        `/<(mailto:[^<> ]+)>/`
+        ``/<(mailto:[^<> \`]+)>/``
 
         Example: `<mailto:someone@example.net?subject=Hi+there>`
 
@@ -3040,7 +3040,7 @@ then the following is done:
         _auto-link tag_
 
  2. If the [remaining-character-sequence] matches the regular expression
-    pattern `/<([^\/\?#@\s]+@[^\/\?#@\s\.]+\.[^\/\?#@\s]+)>/`
+    pattern ``/<([^\/\?#@\`\s]+@[^\/\?#@\`\s\.]+\.[^\/\?#@\`\s]+)>/``
     (Example: `<someone@example.net>`), then the following is done:
 
      1. The matching substring for the whole of the matching pattern is
@@ -3061,12 +3061,12 @@ then the following is done:
     insensitive):
 
      1. URL without angle brackets:
-        `/([a-z0-9\+\.\-]+:\/\/)[^<>\s]+/`
+        ``/([a-z0-9\+\.\-]+:\/\/)[^<>\`\s]+/``
 
         Example: `http://example.net`
 
      3. Mailto URL without angle brackets:
-        `/(mailto:)[^<>\s]+/`
+        ``/(mailto:)[^<>\`\s]+/``
 
         Example: `mailto:someone@example.net`
 
