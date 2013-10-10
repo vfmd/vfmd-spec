@@ -32,8 +32,9 @@ and inline-code.
 
 ## Table of contents
 
-  * [Encoding]
-  * [Tabs]
+  * [Basics]
+      * [Encoding]
+      * [Tabs]
   * [Block-level elements]
       * [Paragraphs]
       * [Headers]
@@ -54,7 +55,11 @@ and inline-code.
       * [Using vfmd along with HTML markup]
       * [Verbatim HTML]
 
-<h2 id="encoding">Encoding</h2>
+<h2 id="basics">Basics</h2>
+
+[Basics]: #basics
+
+<h3 id="encoding">Encoding</h3>
 
 [Encoding]: #encoding
 
@@ -64,7 +69,7 @@ another language, please make sure that the document is in UTF-8
 encoding (for example, if you are using a text editor to write the
 document, ensure that it saves the document in UTF-8 encoding).
 
-<h2 id="tabs">Tabs</h2>
+<h3 id="tabs">Tabs</h3>
 
 [Tabs]: #tabs
 
