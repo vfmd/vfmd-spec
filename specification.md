@@ -777,7 +777,8 @@ following is done:
      4. If _is-in-code-span_ is _false_, then do the following:
          1. Set [open-backticks-count] to _backticks-count_
 
-     5. If _is-in-code-span_ is _true_, then do the following:
+     5. If _is-in-code-span_ is _true_, and if [open-backticks-count] is
+        equal to _backticks-count_, then do the following:
          1. Output the string: `<code />`
          2. Set [open-backticks-count] to 0
 
