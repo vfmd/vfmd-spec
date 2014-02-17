@@ -1692,7 +1692,7 @@ The _link-definition-line_ shall match one of the following regular
 expression patterns:
 
  1. Just the URL:
-    `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ <>]+|<[^<>]*>) *$/`
+    `/^ *\[(([^\\\[\]]|\\.)*)\] *: *([^ <>]+|<[^<>]*>) *$/`
 
     Examples:  
     `[ref id]: http://example.net/`  
@@ -1700,7 +1700,7 @@ expression patterns:
     `[ref \] id]: mailto:someone@somewhere.net`  
 
  2. URL followed by text:
-    `/^ *\[([^\\\[\]]|\\.)*\] *: *([^ <>]+|<[^<>]*>) +([^ ].*)$/`
+    `/^ *\[(([^\\\[\]]|\\.)*)\] *: *([^ <>]+|<[^<>]*>) +([^ ].*)$/`
 
     Examples:  
     `[ref id]: http://example.net/ "Title"`  
@@ -1710,16 +1710,17 @@ expression patterns:
     `[ref id]: http://example.net/ "Title" followed by random "(ignored)" text`  
     `[ref id]: http://example.net/ just random ignored text`  
 
-In case of either pattern, the matching substring for the first
+In case of either pattern, the matching substring for the first (i.e. outer)
 parenthesized subexpression in the pattern is [simplified] to obtain the
-_reference id string_. The matching substring for the second
-parathesized subexpression is called the _unprocessed url string_.
+_reference id string_. The matching substring for the third
+parathesized subexpression (just after the `:`) is called the
+_unprocessed url string_.
 
 Any `<`, `>` or [whitespace] characters in the _unprocessed url string_
 are removed, and the resultant string is called the _link url string_.
 
 In case the match is with the second regular expression pattern, the
-matching substring for the third parenthesized subexpression in the
+matching substring for the fourth parenthesized subexpression in the
 pattern is called the _title container string_.
 
 If the _title-container-string_ matches the regular expression pattern
