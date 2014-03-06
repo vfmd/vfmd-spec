@@ -2139,7 +2139,7 @@ done:
 
             Example: `] (http://www.example.net` + _residual-link-attribute-sequence_
 
-         2. URL within angle brackets: ``/^\]\s*\(\s*<([^<>\`]*)>([\)].+)$/``
+         2. URL within angle brackets: ``/^\]\s*\(\s*<([^<>\`]*)>([\)\s].*)$/``
 
             Examples:  
             `](<http://example.net>` + _residual-link-attribute-sequence_  
