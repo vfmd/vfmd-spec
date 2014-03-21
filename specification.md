@@ -3275,10 +3275,16 @@ Escaping backslashes in the input should not be part of the output.
 be a unicode code point whose 'General\_Category' unicode property has
 one of the following values: Pc, Pd, Ps, Pe, Pi, Pf, Po.</span>
 
+<span id="symbol">We define a **symbol** [character] to
+be a unicode code point whose 'General\_Category' unicode property has
+one of the following values: Sc, Sk, Sm, So.</span>
+
 [punctuation]: #punctuation
+[symbol]: #symbol
 
 To de-escape a [string], every `\` (backslash) character in the string
-that is used for [escaping] a [punctuation] character, shall be removed.
+that is used for [escaping] a [punctuation] character or a [symbol]
+character, shall be removed.
 
 For example, for the string `With \(esca\ped\) \\brackets`, the
 de-escaped string will be `With (esca\ped) \brackets`.
