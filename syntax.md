@@ -1076,8 +1076,8 @@ becomes, in HTML output:
     <strong>E</strong> <em>(energy)</em> = <strong>mc<sup>2</sup></strong></p>
 
 [Other HTML elements] can contain vfmd text, but cannot be contained
-within vfmd markup. Moreover, vfmd paragraphs containing any of the
-[other HTML elements] are not wrapped in `p` tags.
+within span-level vfmd markup. Moreover, vfmd paragraphs containing
+any of the [other HTML elements] are not wrapped in `p` tags.
 
 The following example shows how vfmd markup can be used within `td`
 elements of a HTML table:
