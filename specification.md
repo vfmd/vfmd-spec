@@ -3161,9 +3161,9 @@ time, till one of the following happens:
         _html-tag-detection-sequence_
 
  2. The HTML parser detects a complete self-closing HTML tag (this also
-    includes tags empty by definition in HTML4, like `<br>` and `<img
-    src="picture.jpg">`, for example), and the name of the tag is
-    neither a [verbatim-html-starter-tag-name], nor a
+    includes [tags empty by definition][void-tags-in-html5], like `<br>`
+    and `<img src="picture.jpg">`, for example), and the name of the tag
+    is neither a [verbatim-html-starter-tag-name], nor a
     [verbatim-html-container-tag-name].
 
     If this happens first, the following is done:
@@ -3261,6 +3261,8 @@ time, till one of the following happens:
     If this happens first, the `<` at the [current-position] is
     identified as a _text fragment_, and [consumed-character-count] is
     set to 1.
+
+[void-tags-in-html5]: http://www.w3.org/TR/html5/syntax.html#void-elements
 
 <h2 id="additional-processing">Additional processing</h2>
 
