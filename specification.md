@@ -3236,8 +3236,7 @@ time, till one of the following happens:
  5. The HTML parser detects a complete HTML comment.
 
     If this happens first, the text that represents the HTML comment is
-    identified as a _span tag candidate_, and interpreted as a **comment
-    HTML tag**.
+    identified as a **comment HTML tag**.
 
     For HTML output, the text that represents the comment HTML tag shall
     be included in the output verbatim.
