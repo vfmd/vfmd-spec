@@ -656,31 +656,39 @@ block-element and the [block-element end line]:
          3. The HTML parser state is not "within the contents of a
             well-formed [verbatim HTML element]"
 
-     2. The line is a [blank line], or is immediately succeeded by a
-        succeeding line that does not begin with four or more
-        consecutive [space] characters, and satisfies at least one of
-        the following conditions:
+     2. The line is a [blank line], or both the following conditions are
+        satisfied:
 
-         1. The succeeding line matches the [horizontal rule pattern]
+         1. The line is immediately succeeded by a succeeding line
+            that does not begin with four or more consecutive [space]
+            characters, and satisfies at least one of the following
+            conditions:
 
-            (or)
+             1. The succeeding line matches the [horizontal rule pattern]
 
-         2. The leftmost [non-space] character in the succeeding line is
-            a `>` character, and the [input line sequence] is a
-            [blockquote-processed line sequence]
+                (or)
 
-            (or)
+             2. The leftmost [non-space] character in the succeeding line is
+                a `>` character, and the [input line sequence] is a
+                [blockquote-processed line sequence]
 
-         3. The succeeding line matches the [ordered list starter
-            pattern], and the [input line sequence] is a
-            [list-item-processed line sequence]
+                (or)
 
-            (or)
+             3. The succeeding line matches the [ordered list starter
+                pattern], and the [input line sequence] is a
+                [list-item-processed line sequence]
 
-         4. The succeeding line matches the [unordered list starter
-            pattern], and the [input line sequence] is a
-            [list-item-processed line sequence]
+                (or)
 
+             4. The succeeding line matches the [unordered list starter
+                pattern], and the [input line sequence] is a
+                [list-item-processed line sequence]
+
+         2. The HTML parser, after having consumed all filtered lines
+            till (and inclusive of) this line, has not encountered any
+            HTML tag with tag name as either a
+            [verbatim-html-starter-tag-name] or a
+            [verbatim-html-container-tag-name]
 
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
