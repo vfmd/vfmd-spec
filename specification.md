@@ -623,27 +623,64 @@ block-element and the [block-element end line]:
  0. If none of the above conditions apply, then the [block-element start
     line] marks the start of a block-element of type [**paragraph**].
 
-    In order to find the [block-element end line], we need to make use
-    of a [code-span filter] and a HTML parser, in a pipelined
-    configuration. The [code-span filter] filters off any code spans in
-    the text and replaces each code-span with a generic code-span
-    equivalent string. The HTML parser handles the general HTML/SGML/XML
-    syntax and shall not be particular about the names of the HTML tags.
+    In order to find the [block-element end line] of a paragraph, we
+    need to make use of a [code-span detector] and a HTML parser,
+    configured to act in tandem as specified below:
 
-    First, we reset the [code-span filter] and the HTML parser to their
-    initial state. Then, starting from (and inclusive of) the
-    [block-element start line], we pass the characters of each line, and
-    a [line break] character, to the [code-span filter], and pass the
-    filtered output to the HTML parser. For each line, after passing the
-    filtered output to the HTML parser, we observe the state of the HTML
-    parser. Of the the many possible states of a HTML parser, we are
-    only interested in the [HTML parser states relevant to finding the
-    end of a paragraph].
+     1. When the [code-span detector] is _deactivated_, it shall ignore
+        all input passed to it. Similarly, when the HTML parser is
+        _deactivated_, it shall ignore all input passed to it.  After
+        being _deactivated_, both the [code-span detector] and the HTML
+        parser can be _activated_ again, on which they shall resume
+        processing new input. Any input ignored when _deactivated_ shall
+        remain ignored.
+
+     2. When the [code-span detector] enters the "within a code-span"
+        state, it shall _deactivate_ the HTML parser. When the
+        [code-span detector] exits the "within a code-span" state, it
+        shall _activate_ the HTML parser and immediately pass the input
+        `<code><code/>` to the HTML parser.
+
+     3. When the HTML parser enters the "within a quoted attribute value
+        of a HTML tag" state, it shall _deactivate_ the [code-span
+        detector], and when it exits the "within a quoted attribute
+        value of a HTML tag" state, it shall _activate_ the [code-span
+        detector].
+
+    First, we reset the [code-span detector] and the HTML parser to
+    their initial state. Then, starting from (and inclusive of) the
+    [block-element start line], we input each line to the [code-span
+    detector] and to the HTML parser as described below:
+
+    For each line:
+
+    <!-- For some reason, Redcarpet requires a comment here to correctly
+    display the following list -->
+
+     1. For each character in the line, the character is first given as
+        input to the [code-span detector], and then given as input to
+        the HTML parser.
+
+        That is, we pass the first character to the [code-span
+        detector], then pass the first character to the HTML parser,
+        then pass the second character to the [code-span detector], then
+        pass the second character to the HTML parser, and so on, till we
+        reach the end of the line.
+
+     2. A [line break] character is given as input to the [code-span
+        detector], and then given as input to the HTML parser.
+
+     3. We observe the state of the HTML parser. Of the the many
+        possible states of a HTML parser, we are only interested in the
+        [HTML parser states relevant to finding the end of a paragraph].
 
     The [block-element end line] is the next subsequent [line] in the
     [input line sequence], starting from and inclusive of the
     [block-element start line], that satisfies all the following
     conditions:
+
+    <!-- For some reason, Redcarpet requires a comment here to correctly
+    display the following list -->
 
      1. At the end of feeding all filtered lines till (and inclusive of)
         this line, to the HTML parser, all the following conditions are
@@ -651,9 +688,12 @@ block-element and the [block-element end line]:
 
          1. The HTML parser state is not "within a HTML tag"
 
-         2. The HTML parser state is not "within a HTML comment"
+         2. The HTML parser state is not "within a quoted attribute
+            value of a HTML tag"
 
-         3. The HTML parser state is not "within the contents of a
+         3. The HTML parser state is not "within a HTML comment"
+
+         4. The HTML parser state is not "within the contents of a
             well-formed [verbatim HTML element]"
 
      2. The line is a [blank line], or both the following conditions are
@@ -714,100 +754,83 @@ be interpreted and output.</span>
 [block-level extension]: #block-level-extension
 
 
-<h4 id="code-span-filter">
-Code-span filter</h4>
+<h4 id="code-span-detector">
+Code-span detector</h4>
 
-[code-span filter]: #code-span-filter
+[code-span detector]: #code-span-detector
 
-The code-span filter replaces any code spans in the input lines with a
-generic code span equivalent string. It generates output lines as it
-receives input lines, so that it can operate in a pipelined
-configuration. It maintains state information as it processes input
-lines.
+The code-span detector is used to detect code-spans while looking for
+the end of a paragraph block. The code-span detector is always in one of
+the following two states:
 
-The following state information is preserved across multiple lines of
-input:
+  1. Within a code-span
+  2. Not within a code-span
 
- 1. <span id="open-backticks-count">**open-backticks-count**: The number
-    of `` ` `` characters in the opening tag of the current code
-    span</span>
+The code-span detector takes one [character] of input at a time, and
+maintains internal state information in addition to the two externally
+visible states mentioned above. The following internal state information
+is preserved across multiple characters of input:
 
-    If the _open-backticks-count_ is 0, it implies that at present, we
-    are not inside a code span.
+ 1. <span id="code-span-detector-backticks-count">
+    **backticks-count**: The number of `` ` `` characters in the current
+    backtick sequence</span>
 
-The following variables are used in processing one line of input:
+ 1. <span id="code-span-detector-open-backticks-count">
+    **open-backticks-count**: The number of `` ` `` characters in the
+    opening tag of the current code span</span>
 
- 1. <span id="current-position-in-line">**current-position-in-line**:
-    The current position in the current line</span>
-
-    When _current-position-in-line_ is 0, the first character in the
-    line is said to be the character at the _current-position-in-line_;
-    when _current-position-in-line_ is 1, the second character in the
-    line is said to be the character at the _current-position-in-line_,
-    and so on.
-
- 2. <span id="remaining-input-line">The substring of the line starting
-    from and including the character at the [current-position-in-line]
-    and ending at the end of the line is called the
-    **remaining-input-line**.</span>
-
-[open-backticks-count]: #open-backticks-count
-[current-position-in-line]: #current-position-in-line
-[remaining-input-line]: #remaining-input-line
+[backticks-count]: #code-span-detector-backticks-count
+[open-backticks-count]: #code-span-detector-open-backticks-count
 
 When the code-span filter is **reset** or **initialized**, the
-[open-backticks-count] is set to 0.
+[backticks-count] and [open-backticks-count] are set to 0, and the state
+of the code-span detector is set to "Not within a code-span".
 
-As the code-span filter receives input lines, for each input line, the
-following is done:
+For each character that is input to the code-span detector, the
+following is done
 
- 1. Set [current-position-in-line] to 0
- 2. <span id="code span-filter-proc-step-2">
-    Set _consumed-character-count_ to 0</span>
- 3. If the character at the [current-position-in-line] is an [unescaped]
-    `` ` `` character, do the following:
+ 1. Let _input-character_ be the character that is input
 
-     1. The [remaining-input-line] shall match the
-        regular expression pattern ``/^(`+)([^`]|$)/``
+ 2. If the _input character_ is an unescaped `` ` `` character, do the
+    following:
 
-        The length of the matching substring for the first parenthesized
-        subexpression in the pattern is called the _backticks-count_.
-        The _backticks-count_ will always be greater than 0.
+    1. If the state of the code-span detector is "Not within a
+       code-span", then set the state of the code-span detector to
+       "Within a code-span"
 
-     2. Set _consumed-character-count_ to _backticks-count_
+    2. Increment [backticks-count]
 
-     3. If [open-backticks-count] is greater than 0, then set
-        _is-in-code-span_ to _true_.
+ 3. If the _input character_ is not an unescaped `` ` `` character, do the
+    following:
 
-        If [open-backticks-count] is equal to 0, then set
-        _is-in-code-span_ to _false_
+     1. If [backticks-count] is greater than 0, then set
+        _is-end-of-backtick-sequence_ to _true_
 
-     4. If _is-in-code-span_ is _false_, then do the following:
-         1. Set [open-backticks-count] to _backticks-count_
+        If [backticks-count] is equal to 0, then set
+        _is-end-of-backtick-sequence_ to _false_
 
-     5. If _is-in-code-span_ is _true_, and if [open-backticks-count] is
-        equal to _backticks-count_, then do the following:
-         1. Output the string: `<code />`
-         2. Set [open-backticks-count] to 0
+     2. If _is-end-of-backtick-sequence_ is true, do the following:
 
- 4. If the character at the [current-position-in-line] is not an
-    [unescaped] `` ` `` character, do the following:
+         1. If [open-backticks-count] is greater than 0, then set
+            _is-in-code-span_ to _true_.
 
-     1. If [open-backticks-count] is equal to 0, then do the following:
-         1. Output the character at the [current-position-in-line]
+            If [open-backticks-count] is equal to 0, then set
+            _is-in-code-span_ to _false_
 
-     2. Set _consumed-character-count_ to 1
+         2. If _is-in-code-span_ is _false_, then do the following:
+             1. Set [open-backticks-count] to [backticks-count]
 
- 5. Increment [current-position-in-line] by _consumed-character-count_
- 6. If [current-position-in-line] is not past the end of the line, go to
-    [Step 2](#code-span-filter-proc-step-2)
+         3. If _is-in-code-span_ is _true_, and if [open-backticks-count] is
+            equal to [backticks-count], then do the following:
+             2. Set [open-backticks-count] to 0
+             3. Set the state of the code-span detector to "Not within a
+                code-span"
+
+         4. Set [backticks-count] to 0
 
 Note that this procedure intentionally does not take care of unclosed
-code spans. The code span filter is used solely for finding the end of a
+code spans. The code span detector is used solely for finding the end of a
 paragraph and it is not necessary to handle unclosed code spans in it.
-
-[current-index]: #current-index
-[remaining-filter-input-string]: #remaining-filter-input-string
 
 
 <h4 id="html-parser-states-relevant-to-end-of-paragraph">
@@ -832,28 +855,37 @@ _verbatim HTML element_.</span>
 The relevant states of the HTML parser when looking for the
 [block-element end line] for a block-element of type [paragraph] are:
 
- 1. Within a HTML tag (open / close / self-closing tag)
+ 1. Within a quoted attribute value of a HTML tag
+
+    This is the state within attribute values enclosed in either single
+    or double quotes. For example, this is the state at the end of the
+    first line below:
+
+        <img src="image.png" title="Title spanning
+        multiple lines">
+
+ 2. Within a HTML tag (open / close / self-closing tag)
 
     For example, this is the state at the end of the first line below:
 
         <div id="div1"
         >
 
- 2. Within a HTML comment
+ 3. Within a HTML comment
 
     For example, this is the state at the end of the first line below:
 
         <!-- Insert illuminating comment here
         -->
 
- 3. Within the contents of a well-formed [verbatim HTML element]
+ 4. Within the contents of a well-formed [verbatim HTML element]
 
     For example, this is the state at the end of the first line below:
 
         This open <pre> tag has a
         corresponding close </pre> tag
 
- 4. Within the contents of a not-well-formed [verbatim HTML element]
+ 5. Within the contents of a not-well-formed [verbatim HTML element]
     \(i.e. after the open tag of an unclosed or not-properly-closed
     [verbatim HTML element]\)
 
@@ -863,7 +895,7 @@ The relevant states of the HTML parser when looking for the
         corresponding close tag in the document
 
 
- 5. Within the contents of a [non-verbatim HTML element] \(well-formed
+ 6. Within the contents of a [non-verbatim HTML element] \(well-formed
     or not\)
 
     For example, this is the state at the end of the first line below:
@@ -872,7 +904,7 @@ The relevant states of the HTML parser when looking for the
         Inside </div> Outside
 
 
- 6. Outside of any HTML element or comment
+ 7. Outside of any HTML element or comment
 
     For example, this is the state at the end of the first line below:
 
