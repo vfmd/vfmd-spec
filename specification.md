@@ -3171,10 +3171,15 @@ time, till one of the following happens:
      1. The text that represents the self-closing HTML tag is identified
         as a **self-closing HTML tag**
 
-     2. For HTML output, the text that represents the self-closing HTML
+     2. If the tag just identified is not a [phrasing-html-element] tag,
+        then all nodes whose _node type_ is not equal to _raw html node_
+        are removed from the [stack of potential opening span tags] and
+        interpreted as _text fragments_
+
+     3. For HTML output, the text that represents the self-closing HTML
         tag shall be included in the output verbatim
 
-     3. Set [consumed-character-count] to the length of the
+     4. Set [consumed-character-count] to the length of the
         _self-closing HTML tag_
 
  3. The HTML parser detects a complete opening HTML tag, and the name of
@@ -3186,7 +3191,12 @@ time, till one of the following happens:
      1. The text that represents the opening HTML tag is identified as
         an **opening HTML tag**
 
-     2. A new node is pushed onto the [stack of potential opening span
+     2. If the tag just identified is not a [phrasing-html-element] tag,
+        then all nodes whose _node type_ is not equal to _raw html node_
+        are removed from the [stack of potential opening span tags] and
+        interpreted as _text fragments_
+
+     3. A new node is pushed onto the [stack of potential opening span
         tags] with the following [properties][stack-node-properties]:
 
          1. The _tag string_ of the node is set to the text that
@@ -3195,10 +3205,10 @@ time, till one of the following happens:
          3. The _html tag name_ of the node is set to the HTML tag name
             of the opening HTML tag that was just identified
 
-     3. For HTML output, the text that represents the opening HTML tag
+     4. For HTML output, the text that represents the opening HTML tag
         shall be included in the output verbatim.
 
-     4. Set [consumed-character-count] to the length of the
+     5. Set [consumed-character-count] to the length of the
         _opening HTML tag_
 
  4. The HTML parser detects a complete closing HTML tag, and the name of
@@ -3210,10 +3220,15 @@ time, till one of the following happens:
      1. The text that represents the closing HTML tag is identified as a
         **closing HTML tag**
 
-     2. Let _currently open html node_ be the [topmost node of type]
+     2. If the tag just identified is not a [phrasing-html-element] tag,
+        then all nodes whose _node type_ is not equal to _raw html node_
+        are removed from the [stack of potential opening span tags] and
+        interpreted as _text fragments_
+
+     3. Let _currently open html node_ be the [topmost node of type]
         _raw html node_
 
-     3. If the _currently open html node_ is not
+     4. If the _currently open html node_ is not
         [_null_](#topmost-node-of-type-is-null), and if the _html tag
         name_ of the _currently open html node_ is the same as the HTML
         tag name of the closing HTML tag that was just identified, the
@@ -3229,7 +3244,7 @@ time, till one of the following happens:
 
           3. The _currently open html node_ is popped off
 
-     4. If the _currently open html node_ is
+     5. If the _currently open html node_ is
         [_null_](#topmost-node-of-type-is-null), or if  _html tag name_
         of the _currently open html node_ is not the same as the HTML
         tag name of the closing HTML tag that was just identified, then
@@ -3237,10 +3252,10 @@ time, till one of the following happens:
         _node type_ is not equal to _raw html node_ shall be removed
         from the stack and interpreted as _text fragments_
 
-     5. For HTML output, the text that represents the closing HTML tag
+     6. For HTML output, the text that represents the closing HTML tag
         shall be included in the output verbatim.
 
-     6. Set [consumed-character-count] to the length of the
+     7. Set [consumed-character-count] to the length of the
         _closing HTML tag_
 
  5. The HTML parser detects a complete HTML comment.
