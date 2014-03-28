@@ -3214,10 +3214,20 @@ time, till one of the following happens:
         _raw html node_
 
      3. If the _currently open html node_ is not
-        [_null_](#topmost-node-of-type-is-null), and the _html tag name_
-        of the _currently open html node_ is the same as the HTML tag
-        name of the closing HTML tag that was just identified, the [top
-        node] shall be popped off
+        [_null_](#topmost-node-of-type-is-null), and if the _html tag
+        name_ of the _currently open html node_ is the same as the HTML
+        tag name of the closing HTML tag that was just identified, the
+        following is done:
+
+          1. If the _currently open html node_ is not already the top
+             node, all nodes above it are popped off and interpreted as
+             text fragments
+
+          2. The closing HTML tag that was just identified is considered
+             as the matching tag for the HTML tag represented by the
+             _currently open html node_
+
+          3. The _currently open html node_ is popped off
 
      4. If the _currently open html node_ is
         [_null_](#topmost-node-of-type-is-null), or if  _html tag name_
