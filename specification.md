@@ -1619,20 +1619,6 @@ The resulting sequence of [characters] is [trimmed] to give the
 _paragraph text_. The result of interpreting the _paragraph text_ as a
 [text span sequence] shall form the content of the paragraph element.
 
-<span id="phrasing-html-element"> We define a **phrasing-html-element**
-to be one of the following HTML elements:</span> `a`, `abbr`, `area`,
-`audio`, `b`, `bdi`, `bdo`, `br`, `button`, `canvas`, `cite`, `code`,
-`data`, `datalist`, `del`, `dfn`, `em`, `embed`, `i`, `iframe`, `img`,
-`input`, `ins`, `kbd`, `keygen`, `label`, `map`, `mark`, `meter`,
-`noscript`, `object`, `output`, `progress`, `q`, `ruby`, `s`, `samp`,
-`select`, `small`, `span`, `strong`, `sub`, `sup`, `textarea`, `time`,
-`u`, `var`, `video` or `wbr`. These are elements in the HTML namespace
-that belong to the [phrasing content] category in [HTML5].
-
-[HTML5]: http://www.w3.org/TR/html5/ "HTML5 Specification"
-[phrasing content]: http://www.w3.org/TR/html5/dom.html#phrasing-content-1
-[phrasing-html-element]: #phrasing-html-element
-
 For HTML output, the _paragraph text_ needs to be run through a HTML
 parser to determine how the content of the paragraph element should be
 presented.
@@ -3123,6 +3109,16 @@ then the following is done:
 This procedure assumes that the character at the [current-position] is
 an [unescaped] `<` character.
 
+<span id="phrasing-html-element"> We define a **phrasing-html-element**
+to be one of the following HTML elements:</span> `a`, `abbr`, `area`,
+`audio`, `b`, `bdi`, `bdo`, `br`, `button`, `canvas`, `cite`, `code`,
+`data`, `datalist`, `del`, `dfn`, `em`, `embed`, `i`, `iframe`, `img`,
+`input`, `ins`, `kbd`, `keygen`, `label`, `map`, `mark`, `meter`,
+`noscript`, `object`, `output`, `progress`, `q`, `ruby`, `s`, `samp`,
+`select`, `small`, `span`, `strong`, `sub`, `sup`, `textarea`, `time`,
+`u`, `var`, `video` or `wbr`. These are elements in the HTML namespace
+that belong to the [phrasing content] category in [HTML5].
+
 <span id="verbatim-html-starter-tag-name"> We define a
 **verbatim-html-starter-tag-name** to be one of the following HTML tag
 names:</span> `address`, `article`, `aside`, `blockquote`, `details`,
@@ -3133,8 +3129,12 @@ names:</span> `address`, `article`, `aside`, `blockquote`, `details`,
 **verbatim-html-container-tag-name** to be one of the following HTML tag
 names:</span> `pre`, `script` or `style`.
 
+[phrasing-html-element]: #phrasing-html-element
 [verbatim-html-starter-tag-name]: #verbatim-html-starter-tag-name
 [verbatim-html-container-tag-name]: #verbatim-html-container-tag-name
+
+[HTML5]: http://www.w3.org/TR/html5/ "HTML5 Specification"
+[phrasing content]: http://www.w3.org/TR/html5/dom.html#phrasing-content-1
 
 Let _html-tag-detection-sequence_ be the [remaining-character-sequence].
 
