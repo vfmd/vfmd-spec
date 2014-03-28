@@ -1235,6 +1235,21 @@ lines following a blank line) to line up with the list.
         Still inside the list
         </div>
 
+When using verbatim HTML within a blockquote or a list item, the
+verbatim-HTML-mode comes to an end at the end of the blockquote or the
+list item, even if there is no blank line.
+
+For example:
+
+    * This list item contains a div tag.
+      <div>
+         Anything following a div tag
+         would be interpreted as verbatim HTML.
+      </div>
+      Markdown sytax **is not** recognized here.
+    * But this is the next list item, and so
+      Markdown sytax **is** very much recognized here.
+
 <h3 id="matching-open-and-close-html-tags">
 Matching open and close HTML tags</h3>
 
