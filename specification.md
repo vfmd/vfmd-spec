@@ -925,17 +925,12 @@ well-formed or not, only after encountering an end tag. So, after
 consuming only part of the input, the HTML parser might not know whether
 it's in the "within the contents of a well-formed [verbatim HTML
 element]" state, or it's in the "within the contents of a
-not-well-formed [verbatim HTML element]" state. So, in order to find the
-end of the paragraph without backtracking, it is suggested that an
-implementation employ the following design:
+not-well-formed [verbatim HTML element]" state.
 
-  * When an opening tag of a [verbatim HTML element] is encountered,
-    keep in mind that it could turn out to be either a well-formed HTML
-    element, or a not-well-formed HTML element
-  * Keep track of what the [block-element end line] for the paragraph
-    would have been in either case
-  * When it becomes clear whether the HTML element is well-formed or
-    not, pick the appropriate choice for the [block-element end line]
+To handle the input as defined in this specification, an implementation
+might have to use either look-ahead or backtracking. In either case, it
+is suggested that the implementation optimize for the case where the
+HTML in the input is well-formed.
 
 <h2 id="interpreting-block-elements">Interpreting block-elements</h2>
 
