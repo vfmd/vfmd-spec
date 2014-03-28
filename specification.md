@@ -1970,27 +1970,23 @@ the [input character sequence].
 The root procedure in turn invokes other procedures. In the method
 described here, global variables are used to communicate information
 from invoked procedures back to the root procedure, but better means can
-be adopted by an implementation. The global variables used are:
+be adopted by an implementation. The global variable used is:
 
  1. <span id="consumed-character-count">_consumed-character-count_: The
     number of characters that were consumed to form a _span tag_ or a
     _text fragment_</span>
- 2. <span id="is-verbatim-html-mode">_is-verbatim-html-mode_: A boolean
-    that decides whether vfmd syntax should be recognized at this
-    position in the document, or not</span>
 
 [current-position]: #current-position
 [remaining-character-sequence]: #remaining-character-sequence
 [consumed-character-count]: #consumed-character-count
-[is-verbatim-html-mode]: #is-verbatim-html-mode
 
 The procedure to identify and interpret the _span tags_ is as follows:
 
  1. Set [current-position] as 0
- 2. Set _is-verbatim-html-mode_ as _false_
- 3. <span id="span-proc-step-3">Set _consumed-character-count_ as 0
+ 2. <span id="span-proc-step-2">Set _consumed-character-count_ as 0
     </span>
- 4. If _is-verbatim-html-mode_ is equal to _false_, do the following:
+ 3. Depending on the character at the [current-position], invoke the
+    appropriate procedure, as given below:
      1. If the character at the [current-position] is either an
         [unescaped] `[` (open square bracket) character, or an [unescaped]
         `]` (close square bracket) character, invoke the [procedure for
@@ -2016,29 +2012,21 @@ The procedure to identify and interpret the _span tags_ is as follows:
      7. If _consumed-character-count_ is equal to 0, interpret the
         character at the [current-position] to be part of a _text
         fragment_, and set _consumed-character-count_ as 1
- 5. If _is-verbatim-html-mode_ is equal to _true_, interpret the
-    [remaining-character-sequence] as _verbatim-html_, and set
-    _consumed-character-count_ to the length of the
-    [remaining-character-sequence]
- 6. Increment [current-position] by _consumed-character-count_
- 7. If [current-position] is less than the length of the
-    [input character sequence], go to [Step 3](#span-proc-step-3)
- 8. All nodes in the [stack of potential opening span tags] with _node
+ 4. Increment [current-position] by _consumed-character-count_
+ 5. If [current-position] is less than the length of the
+    [input character sequence], go to [Step 2](#span-proc-step-2)
+ 6. All nodes in the [stack of potential opening span tags] with _node
     type_ not equal to _raw html node_ should be interpreted as _text
     fragments_
 
 The _text fragments_ identified in the above procedure should be
 handled as specified in [processing text fragments].
 
-Any _verbatim-html_ identified in the above procedure should be output
-verbatim, without subjecting it to the
-[processing for text fragments][processing text fragments].
-
 <span id="span-level-extensions">An implementation can extend the core
 vfmd syntax to support additional syntax elements. For every additional
-span-level syntax element, the implementation shall insert a rule in
-the above rule list, at a position at which it makes sense to recognize
-the particular construct. The rule shall determine whether a span-level
+span-level syntax element, the implementation shall insert a rule in the
+above rule list, at a position at which it makes sense to recognize the
+particular construct. The rule shall determine whether a span-level
 construct begins at a particular position in the [input character
 sequence] or not, and if it does, how it should be interpreted and
 output.</span>
@@ -3155,9 +3143,28 @@ of a HTML parser. We supply characters in the
 _html-tag-detection-sequence_ to the HTML parser, one character at a
 time, till one of the following happens:
 
- 1. The HTML parser detects a complete self-closing HTML tag (this also
+ 1. The HTML parser detects a complete HTML tag (start, end or
+    self-closing tag) with tag name as either a
+    [verbatim-html-starter-tag-name] or as a
+    [verbatim-html-container-tag-name].
+
+    If this happens first, the following is done:
+
+     1. The whole of the _html-tag-detection-sequence_ is identified as
+        _verbatim-html_
+
+     2. For HTML output, this _verbatim-html_ shall be included in the
+        output verbatim (without subjecting it to the [processing for
+        text fragments][processing text fragments])
+
+     3. Set [consumed-character-count] to the length of the
+        _html-tag-detection-sequence_
+
+ 2. The HTML parser detects a complete self-closing HTML tag (this also
     includes tags empty by definition in HTML4, like `<br>` and `<img
-    src="picture.jpg">`, for example)
+    src="picture.jpg">`, for example), and the name of the tag is
+    neither a [verbatim-html-starter-tag-name], nor a
+    [verbatim-html-container-tag-name].
 
     If this happens first, the following is done:
 
@@ -3170,12 +3177,9 @@ time, till one of the following happens:
      3. Set [consumed-character-count] to the length of the
         _self-closing HTML tag_
 
-     4. If the HTML tag name of the self-closing HTML tag is either a
-        [verbatim-html-starter-tag-name] or a
-        [verbatim-html-container-tag-name], then set
-        [is-verbatim-html-mode] to _true_
-
- 2. The HTML parser detects a complete opening HTML tag.
+ 3. The HTML parser detects a complete opening HTML tag, and the name of
+    the tag is neither a [verbatim-html-starter-tag-name], nor a
+    [verbatim-html-container-tag-name].
 
     If this happens first, the following is done:
 
@@ -3197,12 +3201,9 @@ time, till one of the following happens:
      4. Set [consumed-character-count] to the length of the
         _opening HTML tag_
 
-     5. If the HTML tag name of the opening HTML tag is either a
-        [verbatim-html-starter-tag-name] or a
-        [verbatim-html-container-tag-name], then set
-        [is-verbatim-html-mode] to _true_
-
- 3. The HTML parser detects a complete closing HTML tag.
+ 4. The HTML parser detects a complete closing HTML tag, and the name of
+    the tag is neither a [verbatim-html-starter-tag-name], nor a
+    [verbatim-html-container-tag-name].
 
     If this happens first, the following is done:
 
@@ -3232,12 +3233,7 @@ time, till one of the following happens:
      6. Set [consumed-character-count] to the length of the
         _closing HTML tag_
 
-     7. If the HTML tag name of the closing HTML tag is either a
-        [verbatim-html-starter-tag-name] or a
-        [verbatim-html-container-tag-name], then set
-        [is-verbatim-html-mode] to _true_
-
- 4. The HTML parser detects a complete HTML comment.
+ 5. The HTML parser detects a complete HTML comment.
 
     If this happens first, the text that represents the HTML comment is
     identified as a _span tag candidate_, and interpreted as a **comment
@@ -3249,7 +3245,7 @@ time, till one of the following happens:
     [consumed-character-count] is set to the length of the _comment HTML
     tag_.
 
- 5. The HTML parser detects HTML text, or the HTML parser detects an
+ 6. The HTML parser detects HTML text, or the HTML parser detects an
     error, or the _html-tag-detection-sequence_ has no more characters
     to supply to the HTML parser.
 
