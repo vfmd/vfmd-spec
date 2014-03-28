@@ -917,7 +917,7 @@ example, if a matching `>` is not found, the first `<` does not indicate
 the start of a HTML construct at all. As another example, if the `<` is
 immediately followed by a `!--` and later followed by a `-->`, the `<`
 marks the start of a HTML comment. Consequently, the HTML parser should
-lookahead as many character as may be necessary and return the
+lookahead as many characters as may be necessary and return the
 appropriate state considering all these possibilities.
 
 Also note that a HTML parser can know whether a HTML element is
