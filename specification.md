@@ -682,8 +682,8 @@ block-element and the [block-element end line]:
     <!-- For some reason, Redcarpet requires a comment here to correctly
     display the following list -->
 
-     1. At the end of feeding all filtered lines till (and inclusive of)
-        this line, to the HTML parser, all the following conditions are
+     1. At the end of feeding all lines till (and inclusive of) this
+        line, to the HTML parser, all the following conditions are
         satisfied:
 
          1. The HTML parser state is not "within a HTML tag"
@@ -724,11 +724,10 @@ block-element and the [block-element end line]:
                 pattern], and the [input line sequence] is a
                 [list-item-processed line sequence]
 
-         2. The HTML parser, after having consumed all filtered lines
-            till (and inclusive of) this line, has not encountered any
-            HTML tag with tag name as either a
-            [verbatim-html-starter-tag-name] or a
-            [verbatim-html-container-tag-name]
+         2. The HTML parser, after having consumed all lines till (and
+            inclusive of) this line, has not encountered any HTML tag
+            with tag name as either a [verbatim-html-starter-tag-name]
+            or a [verbatim-html-container-tag-name]
 
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
@@ -782,7 +781,7 @@ is preserved across multiple characters of input:
 [backticks-count]: #code-span-detector-backticks-count
 [open-backticks-count]: #code-span-detector-open-backticks-count
 
-When the code-span filter is **reset** or **initialized**, the
+When the code-span detector is **reset** or **initialized**, the
 [backticks-count] and [open-backticks-count] are set to 0, and the state
 of the code-span detector is set to "Not within a code-span".
 
