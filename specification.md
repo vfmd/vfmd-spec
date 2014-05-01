@@ -794,16 +794,17 @@ following is done
 
  1. Let _input-character_ be the character that is input
 
- 2. If the _input character_ is an unescaped `` ` `` character, do the
+ 2. If the _input character_ is a `` ` `` character, do the
     following:
 
     1. If the state of the code-span detector is "Not within a
-       code-span", then set the state of the code-span detector to
+       code-span", and if the _input character_ is an unescaped `` ` ``
+       character, then set the state of the code-span detector to
        "Within a code-span"
 
     2. Increment [backticks-count]
 
- 3. If the _input character_ is not an unescaped `` ` `` character, do the
+ 3. If the _input character_ is not a `` ` `` character, do the
     following:
 
      1. If [backticks-count] is greater than 0, then set
