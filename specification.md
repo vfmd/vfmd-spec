@@ -2116,7 +2116,7 @@ done:
         content_ linked to the link url and link title specified in the
         entry for the _reference id string_ in the [link reference
         association map]. For HTML output, the link url should be
-        [attribute-value-escaped]; the link title should be [de-escaped]
+        [URL-escaped]; the link title should be [de-escaped]
         and then [attribute-value-escaped].
 
         If the [link reference association map] does not contain an
@@ -2230,7 +2230,7 @@ done:
         shall be used as the title for the link. The output shall have
         the _enclosed content_ linked to the link url and link title.
         For HTML output, the link url should be
-        [attribute-value-escaped]; the link title should be [de-escaped]
+        [URL-escaped]; the link title should be [de-escaped]
         and then [attribute-value-escaped].
 
      6. The [top node] is popped off
@@ -2291,7 +2291,7 @@ done:
         content_ linked to the link url and link title specified in the
         entry for the _reference id string_ in the [link reference
         association map]. For HTML output, the link url should be
-        [attribute-value-escaped]; the link title should be [de-escaped]
+        [URL-escaped]; the link title should be [de-escaped]
         and then [attribute-value-escaped].
 
         If the [link reference association map] does not contain an
@@ -2840,7 +2840,7 @@ If the [remaining-character-sequence] matches the
         id string_ in the [link reference association map]. The
         [image-alt-text-string] shall be used as the alternate text for
         the image. For HTML output, the link url of the image should be
-        [attribute-value-escaped]; the title of the image and the
+        [URL-escaped]; the title of the image and the
         alternate text for the image should be [de-escaped] and then
         [attribute-value-escaped].
 
@@ -2934,7 +2934,7 @@ If the [remaining-character-sequence] matches the
         If _title string_ is not null, the _title string_ shall be used
         as the title of the image. The [image-alt-text-string] shall be
         used as the alternate text for the image. For HTML output, the
-        link url of the image should be [attribute-value-escaped]; the
+        link url of the image should be [URL-escaped]; the
         title of the image and the alternate text for the image should
         be [de-escaped] and then [attribute-value-escaped].
 
@@ -2976,7 +2976,7 @@ If the [remaining-character-sequence] matches the
         id string_ in the [link reference association map]. The
         [image-alt-text-string] shall be used as the alternate text for
         the image. For HTML output, the link url of the image should be
-        [attribute-value-escaped]; the title of the image and the
+        [URL-escaped]; the title of the image and the
         alternate text for the image should be [de-escaped] and then
         [attribute-value-escaped].
 
@@ -3066,8 +3066,8 @@ then the following is done:
         _auto-link url_.
      3. The output shall have a link with the link url set as _auto-link
         url_ and the link text content also set as _auto-link url_.
-        For HTML output, the link url and the link text should be
-        [attribute-value-escaped].
+        For HTML output, the link url should be
+        [URL-escaped] and the link text should be [html-text-escaped].
      4. The [consumed-character-count] is set to the length of the
         _auto-link tag_
 
@@ -3083,8 +3083,8 @@ then the following is done:
         _auto-link email_ be called as _auto-link email url_
      3. The output shall have a link with the link url set as _auto-link
         email url_ and the link text content set as _auto-link email_.
-        For HTML output, the link url and the link text should be
-        [attribute-value-escaped].
+        For HTML output, the link url should be
+        [URL-escaped] and the link text should be [html-text-escaped].
      4. The [consumed-character-count] is set to the length of the
         _auto-link tag_
 
@@ -3124,8 +3124,10 @@ then the following is done:
         following is done:
          1. The output shall have a link with the link url set as
             _auto-link tag candidate_ and the link text content also set
-            as _auto-link tag candidate_. For HTML output, the link url
-            and the link text should be [attribute-value-escaped].
+            as _auto-link tag candidate_.
+            For HTML output, the link url should be
+            [URL-escaped] and the link text should be
+            [html-text-escaped].
          2. The [consumed-character-count] is set to the length of the
             _auto-link tag candidate_
      5. If the length of the _auto-link tag candidate_ is lesser than or
