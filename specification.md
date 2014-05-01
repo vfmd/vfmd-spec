@@ -3412,6 +3412,8 @@ follows before being output as HTML:
  1. Replace the `<` character with `&lt;`
  2. Replace the `>` character with `&gt;`
  3. Replace the `&` character with `&amp;`
+ 4. Replace the `"` character with `&quot;`
+ 5. Replace the `'` character with `&#x27;`
 
 [code blocks]: #code-blocks
 [code spans]: #procedure-for-identifying-code-span-tags
@@ -3429,23 +3431,53 @@ HTML:
  2. Replace the `>` character with `&gt;`
  3. Replace any `&` character with `&amp;`, unless the `&` character
     forms the start of a [character reference]
+ 4. Replace the `"` character with `&quot;`
+ 5. Replace the `'` character with `&#x27;`
 
 <h4 id="attribute-value-escaping">Attribute value escaping</h4>
 
 [Attribute value escaping]: #attribute-value-escaping
 [attribute-value-escaped]: #attribute-value-escaping
 
-When writing the HTML output for vfmd constructs, the text to be output
-as the value of a HTML attribute should be be processed as follows:
+Any text to be output as the value of a HTML attribute (other than
+the attributes mentioned in [URL escaping]) should be be processed as
+follows:
 
  1. Replace the `<` character with `&lt;`
  2. Replace the `>` character with `&gt;`
  3. Replace any `&` character with `&amp;`, unless the `&` character
     forms the start of a [character reference]
  4. Replace the `"` character with `&quot;`
+ 5. Replace the `'` character with `&#x27;`
 
 When writing the HTML output for vfmd constructs, the `"` character
 should be used as the enclosing quote character for attribute values.
+
+<h4 id="url-escaping">URL escaping</h4>
+
+[URL escaping]: #url-escaping
+[URL-escaped]: #url-escaping
+
+A URL that is output in HTML as either of the following:
+
+  1. As the value of a `href` attribute of an `a` tag
+
+     (or)
+
+  2. As the value of a `src` attribute of an `img` tag
+
+should be processed as follows before being output:
+
+ 1. [Percent-encode] all bytes except the bytes that form the
+    following ASCII characters:
+      - Alphanumeric characters: `[A-Za-z0-9]`
+      - Special characters: `$-_.+!*'(),`
+      - Reserved characters: `;/?:@=&`
+ 2. Replace any `&` character with `&amp;`, unless the `&` character
+    forms the start of a [character reference]
+ 3. Replace the `'` character with `&#x27;`
+
+[Percent-encode]: http://tools.ietf.org/html/rfc3986#section-2.1
 
 <h2 id="extending-the-syntax">Extending the syntax</h2>
 
