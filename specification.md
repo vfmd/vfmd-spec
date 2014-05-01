@@ -253,6 +253,7 @@ called the **enclosed string** of the [quoted string].</span>
 [simplifying]: #simplifying
 [simplified]: #simplifying
 [escaping]: #escaping
+[escaped]: #escaping
 [unescaped]: #escaping
 [quoted string]: #quoted-string
 [enclosed string]: #enclosed-string
@@ -657,20 +658,23 @@ block-element and the [block-element end line]:
     <!-- For some reason, Redcarpet requires a comment here to correctly
     display the following list -->
 
-     1. For each character in the line, the character is first given as
-        input to the [code-span detector], and then given as input to
-        the HTML parser.
+     1. Any [escaped] `<` characters in the line are replaced with the
+        string `&lt;` and the result is called the _processed line_
+
+     2. For each character in the _processed line_, the character is
+        first given as input to the [code-span detector], and then given
+        as input to the HTML parser.
 
         That is, we pass the first character to the [code-span
         detector], then pass the first character to the HTML parser,
         then pass the second character to the [code-span detector], then
         pass the second character to the HTML parser, and so on, till we
-        reach the end of the line.
+        reach the end of the _processed line_.
 
-     2. A [line break] character is given as input to the [code-span
+     3. A [line break] character is given as input to the [code-span
         detector], and then given as input to the HTML parser.
 
-     3. We observe the state of the HTML parser. Of the the many
+     4. We observe the state of the HTML parser. Of the the many
         possible states of a HTML parser, we are only interested in the
         [HTML parser states relevant to finding the end of a paragraph].
 
