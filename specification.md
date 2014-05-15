@@ -147,9 +147,9 @@ The [document] contains Unicode text in UTF-8 encoding. If the document
 starts with the three bytes: `0xEF` `0xBB` `0xBF`, then those three
 bytes are interpreted as the UTF-8 Byte-Order-Mark and are filtered off
 and ignored. Any byte sequences in the input that are invalid in UTF-8
-encoding are interpreted to be in ISO-8859-1 encoding. Therefore, for
-the following discussion, the [document] is considered to not have the
-Byte-Order-Mark and not to have any invalid byte sequences.
+encoding are interpreted to be bytes in ISO-8859-1 encoding. Therefore,
+for the following discussion, the [document] is considered to not have
+the Byte-Order-Mark and not to have any invalid byte sequences.
 
 <h4 id="characters">Characters</h4>
 
