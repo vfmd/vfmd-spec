@@ -589,7 +589,7 @@ The following four link definitions are equivalent:
     [foo]: http://example.com/
            "Optional Title Here"
 
-You can use a backslash escapes within a title to include instances of
+You can use backslash escapes within a title to include instances of
 the enclosing character in the title. For example:
 
     [foo]: http://example.com/  "Title \"with quotes\" Here"
