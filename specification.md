@@ -1848,13 +1848,14 @@ only if, _S_ satisfies any of the following conditions:
 
     (or)
 
- 2. The last line of _S_ is not a [blank line]
+ 2. _S_ is the last [list item line sequence] in the [block-element line
+    sequence], and the line immediately before the first line of _S_ in
+    the [block-element line sequence] is not a [blank line]
 
     (or)
 
- 3. _S_ is the last [list item line sequence] in the [block-element line
-    sequence], and the line immediately before the first line of _S_ in
-    the [block-element line sequence] is not a [blank line]
+ 3. _S_ is not the last [list item line sequence] in the [block-element line
+    sequence], and the last line of _S_ is not a [blank line]
 
 If a [list item line sequence] is _bottom-packed_, the
 [list-item-processed line sequence] obtained from it is also said to be
