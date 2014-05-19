@@ -3078,7 +3078,7 @@ then the following is done:
         _auto-link tag_
 
  2. If the [remaining-character-sequence] matches the regular expression
-    pattern ``/<([^\/\?#@\`\s]+@[^\/\?#@\`\s\.]+\.[^\/\?#@\`\s]+)>/``
+    pattern ``/<([^\(\)\<\>\[\]\:\'\@\\\,\"\s\`]+@[^\(\)\<\>\[\]\:\'\@\\\,\"\s\`\.]+\.[^\(\)\<\>\[\]\:\'\@\\\,\"\s\`]+)>/``
     (Example: `<someone@example.net>`), then the following is done:
 
      1. The matching substring for the whole of the matching pattern is
