@@ -2343,11 +2343,11 @@ follows:</span>
     fringe rank_ of 0.
 
  2. If the 'General\_Category' unicode property of the character is one
-    of the following: Pc, Pd, Ps, Pe, Pi, Pf or Po, then the _emphasis
-    fringe rank_ of the character is said to be 1.
+    of the following: Pc, Pd, Ps, Pe, Pi, Pf, Po, Sc, Sk, Sm or So, then
+    the _emphasis fringe rank_ of the character is said to be 1.
 
     For example, the following characters have an _emphasis fringe rank_
-    of 1: `,`, `.`, `(`, `)`, `+`
+    of 1: `,`, `.`, `(`, `)`, `+`, `>`
 
  3. If the 'General\_Category' unicode property of the character is not
     one of the following: Zs, Zl, Zp, Cc, Cf, Pc, Pd, Ps, Pe, Pi, Pf or
