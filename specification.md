@@ -931,10 +931,43 @@ it's in the "within the contents of a well-formed [verbatim HTML
 element]" state, or it's in the "within the contents of a
 not-well-formed [verbatim HTML element]" state.
 
-To handle the input as defined in this specification, an implementation
-might have to use either look-ahead or backtracking. In either case, it
-is suggested that the implementation optimize for the case where the
-HTML in the input is well-formed.
+In order to be able to get the state of the HTML parser correctly as
+defined above, it is suggested that an implementation follow one of the
+following methods:
+
+  1. **Multiple-pass parsing:**
+
+     Once the [block-element start line] is identified as belonging to a
+     [paragraph] block, the entire sequence of lines starting from the
+     [block-element start line] till the end of the
+     [input line sequence] is passed to a HTML parser, which identifies
+     all HTML tags, their positions and whether they are well-formed
+     (i.e.  whether they have corresponding opening/closing tags, as
+     applicable).
+
+     In the second pass, the information gathered in the first pass is
+     used to drive the procedure to detect the end of the paragraph.
+
+     This method is possibly simpler to implement.
+
+  2. **Backtracking:**
+
+     When finding the HTML state at the end of a line requires data from
+     subsequent lines, the implementation can assume well-formedness and
+     proceed with processing the subsequent lines. If the assumption
+     turns out to be wrong, it should backtrack to the original state
+     and continue as if it is not well-formed.
+
+     For example, if a line ending with `<pre>` is encountered, we
+     assume that the opening tag will get closed subsequently and
+     proceed with processing the subsequent lines. If no matching
+     `</pre>` is found in the [input line sequence], we have to
+     backtrack to the first blank line after the opening `<pre>` and end
+     the paragraph there.
+
+     This method is more complex to implement, but will also be more
+     optimal in terms of performance, especially for well-formed input.
+
 
 <h2 id="interpreting-block-elements">Interpreting block-elements</h2>
 
