@@ -408,8 +408,11 @@ block-element and the [block-element end line]:
         `[![image]]: ` + _ref-value-sequence_  
         `[![image][image ref]]: ` + _ref-value-sequence_
 
-        The matching substring for the last parenthesized subexpression
-        in the pattern shall be called the _ref-value-sequence_.
+        The matching substring for the first parenthesized subexpression
+        in the pattern shall be called the _unprocessed reference id
+        string_. The matching substring for the last parenthesized
+        subexpression in the pattern shall be called the
+        _ref-value-sequence_.
 
      2. The _ref-value-sequence_ matches the regular expression pattern:
 
@@ -419,6 +422,8 @@ block-element and the [block-element end line]:
         `url` + _ref-definition-trailing-sequence_  
         `<url>` + _ref-definition-trailing-sequence_
 
+        The matching substring for the first parenthesized subexpression
+        in the pattern shall be called the _unprocessed url string_.
         The matching substring for the last parenthesized subexpression
         in the pattern shall be called the
         _ref-definition-trailing-sequence_.
@@ -1749,59 +1754,34 @@ The reference-resolution block does not result in any output by itself.
 It is used to resolve the URLs of reference-style links and images in
 the rest of the document.
 
-In case the [block-element line sequence] contains a single [line], that
-[line] is called the _link-definition-line_.
+When the [block-element start line] for the reference-resolution block
+was identified, the following values would have been identified as well:
 
-In case the [block-element line sequence] contains two [lines], the
-second [line] is appended to the first [line] to produce the
-_link-definition-line_.
+  * _unprocessed reference id string_
+  * _unprocessed url string_
+  * _ref-definition-trailing-sequence_
 
-The _link-definition-line_ shall not contain any [line break]
-characters.
-
-The _link-definition-line_ shall match one of the following regular
-expression patterns:
-
- 1. Just the URL:
-    `/^ *\[(([^\\\[\]]|\\.)*)\] *: *([^ <>]+|<[^<>]*>) *$/`
-
-    Examples:  
-    `[ref id]: http://example.net/`  
-    `[ref \[ id]: <http://example.net/>`  
-    `[ref \] id]: mailto:someone@somewhere.net`  
-
- 2. URL followed by text:
-    `/^ *\[(([^\\\[\]]|\\.)*)\] *: *([^ <>]+|<[^<>]*>) +([^ ].*)$/`
-
-    Examples:  
-    `[ref id]: http://example.net/ "Title"`  
-    `[ref \[ id]: http://example.net/ 'Title'`  
-    `[ref    id]: http://example.net/ (Title)`  
-    `[ref \] id]: http://example.net/ "Title with \"escaped\" quotes"`  
-    `[ref id]: http://example.net/ "Title" followed by random "(ignored)" text`  
-    `[ref id]: http://example.net/ just random ignored text`  
-
-In case of either pattern, the matching substring for the first (i.e. outer)
-parenthesized subexpression in the pattern is [simplified] to obtain the
-_reference id string_. The matching substring for the third
-parathesized subexpression (just after the `:`) is called the
-_unprocessed url string_.
+The _unprocessed reference id string_ is [simplified] to obtain the
+_reference id string_.
 
 Any `<`, `>` or [whitespace] characters in the _unprocessed url string_
 are removed, and the resultant string is called the _link url string_.
 
-In case the match is with the second regular expression pattern, the
-matching substring for the fourth parenthesized subexpression in the
-pattern is called the _title container string_.
+In case the [block-element line sequence] contains a single [line], the
+_ref-definition-trailing-sequence_ shall be called the _title container
+string_.
 
-If the _title-container-string_ matches the regular expression pattern
+In case the [block-element line sequence] contains two [lines], the
+second [line] shall be called the _title container string_.
+
+If the _title container string_ matches the regular expression pattern
 `/^\((([^\\\(\)]|\\.)*)\)/`, then the matching substring for the first
 (i.e. outer) parenthesized subexpression in the pattern is called the
 _link title string_.
 
-If the _title-container-string_ begins with a [quoted string], the
+If the _title container string_ begins with a [quoted string], the
 [enclosed string] of the [quoted string] is called the _link title
-string_ and the rest of the _title-container-string_ is ignored.
+string_ and the rest of the _title container string_ is ignored.
 
 The _reference id string_ is said to be associated with the _link url
 string_ and the _link title string_ (if a _link title string_ was
