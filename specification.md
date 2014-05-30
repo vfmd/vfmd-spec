@@ -997,6 +997,16 @@ block-element type of each [block-element line sequence] has been
 identified. For a given block-element type, the procedure to interpret a
 [block-element line sequence] is discussed in this section.
 
+<h3 id="null-block">null block</h3>
+
+[null block]: #null-block
+[**null block**]: #null-block
+
+The  [block-element line sequence] for a null block element shall have a
+single [blank line].
+
+A null block does not result in any output.
+
 <h3 id="atx-style-header">atx-style header</h3>
 
 [atx-style header]: #atx-style-header
@@ -1803,16 +1813,6 @@ lookups in the _link reference association map_ are made
 case-insensitively.
 
 [link reference association map]: #link-reference-association-map
-
-<h3 id="null-block">null block</h3>
-
-[null block]: #null-block
-[**null block**]: #null-block
-
-The  [block-element line sequence] for a null block element shall have a
-single [blank line].
-
-A null block does not result in any output.
 
 <h3 id="properties-of-list-item-line-sequences">Properties of list item line sequences</h3>
 
