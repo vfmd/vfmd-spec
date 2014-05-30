@@ -389,13 +389,15 @@ We define the following regular expression patterns:
 The following rules are to be followed in determining the type of the
 block-element and the [block-element end line]:
 
- 1. If the [block-element start line] is a [blank line], then the block
+ 1. <span id="null-block-line-sequence">
+    If the [block-element start line] is a [blank line], then the block
     element is of type [**null block**]. The same line is the
-    [block-element end line].
+    [block-element end line].</span>
 
- 2. If the [block-element start line] does not begin with four or more
+ 2. <span id="reference-resolution-block-line-sequence">
+    If the [block-element start line] does not begin with four or more
     consecutive [space] characters, and satisfies both the following
-    conditions:
+    conditions:</span>
 
      1. The [block-element start line] matches the regular expression
         pattern:
@@ -453,20 +455,23 @@ block-element and the [block-element end line]:
     follows the [block-element start line]; else, the [block-element end
     line] is the same line as the [block-element start line].
 
- 3. If none of the above conditions apply, and if the [block-element
+ 3. <span id="setext-style-header-line-sequence">
+    If none of the above conditions apply, and if the [block-element
     start line] is not the last line in the [input line sequence], and
     is immediately followed by a succeeding line that matches the
     regular expression pattern `/^(-+|=+) *$/`, then the block-element
     is said to be of type [**setext-style header**], and the succeeding
-    line is said to be the [block-element end line].
+    line is said to be the [block-element end line].</span>
 
- 4. If none of the above conditions apply, and if the [block-element
+ 4. <span id="code-block-line-sequence">
+    If none of the above conditions apply, and if the [block-element
     start line] begins with four or more consecutive [space] characters,
     it signifies the start of a block-element of type [**code block**].
     The [block-element end line] is the next subsequent line in the
     [input line sequence], starting from and inclusive of the
     [block-element start line], that is immediately succeeded by a
     succeeding line that satisfies one of the following conditions:
+    </span>
 
      1. The succeeding line is not a [blank line], and it does not
         begin with four or more consecutive [space] characters
@@ -480,18 +485,20 @@ block-element and the [block-element end line]:
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
 
- 5. If none of the above conditions apply, and if the first character
+ 5. <span id="atx-style-header-line-sequence">
+    If none of the above conditions apply, and if the first character
     of the [block-element start line] is a `#` character, it signifies
     the start of a block-element of type [**atx-style header**]. The
-    same line is the [block-element end line].
+    same line is the [block-element end line].</span>
 
- 6. If none of the above conditions apply, and if the first
+ 6. <span id="blockquote-line-sequence">
+    If none of the above conditions apply, and if the first
     [non-space] character in the [block-element start line] is a `>`
     character, then the block-element is of type [**blockquote**].
     The [block-element end line] is the next subsequent line in the
     [input line sequence], starting from and inclusive of the
     [block-element start line], that satisfies one of the following
-    conditions:
+    conditions:</span>
 
      1. The line is a [blank line] and is immediately succeeded by
         another [blank line]
@@ -519,21 +526,23 @@ block-element and the [block-element end line]:
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
 
- 7. If none of the above conditions apply, and if the [block-element
+ 7. <span id="horizontal-rule-line-sequence">
+    If none of the above conditions apply, and if the [block-element
     start line] matches the [horizontal rule pattern], then the line
-    forms a block-element of type [**horizontal rule**].
+    forms a block-element of type [**horizontal rule**].</span>
 
     The [block-element end line] is the same as the [block-element start
     line].
 
- 8. If none of the conditions specified above apply, and if the
+ 8. <span id="unordered-list-line-sequence">
+    If none of the conditions specified above apply, and if the
     [block-element start line] matches the [unordered list starter
     pattern] \(i.e. the regular expression `/^( *[\*\-\+] +)[^ ]/`\)
     then the block-element is of type [**unordered list**]. The matching
     substring for the first and only parenthesized subexpression in the
     pattern is called the _unordered list starter string_. The number of
     [characters] in the _unordered list starter string_ is called the
-    _unordered-list-starter-string-length_.
+    _unordered-list-starter-string-length_.</span>
 
     For example, consider the following [block-element start line]
     \(which has three [space] characters, followed by an asterisk,
@@ -583,13 +592,14 @@ block-element and the [block-element end line]:
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
 
- 9. If none of the conditions specified above apply, and if the
+ 9. <span id="ordered-list-line-sequence">
+    If none of the conditions specified above apply, and if the
     [block-element start line] matches the [ordered list starter
     pattern] \(i.e. the regular expression `/^( *([0-9]+)\. +)[^ ]/`\)
     then the block-element is of type [**ordered list**]. The length of
     the matching substring for the first (i.e. outer) parenthesized
     subexpression in the pattern is called the
-    _ordered-list-starter-string-length_.
+    _ordered-list-starter-string-length_.</span>
 
     For example, consider the following [block-element start line]
     \(which has three [space] characters, followed by the number '1',
@@ -636,8 +646,10 @@ block-element and the [block-element end line]:
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
 
- 0. If none of the above conditions apply, then the [block-element start
+ 0. <span id="paragraph-line-sequence">
+    If none of the above conditions apply, then the [block-element start
     line] marks the start of a block-element of type [**paragraph**].
+    </span>
 
     In order to find the [block-element end line] of a paragraph, we
     need to make use of a [code-span detector] and a HTML parser,
@@ -770,7 +782,6 @@ be interpreted and output.</span>
 [verbatim HTML element]: #verbatim-html-element
 [block-level extensions]: #block-level-extensions
 [block-level extension]: #block-level-extension
-
 
 <h4 id="code-span-detector">
 Code-span detector</h4>
@@ -999,7 +1010,7 @@ identified. For a given block-element type, the procedure to interpret a
 [null block]: #null-block
 [**null block**]: #null-block
 
-The  [block-element line sequence] for a null block element shall have a
+The  [block-element line sequence for a null block element] shall have a
 single [blank line].
 
 A null block does not result in any output.
@@ -1009,7 +1020,7 @@ A null block does not result in any output.
 [reference-resolution block]: #reference-resolution-block
 [**reference-resolution block**]: #reference-resolution-block
 
-The [block-element line sequence] for a reference-resolution block shall
+The [block-element line sequence for a reference-resolution block] shall
 have either a single [line] or two [lines].
 
 The reference-resolution block does not result in any output by itself.
@@ -1071,7 +1082,7 @@ case-insensitively.
 [atx-style header]: #atx-style-header
 [**atx-style header**]: #atx-style-header
 
-The  [block-element line sequence] for an atx-style header shall have a
+The  [block-element line sequence for an atx-style header] shall have a
 single line that starts with a `#` character.
 
 The single [line] in the [block-element line sequence] shall match one
@@ -1126,7 +1137,7 @@ of the following regular expression patterns:
 [setext-style header]: #setext-style-header
 [**setext-style header**]: #setext-style-header
 
-The  [block-element line sequence] for a setext-style header shall have
+The  [block-element line sequence for a setext-style header] shall have
 exactly two lines, with the second line beginning with either a `-`
 character or a `=` character.
 
@@ -1168,7 +1179,7 @@ The corresponding HTML outputs for the above lines are:
 [code block]: #code-block
 [**code block**]: #code-block
 
-Each line in the  [block-element line sequence] for a code block element
+Each line in the [block-element line sequence for a code block element]
 shall either be a [blank line] or a [line] beginning with four or more
 [space] characters.
 
@@ -1197,7 +1208,7 @@ The corresponding HTML output shall be:
 [blockquote]: #blockquote
 [**blockquote**]: #blockquote
 
-The [block-element line sequence] for a blockquote element shall
+The [block-element line sequence for a blockquote element] shall
 have one or more [lines], some of which might have the `>` character as
 the first [non-space] character in the [line].
 
@@ -1267,7 +1278,7 @@ sequence] is:
 [horizontal rule]: #horizontal-rule
 [**horizontal rule**]: #horizontal-rule
 
-The  [block-element line sequence] for a horizontal rule element shall
+The  [block-element line sequence for a horizontal rule element] shall
 have a single [line] that is composed entirely of either `*`, `-` or `_`
 characters, along with optional [space] characters.
 
@@ -1294,7 +1305,7 @@ The corresponding HTML output shall be:
 [unordered list]: #unordered-list
 [**unordered list**]: #unordered-list
 
-The [block-element line sequence] for an unordered list block shall have
+The [block-element line sequence for an unordered list block] shall have
 one or more [lines].
 
 The first line in the [block-element line sequence] would match the
@@ -1517,7 +1528,7 @@ this example would be:
 [ordered list]: #ordered-list
 [**ordered list**]: #ordered-list
 
-The [block-element line sequence] for an ordered list block shall have
+The [block-element line sequence for an ordered list block] shall have
 one or more [lines].
 
 The first line in the [block-element line sequence] would match the
@@ -1769,7 +1780,7 @@ this example would be:
 [paragraph]: #paragraph
 [**paragraph**]: #paragraph
 
-The [block-element line sequence] for a paragraph block shall have
+The [block-element line sequence for a paragraph block] shall have
 one or more [lines].
 
 The lines in the [block-element line sequence] are joined together into
@@ -1810,6 +1821,19 @@ in `p` tags, unless any of the following conditions is satisfied:
 If one or more of the above 6 conditions is satisfied, the HTML output
 of the paragraph shall be the same as the content of the paragraph,
 without wrapping it in `p` tags.
+
+
+[block-element line sequence for a null block element]: #null-block-line-sequence
+[block-element line sequence for a reference-resolution block]: #reference-resolution-block-line-sequence
+[block-element line sequence for an atx-style header]: #atx-style-header-line-sequence
+[block-element line sequence for a setext-style header]: #setext-style-header-line-sequence
+[block-element line sequence for a code block element]: #code-block-line-sequence
+[block-element line sequence for a blockquote element]: #blockquote-line-sequence
+[block-element line sequence for a horizontal rule element]: #horizontal-rule-line-sequence
+[block-element line sequence for an unordered list block]: #unordered-list-line-sequence
+[block-element line sequence for an ordered list block]: #ordered-list-line-sequence
+[block-element line sequence for a paragraph block]: #paragraph-line-sequence
+
 
 <h3 id="properties-of-list-item-line-sequences">Properties of list item line sequences</h3>
 
