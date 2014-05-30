@@ -636,9 +636,6 @@ block-element and the [block-element end line]:
     If no such [block-element end line] is found, the last line in the
     [input line sequence] is the [block-element end line].
 
- <!-- Redcarpet doesn't like double-digit line numbers at this point,
-      so using 0 instead of 10 -->
-
  0. If none of the above conditions apply, then the [block-element start
     line] marks the start of a block-element of type [**paragraph**].
 
