@@ -394,23 +394,36 @@ block-element and the [block-element end line]:
     [block-element end line].
 
  2. If the [block-element start line] does not begin with four or more
-    consecutive [space] characters, and if the [block-element start
-    line] matches one of the following regular expression patterns:
+    consecutive [space] characters, and satisfies both the following
+    conditions:
 
-     1. Label and URL without angle brackets:  
-        `/^ *\[([^\\\[\]]|\\.)*\] *: *[^ <>]+( .*)?$/`
+     1. The [block-element start line] matches the regular expression
+        pattern:
 
-        Example: `[ref id]: url` + _ref-definition-trailing-sequence_
+        `/^ *\[(([^\\\[\]\!]|\\.|\![^\[])*((\!\[([^\\\[\]]|\\.)*\](\[([^\\\[\]]|\\.)*\])?)?([^\\\[\]]|\\.)*)*)\] *:(.*)$/`
 
-     2. Label and URL within angle brackets:  
-        `/^ *\[([^\\\[\]]|\\.)*\] *: *<[^<>]*>(.*)$/`
+        Examples:  
+        `[ref id]: ` + _ref-value-sequence_  
+        `[ref \[escaped brackets\] id]: ` + _ref-value-sequence_  
+        `[![image]]: ` + _ref-value-sequence_  
+        `[![image][image ref]]: ` + _ref-value-sequence_
 
-        Example: `[ref id]: <url>` + _ref-definition-trailing-sequence_
+        The matching substring for the last parenthesized subexpression
+        in the pattern shall be called the _ref-value-sequence_.
+
+     2. The _ref-value-sequence_ matches the regular expression pattern:
+
+        `/^ *([^ \<\>]+|\<[^\<\>]*\>)( .*)?$/`
+
+        Examples:  
+        `url` + _ref-definition-trailing-sequence_  
+        `<url>` + _ref-definition-trailing-sequence_
+
+        The matching substring for the last parenthesized subexpression
+        in the pattern shall be called the
+        _ref-definition-trailing-sequence_.
 
     then the block-element is of type [**reference-resolution block**].
-    The matching substring for the last parenthesized subexpression in
-    the matching pattern shall be called the
-    _ref-definition-trailing-sequence_.
 
     If all the following conditions are satisfied:
 
