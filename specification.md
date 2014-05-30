@@ -1007,6 +1007,68 @@ single [blank line].
 
 A null block does not result in any output.
 
+<h3 id="reference-resolution-block">reference-resolution block</h3>
+
+[reference-resolution block]: #reference-resolution-block
+[**reference-resolution block**]: #reference-resolution-block
+
+The [block-element line sequence] for a reference-resolution block shall
+have either a single [line] or two [lines].
+
+The reference-resolution block does not result in any output by itself.
+It is used to resolve the URLs of reference-style links and images in
+the rest of the document.
+
+When the [block-element start line] for the reference-resolution block
+was identified, the following values would have been identified as well:
+
+  * _unprocessed reference id string_
+  * _unprocessed url string_
+  * _ref-definition-trailing-sequence_
+
+The _unprocessed reference id string_ is [simplified] to obtain the
+_reference id string_.
+
+Any `<`, `>` or [whitespace] characters in the _unprocessed url string_
+are removed, and the resultant string is called the _link url string_.
+
+In case the [block-element line sequence] contains a single [line], the
+_ref-definition-trailing-sequence_ shall be called the _title container
+string_.
+
+In case the [block-element line sequence] contains two [lines], the
+second [line] shall be called the _title container string_.
+
+If the _title container string_ matches the regular expression pattern
+`/^\((([^\\\(\)]|\\.)*)\)/`, then the matching substring for the first
+(i.e. outer) parenthesized subexpression in the pattern is called the
+_link title string_.
+
+If the _title container string_ begins with a [quoted string], the
+[enclosed string] of the [quoted string] is called the _link title
+string_ and the rest of the _title container string_ is ignored.
+
+The _reference id string_ is said to be associated with the _link url
+string_ and the _link title string_ (if a _link title string_ was
+found). A new entry is added to the [link reference association map]
+with the _reference id string_ as the key, and the _link url string_ and
+the _link title string_ as values, unless the [link reference
+association map] already has an entry with the _reference id string_ as
+the key.
+
+The <span id="link-reference-association-map">**link reference
+association map**</span> is an associative array that contains data from
+all the reference-resolution blocks in the document, including those
+that occur within blockquotes and lists. It helps in
+mapping a _reference id_ to the _link url_ and _link title_ that the
+_reference id_ represents. It is used in the [procedure for identifying
+link tags] and in the [procedure for identifying image tags] to resolve
+a reference id to a link url and, if available, a link title. All
+lookups in the _link reference association map_ are made
+case-insensitively.
+
+[link reference association map]: #link-reference-association-map
+
 <h3 id="atx-style-header">atx-style header</h3>
 
 [atx-style header]: #atx-style-header
@@ -1751,68 +1813,6 @@ in `p` tags, unless any of the following conditions is satisfied:
 If one or more of the above 6 conditions is satisfied, the HTML output
 of the paragraph shall be the same as the content of the paragraph,
 without wrapping it in `p` tags.
-
-<h3 id="reference-resolution-block">reference-resolution block</h3>
-
-[reference-resolution block]: #reference-resolution-block
-[**reference-resolution block**]: #reference-resolution-block
-
-The [block-element line sequence] for a reference-resolution block shall
-have either a single [line] or two [lines].
-
-The reference-resolution block does not result in any output by itself.
-It is used to resolve the URLs of reference-style links and images in
-the rest of the document.
-
-When the [block-element start line] for the reference-resolution block
-was identified, the following values would have been identified as well:
-
-  * _unprocessed reference id string_
-  * _unprocessed url string_
-  * _ref-definition-trailing-sequence_
-
-The _unprocessed reference id string_ is [simplified] to obtain the
-_reference id string_.
-
-Any `<`, `>` or [whitespace] characters in the _unprocessed url string_
-are removed, and the resultant string is called the _link url string_.
-
-In case the [block-element line sequence] contains a single [line], the
-_ref-definition-trailing-sequence_ shall be called the _title container
-string_.
-
-In case the [block-element line sequence] contains two [lines], the
-second [line] shall be called the _title container string_.
-
-If the _title container string_ matches the regular expression pattern
-`/^\((([^\\\(\)]|\\.)*)\)/`, then the matching substring for the first
-(i.e. outer) parenthesized subexpression in the pattern is called the
-_link title string_.
-
-If the _title container string_ begins with a [quoted string], the
-[enclosed string] of the [quoted string] is called the _link title
-string_ and the rest of the _title container string_ is ignored.
-
-The _reference id string_ is said to be associated with the _link url
-string_ and the _link title string_ (if a _link title string_ was
-found). A new entry is added to the [link reference association map]
-with the _reference id string_ as the key, and the _link url string_ and
-the _link title string_ as values, unless the [link reference
-association map] already has an entry with the _reference id string_ as
-the key.
-
-The <span id="link-reference-association-map">**link reference
-association map**</span> is an associative array that contains data from
-all the reference-resolution blocks in the document, including those
-that occur within blockquotes and lists. It helps in
-mapping a _reference id_ to the _link url_ and _link title_ that the
-_reference id_ represents. It is used in the [procedure for identifying
-link tags] and in the [procedure for identifying image tags] to resolve
-a reference id to a link url and, if available, a link title. All
-lookups in the _link reference association map_ are made
-case-insensitively.
-
-[link reference association map]: #link-reference-association-map
 
 <h3 id="properties-of-list-item-line-sequences">Properties of list item line sequences</h3>
 
