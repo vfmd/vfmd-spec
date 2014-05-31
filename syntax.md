@@ -1223,7 +1223,7 @@ line following a blank line in the HTML block).
     > </div>
 
 Similarly, when including a HTML block within a list, please make sure
-that the HTML block is completely contained within the list.
+that the HTML block is completely contained within a list item.
 
 For example, the following is wrong, and will result in invalid HTML
 output:
