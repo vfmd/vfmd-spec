@@ -1249,6 +1249,33 @@ lines following a blank line) to line up with the list.
         Still inside the list
         </div>
 
+Simarly, when including a HTML comment within a [blockquote] or a list
+item, please make sure that the HTML comment is completely contained
+within the [blockquote] or the list item.
+
+For example, the HTML comment in the following snippet will not be
+recognized:
+
+    * This list item contains the start of a HTML comment
+      <!-- HTML comment start
+    * This list item is not commented
+    * Because a HTML comment cannot span across
+      multiple list items -->
+    * Last list item
+
+If you'd like to comment out a whole blockquote or list, you can
+consolidate the HTML comment as a standalone HTML block, separated with
+blank lines, like this:
+
+    * This list item is followed by a HTML comment
+
+    <!-- HTML comment start
+    * This list item is commented
+    * This HTML comment is consolidated as
+      a separate HTML block -->
+
+    * Another list
+
 When using verbatim HTML within a blockquote or a list item, the
 verbatim-HTML-mode comes to an end at the end of the blockquote or the
 list item, even if there is no blank line.
