@@ -3067,7 +3067,7 @@ For example, the [space] character, the [line break] character, `.`,
 
 <span id="speculative-url-end">We define an **speculative-url-end**
 [character] to be a [word-separator] character that is not a U+002F
-(SLASH) character.
+(SLASH) character.</span>
 
 [word-separator]: #word-separator
 [speculative-url-end]: #speculative-url-end
