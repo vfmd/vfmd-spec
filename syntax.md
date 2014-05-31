@@ -855,6 +855,14 @@ content of a link, like this:
     [sleeping kitten]: /thumbnails/sleeping_kitten.jpg
     [![sleeping kitten]]: /images/sleeping_kitten.jpg
 
+If you want to include literal `[`, `]` or `` ` `` characters in either
+the `alt` text or the image label you should escape each such character
+with a backslash.
+
+Also, the link URL should not have any URL-unsafe characters like `<`,
+`>` or `` ` `` - if required, they should be escaped, for example, to
+`&lt;`, `&gt;` or `&#96` respectively.
+
 <h4 id="inline-images">Inline images</h4>
 
 [Inline images]: #inline-images
@@ -874,9 +882,15 @@ That is:
     to the image, and an optional title attribute enclosed in double or
     single quotes.
 
+If you want to include literal `[`, `]` or `` ` `` characters in the
+`alt` text, you should escape each such character with a backslash.
+
 Like in the case of inline link syntax, if your image URL contains the
 `(` or `)` characters, or if you want to break the URL across multiple
-lines, you should enclose the URL in \<angle brackets\>.
+lines, you should enclose the URL in \<angle brackets\>. Also, the link
+URL should not have any URL-unsafe characters like `<`, `>` or `` ` `` -
+if required, they should be escaped, for example, to `&lt;`, `&gt;` or
+`&#96` respectively.
 
 <h2 id="misc">Miscellaneous</h2>
 
