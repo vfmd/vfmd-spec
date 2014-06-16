@@ -28,7 +28,7 @@ and inline-code.
 
 [original Markdown syntax]: http://daringfireball.net/projects/markdown/syntax
 [Markdown]: http://daringfireball.net/projects/markdown/
-[differences]: http://vfmd.github.io/differences/
+[differences]: http://www.vfmd.org/differences/
 
 ## Table of contents
 

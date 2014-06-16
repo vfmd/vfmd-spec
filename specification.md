@@ -17,7 +17,7 @@ or otherwise programmatically interpret vfmd input. If you only intend
 to write a document using vfmd, please read the [syntax guide] instead.
 
 [Markdown]: http://daringfireball.net/projects/markdown/
-[syntax guide]: http://vfmd.github.io/vfmd-spec/syntax/
+[syntax guide]: http://www.vfmd.org/vfmd-spec/syntax/
 
 <h2>Table of contents</h2>
 
@@ -3542,7 +3542,7 @@ An implementation can extend the [core syntax] to support additional
 syntax elements. The additional syntax elements can involve [block-level
 extensions], or [span-level extensions], or both.
 
-[core syntax]: http://vfmd.github.io/introduction/#core-syntax
+[core syntax]: http://www.vfmd.org/introduction/#core-syntax
 
 For example, to support [GitHub-style fenced code blocks], an
 implementation would need to add a [block-level extension]; to support

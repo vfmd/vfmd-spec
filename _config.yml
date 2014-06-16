@@ -2,7 +2,7 @@ name: vfmd
 tagline: Markdown with a spec
 
 url: /
-rooturl: http://vfmd.github.io
+rooturl: http://www.vfmd.org
 githuburl: https://github.com/vfmd
 
 markdown: redcarpet
