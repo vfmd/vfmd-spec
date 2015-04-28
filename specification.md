@@ -701,7 +701,7 @@ block-element and the [block-element end line]:
      3. A [line break] character is given as input to the [code-span
         detector], and then given as input to the HTML parser.
 
-     4. We observe the state of the HTML parser. Of the the many
+     4. We observe the state of the HTML parser. Of the many
         possible states of a HTML parser, we are only interested in the
         [HTML parser states relevant to finding the end of a paragraph].
 
@@ -869,7 +869,7 @@ HTML parser states relevant to finding the end of a paragraph</h4>
 [HTML parser states relevant to finding the end of a paragraph]: #html-parser-states-relevant-to-end-of-paragraph
 
 When looking for the [block-element end line] for a block-element of
-type [paragraph], we make use of a HTML parser. Of the the many possible
+type [paragraph], we make use of a HTML parser. Of the many possible
 states of a HTML parser, we are interested in only some of the states.
 This section enumerates and describes the parser states that are of
 interest in this context.
@@ -1611,7 +1611,7 @@ starting number_. For HTML output, if the _ordered list starting number_
 is the number '1', the corresponding `ol` start tag in the output shall
 not have the `start` attribute; if the _ordered list starting number_ is
 not the number '1', the corresponding `ol` start tag in the output shall
-include the `start` attribute with the the _ordered list starting
+include the `start` attribute with the _ordered list starting
 number_ as the attribute value.
 
 [ordered list item line sequence]: #ordered-list-item-line-sequence
@@ -2542,7 +2542,7 @@ entirely of `_` characters, the _constituent character_ of the
 [emphasis tag strings]: #emphasis-tag-string
 [constituent character]: #constituent-character
 
-If the [emphasis indicator string] is [non-flanking], the the [emphasis
+If the [emphasis indicator string] is [non-flanking], then the [emphasis
 indicator string] is interpreted as a _text fragment_. The
 [consumed-character-count] is set to the length of the [emphasis
 indicator string].
