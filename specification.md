@@ -2999,12 +2999,12 @@ If the [remaining-character-sequence] matches the
      1. Let _empty-ref-pattern_ be the regular expression pattern
         `/^(\]\s*\[\s*\])/` (Example: `][]`)
 
-        If the remaining-character-sequence matches the
+        If the [residual-image-sequence] matches the
         _empty-ref-pattern_, then the length of the matching substring
         for the whole pattern is said to be the
         _image-ref-close-sequence-length_.
 
-        If the remaining-character-sequence does not match the
+        If the [residual-image-sequence] does not match the
         _empty-ref-pattern_, then the _image-ref-close-sequence-length_
         is said to be 1.
 
