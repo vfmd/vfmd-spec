@@ -2608,7 +2608,7 @@ following shall be done:
  8. Set [consumed-character-count] to the length of the [emphasis
     indicator string]
 
-<h4 id="matching-opening-and-closing-emphasis">
+<h4 id="procedure-for-matching-emphasis-tag-strings">
 Procedure for matching emphasis tag strings</h4>
 
 [Procedure for matching emphasis tag strings]: #procedure-for-matching-emphasis-tag-strings
@@ -2935,7 +2935,7 @@ If the [remaining-character-sequence] matches the
         starts within the _residual-image-sequence_ \(i.e. the
         number of characters present in the
         _residual-image-sequence_ before the start of the
-        _residual-link-attribute-sequence_\) shall be called the
+        _residual-image-attribute-sequence_\) shall be called the
         _image-source-pattern-match-length_.
 
      2. The _residual-image-attribute-sequence_ matches one of the
