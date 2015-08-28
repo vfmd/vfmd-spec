@@ -3095,12 +3095,12 @@ then the following is done:
     regular expression patterns (matching shall be case insensitive):
 
      1. URL within angle brackets:
-        ``/<([a-z0-9\+\.\-]+:\/\/[^<> \`]+)>/``
+        ``/^<([a-z0-9\+\.\-]+:\/\/[^<> \`]+)>/``
 
         Example: `<http://example.net>`
 
      2. Mailto URL within angle brackets:
-        ``/<(mailto:[^<> \`]+)>/``
+        ``/^<(mailto:[^<> \`]+)>/``
 
         Example: `<mailto:someone@example.net?subject=Hi+there>`
 
@@ -3125,7 +3125,7 @@ then the following is done:
         _auto-link tag_
 
  2. If the [remaining-character-sequence] matches the regular expression
-    pattern ``/<([^\(\)\<\>\[\]\:\'\@\\\,\"\s\`]+@[^\(\)\<\>\[\]\:\'\@\\\,\"\s\`\.]+\.[^\(\)\<\>\[\]\:\'\@\\\,\"\s\`]+)>/``
+    pattern ``/^<([^\(\)\<\>\[\]\:\'\@\\\,\"\s\`]+@[^\(\)\<\>\[\]\:\'\@\\\,\"\s\`\.]+\.[^\(\)\<\>\[\]\:\'\@\\\,\"\s\`]+)>/``
     (Example: `<someone@example.net>`), then the following is done:
 
      1. The matching substring for the whole of the matching pattern is
@@ -3146,12 +3146,12 @@ then the following is done:
     insensitive):
 
      1. URL without angle brackets:
-        ``/([a-z0-9\+\.\-]+:\/\/)[^<>\`\s]+/``
+        ``/^([a-z0-9\+\.\-]+:\/\/)[^<>\`\s]+/``
 
         Example: `http://example.net`
 
      3. Mailto URL without angle brackets:
-        ``/(mailto:)[^<>\`\s]+/``
+        ``/^(mailto:)[^<>\`\s]+/``
 
         Example: `mailto:someone@example.net`
 
