@@ -1626,7 +1626,7 @@ For example, consider the following [block-element line sequence]:
     2. Second item 1
     Second item 2
 
-          Code block
+           Code block
 
     3. Third item 1
 
@@ -1690,7 +1690,7 @@ The second _ordered list item line sequence_ looks like:
 <pre><code>2. Second item 1
 Second item 2
 
-      Code block
+       Code block
 
 </code></pre>
 
