@@ -1626,7 +1626,7 @@ For example, consider the following [block-element line sequence]:
     2. Second item 1
     Second item 2
 
-          Code block
+           Code block
 
     3. Third item 1
 
@@ -1690,7 +1690,7 @@ The second _ordered list item line sequence_ looks like:
 <pre><code>2. Second item 1
 Second item 2
 
-      Code block
+       Code block
 
 </code></pre>
 
@@ -2608,7 +2608,7 @@ following shall be done:
  8. Set [consumed-character-count] to the length of the [emphasis
     indicator string]
 
-<h4 id="matching-opening-and-closing-emphasis">
+<h4 id="procedure-for-matching-emphasis-tag-strings">
 Procedure for matching emphasis tag strings</h4>
 
 [Procedure for matching emphasis tag strings]: #procedure-for-matching-emphasis-tag-strings
@@ -2935,7 +2935,7 @@ If the [remaining-character-sequence] matches the
         starts within the _residual-image-sequence_ \(i.e. the
         number of characters present in the
         _residual-image-sequence_ before the start of the
-        _residual-link-attribute-sequence_\) shall be called the
+        _residual-image-attribute-sequence_\) shall be called the
         _image-source-pattern-match-length_.
 
      2. The _residual-image-attribute-sequence_ matches one of the
@@ -2999,12 +2999,12 @@ If the [remaining-character-sequence] matches the
      1. Let _empty-ref-pattern_ be the regular expression pattern
         `/^(\]\s*\[\s*\])/` (Example: `][]`)
 
-        If the remaining-character-sequence matches the
+        If the [residual-image-sequence] matches the
         _empty-ref-pattern_, then the length of the matching substring
         for the whole pattern is said to be the
         _image-ref-close-sequence-length_.
 
-        If the remaining-character-sequence does not match the
+        If the [residual-image-sequence] does not match the
         _empty-ref-pattern_, then the _image-ref-close-sequence-length_
         is said to be 1.
 
@@ -3095,12 +3095,12 @@ then the following is done:
     regular expression patterns (matching shall be case insensitive):
 
      1. URL within angle brackets:
-        ``/<([a-z0-9\+\.\-]+:\/\/[^<> \`]+)>/``
+        ``/^<([a-z0-9\+\.\-]+:\/\/[^<> \`]+)>/``
 
         Example: `<http://example.net>`
 
      2. Mailto URL within angle brackets:
-        ``/<(mailto:[^<> \`]+)>/``
+        ``/^<(mailto:[^<> \`]+)>/``
 
         Example: `<mailto:someone@example.net?subject=Hi+there>`
 
@@ -3125,7 +3125,7 @@ then the following is done:
         _auto-link tag_
 
  2. If the [remaining-character-sequence] matches the regular expression
-    pattern ``/<([^\(\)\<\>\[\]\:\'\@\\\,\"\s\`]+@[^\(\)\<\>\[\]\:\'\@\\\,\"\s\`\.]+\.[^\(\)\<\>\[\]\:\'\@\\\,\"\s\`]+)>/``
+    pattern ``/^<([^\(\)\<\>\[\]\:\'\@\\\,\"\s\`]+@[^\(\)\<\>\[\]\:\'\@\\\,\"\s\`\.]+\.[^\(\)\<\>\[\]\:\'\@\\\,\"\s\`]+)>/``
     (Example: `<someone@example.net>`), then the following is done:
 
      1. The matching substring for the whole of the matching pattern is
@@ -3146,12 +3146,12 @@ then the following is done:
     insensitive):
 
      1. URL without angle brackets:
-        ``/([a-z0-9\+\.\-]+:\/\/)[^<>\`\s]+/``
+        ``/^([a-z0-9\+\.\-]+:\/\/)[^<>\`\s]+/``
 
         Example: `http://example.net`
 
      3. Mailto URL without angle brackets:
-        ``/(mailto:)[^<>\`\s]+/``
+        ``/^(mailto:)[^<>\`\s]+/``
 
         Example: `mailto:someone@example.net`
 
